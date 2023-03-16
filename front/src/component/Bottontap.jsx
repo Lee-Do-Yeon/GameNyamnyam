@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Imgbox() {
+export default function Bottontap() {
     return (
         <div>
-            <h1> 이미지 박스</h1>
+            <h1> 버튼 만들기</h1>
         </div>
     )
 }
