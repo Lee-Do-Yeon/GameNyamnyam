@@ -1,9 +1,12 @@
-import React from "react";
+import React from 'react';
 
 export default function Mainpage() {
-    return (
-        <div>
-            <h1> 메인 페이지</h1>
-        </div>
-    )
+  return (
+    <div className="mainPageImg">
+      <div className="steamLoginBtn">
+        <div className="steamTxt">continue with steam login</div>
+        <div className="steamImg"></div>
+      </div>
+    </div>
+  );
 }
