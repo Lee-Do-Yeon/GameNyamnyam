@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+.mainPageImg {
+  height: 100vh;
+  width: 100vw;
+  background-image: url(assets/mainpage.png);
+  background-size: cover;
+  display: flex;
+  background-position: fixed;
+  justify-content: center;
+
+}
+.steamLoginBtn {
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  border-radius: 20px;
+  background-color: #595959;
+  background-size: cover;
+  position :absolute;
+  display: flex;
+  height: 8vh;
+  width: 26vw;
+  bottom: 6px;
+}
+
+.steamTxt {
+  margin-right: 25px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 39px;
+}
+
+.steamImg {
+  background-image: url(assets/steamimg.png);
+  background-size: cover;
+  height: 6vh;
+  width: 3vw;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
