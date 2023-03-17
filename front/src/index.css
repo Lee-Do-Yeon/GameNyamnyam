@@ -15,7 +15,6 @@
 .steamLoginBtn {
   justify-content: center;
   align-items: center;
-  color: #ffffff;
   border-radius: 20px;
   background-color: #595959;
   background-size: cover;
@@ -40,6 +39,29 @@
   background-size: cover;
   height: 6vh;
   width: 3vw;
+}
+.door {
+  position: absolute;
+  width: 33.4vw;
+  height: 63vh;
+  background-color: #747bff;
+  bottom: 11vh;
+  display: block;
+  justify-content: space-between;
+}
+
+.leftDoor {
+  width: 16.7vw;
+  height: 63vh;
+  background-color: #000000;
+  position: absolute;
+}
+.rightDoor {
+  width: 16.7vw;
+  height: 63vh;
+  margin-left: 16.7vw;
+  background-color: #ffffff;
+  position: absolute;
 }
 
 :root {
