@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
+import ImgBox from './components/ImgBox';
+import Buttontap from './components/Buttontap';
+import Tag from './components/Tag';
+import Modal from './components/Modal';
+
+import PageNotFound from './pages/404page/PageNotFound'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,7 +22,9 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <p className="text-blue-600">나웅기</p>
+      <ImgBox />
+      <Tag />
+      <Modal />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -28,6 +36,8 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Buttontap />
+      <PageNotFound />
     </div>
   );
 }
