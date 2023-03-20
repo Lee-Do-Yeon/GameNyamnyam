@@ -40,6 +40,17 @@
   height: 6vh;
   width: 3vw;
 }
+.kanban {
+  position: absolute;
+  background-image: url(assets/kanban.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 180px;
+  width: 48vw;
+  height: 41vh;
+  top: 20vh;
+  z-index: 1;
+}
 .door {
   position: absolute;
   width: 33.4vw;
@@ -53,16 +64,19 @@
 .leftDoor {
   width: 16.7vw;
   height: 63vh;
-  background-color: #000000;
+  background-color: #D9D9D9;
   position: absolute;
+  box-shadow: 0 0 0 10px #E1BA79 inset;
 }
 .rightDoor {
   width: 16.7vw;
   height: 63vh;
   margin-left: 16.7vw;
-  background-color: #ffffff;
+  background-color: #D9D9D9;
   position: absolute;
+  box-shadow: 0 0 0 10px #E1BA79 inset;
 }
+
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
