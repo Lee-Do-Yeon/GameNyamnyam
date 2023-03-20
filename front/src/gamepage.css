@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.gamepage {
+    height: 100vh;
+    width: 100vw;
+    background-image: url(assets/gameChoicePage.png);
+    background-size: 100%, 100%;
+    display: flex;
+    background-position: fixed;
+    justify-content: center;
+  
+  }
