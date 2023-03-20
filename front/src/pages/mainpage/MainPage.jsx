@@ -7,8 +7,8 @@ export default function Mainpage() {
   function doorOpen() {
     gsap
       .timeline()
-      .to(leftDoorRef.current, { duration: 1, x: -200 })
-      .to(rightDoorRef.current, { duration: 1, x: 200 }, '-=1');
+      .to(leftDoorRef.current, { duration: 1, x: -250 })
+      .to(rightDoorRef.current, { duration: 1, x: 250 }, '-=1');
   }
   function doorClose() {
     gsap
@@ -19,9 +19,14 @@ export default function Mainpage() {
 
   return (
     <div className="mainPageImg">
+      <div className='kanban'></div>
       <div className="door" onClick={doorClose}>
-        <div className="leftDoor" ref={leftDoorRef}></div>
-        <div className="rightDoor" ref={rightDoorRef}></div>
+        <div className="leftDoor" ref={leftDoorRef}>
+          <div className="insideDoor"></div>
+        </div>
+        <div className="rightDoor" ref={rightDoorRef}>
+          <div className="insideDoor"></div>
+        </div>
       </div>
       <div className="steamLoginBtn" onClick={doorOpen}>
         <div className="steamTxt">continue with steam login</div>
