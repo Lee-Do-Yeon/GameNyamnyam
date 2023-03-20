@@ -8,7 +8,7 @@ export default function ImgBox() {
         // map을 사용해서 개별 이미지 넣기
         src="https://cdn.akamai.steamstatic.com/steam/apps/793543/header.jpg?t=1520446355"
         alt=""
-      />
+        />
     </div>
   );
 }
