@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 // import Modal from '../../components/Modal'
 import ModalTwo from '../../components/ModalTwo'
+import Slider from '../../components/Slider';
 
 
 export default function Resultpage() {
@@ -11,10 +12,11 @@ export default function Resultpage() {
   };
 
   return (
-    <div className='text-center pt-7'>
-      <button onClick={showModal}> 모달 띄우기 </button>
+    <div className='flex flex-auto p-7 m-5'>
+      <button className="text-center p-7"onClick={showModal}> 모달 띄우기 </button>
       {/* {OpenModal && <Modal setOpenModal={showModal}/>} */}
       {OpenModal && <ModalTwo setOpenModal={showModal}/>}
+      <Slider />
     </div>
   );
 }
