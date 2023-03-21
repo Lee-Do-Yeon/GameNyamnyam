@@ -8,9 +8,8 @@
     background-image: url(assets/gameChoicePage.png);
     background-size: cover;
     background-repeat: no-repeat;
-    display: flex;
+    display: block;
     background-position: fixed;
-    justify-content: center;
   }
   .gamePlate {
     margin-top: 20px;
@@ -70,4 +69,15 @@
     border-radius:50% / 50%;
     z-index: 4;
 }
-  
+.firstTrail {
+  width: 100vw;
+  height: 30vh;
+  display:flex;
+  justify-content: space-around;
+}
+.setDish {
+  width: 70vw;
+  height: 30vh;
+  display: flex;
+  justify-content: space-around;
+}
