@@ -8,11 +8,9 @@ import { RecoilRoot } from 'recoil';
 import './gamepage.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <RecoilRoot>
-    <React.StrictMode>
-      <BrowserRouter>
-        {/* <App /> */}
-        <Test />
-      </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+      {/* <App /> */}
+      <Test />
+    </BrowserRouter>
   </RecoilRoot>,
 );
