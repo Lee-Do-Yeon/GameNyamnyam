@@ -2,13 +2,13 @@
     border: 2px solid red;
     width: 200px;
     height: 300px;
-}/* .bodyslider {
+}.bodyslider {
   align-items: center;
   display: flex;
   justify-content: center;
-} */
+}
   
-/* @-webkit-keyframes scroll {
+@-webkit-keyframes scroll {
   0% {
     -webkit-transform: translateX(0);
             transform: translateX(0);
@@ -17,17 +17,17 @@
     -webkit-transform: translateX(calc(-250px * 7));
             transform: translateX(calc(-250px * 7));
   }
-} */
+}
 
 /* 움직이게 하는 역할 */
 @keyframes scroll {
   0% {
-    -webkit-transform: translateX(100);
-            transform: translateX(100);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
   100% {
-    -webkit-transform: translateX(calc(250px * 5));
-            transform: translateX(calc(250px * 5));
+    -webkit-transform: translateX(calc(-250px * 5));
+            transform: translateX(calc(-250px * 5));
   }
 }
 
@@ -60,11 +60,11 @@
 }
 
 .slider .slide-track {
-  -moz-animation: scroll 100s linear infinite;
+  -moz-animation: scroll 10s linear infinite;
   -webkit-animation: scroll 15s linear infinite;
           animation: scroll 15s linear infinite;
   display: flex;
-  width: calc(250px * 30);
+  width: calc(250px * 30 );
   height: 100%;
   /* cursor: grab; */
 }

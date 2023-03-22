@@ -19,6 +19,8 @@ export default function Slider() {
           <div className='box slide'> 5 </div>
           <div className='box slide'> 6 </div>
           <div className='box slide'> 7 </div>
+          <div className='box slide'> <Dish/> </div>
+
         </div>
       </div>
     </div>
