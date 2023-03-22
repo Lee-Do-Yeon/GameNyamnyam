@@ -2,7 +2,7 @@ import React from 'react';
 import ImgBox from './Imgbox';
 export default function Modal({ setOpenModal }, props) {
   return (
-    <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-30 text-center">
+    <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-30 text-center z-10">
       <div className="bg-gray-300 min-w-[500px] min-h-[450px] rounded">
         <div className='flex justify-between'>
         <h1 className="font-extrabold">이 게임의 이름</h1>
