@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
-
+import '../../components/Slider.css';
 export default function Gamepage() {
   const [sushis, setsushis] = useState([
     { id: '1', name: 'Tuna Sushi' },
@@ -11,7 +11,6 @@ export default function Gamepage() {
     { id: '5', name: 'Octopus Sushi' },
   ]);
   const [plates, setPlates] = useState([]);
-
   const onDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) {
@@ -23,6 +22,7 @@ export default function Gamepage() {
       destination.droppableId === 'plate-list'
     ) {
       const sushi = sushis.find((sushi) => sushi.id === result.draggableId);
+      console.log(sushis.indexOf(sushi));
       const newPlates = [...plates, sushi];
       setPlates(newPlates);
       setsushis([...sushis.filter((sushi) => sushi.id !== result.draggableId)]);
@@ -31,13 +31,17 @@ export default function Gamepage() {
   return (
     <div className="gamepage">
       <DragDropContext onDragEnd={onDragEnd}>
-        <div>
-          <Droppable droppableId="sushi-bar" direction="horizontal">
+        <div className="slider">
+          <Droppable
+            droppableId="sushi-bar"
+            direction="horizontal"
+            shouldRespectForcePress={true}
+          >
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="firstTrail"
+                className="slide-track"
               >
                 {sushis.map((sushi, index) => (
                   <Draggable
@@ -47,6 +51,7 @@ export default function Gamepage() {
                   >
                     {(provided) => (
                       <div
+                        className="slide"
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -69,7 +74,7 @@ export default function Gamepage() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="setDish"
+                className="slider"
               >
                 {plates.map((plate, index) => (
                   <Draggable
