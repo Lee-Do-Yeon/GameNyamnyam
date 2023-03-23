@@ -50,8 +50,14 @@ def get_result(preference, games):
     # 코사인 유사도
     cosine_similar = cosine_similarity(one_hot_genres, one_hot_genres.loc[0].values.reshape(1, -1))
     
+    result_df = pd.DataFrame(cosine_similar).set_index(one_hot_genres.index)
+
+    # 백분율로 계산.
+    result_df[0] = round(result_df[0], 2)*100
+    
     # key: appid, value: 코사인 유사도 값
-    result = pd.DataFrame(cosine_similar).set_index(one_hot_genres.index).to_dict()[0]
+    result = result_df.to_dict()[0]
+    del result[0]
     
     return result
 
