@@ -1,9 +1,7 @@
 import React from 'react';
-import Receipt from '../../components/Receipt'
+import Receipt from '../../components/Receipt';
 import AddGame from '../../components/AddGame';
-// import Slider from '../../components/Slider';
-// import TestS from '../../components/TestS';
-
+import Detail from '../../components/Detail';
 
 export default function Resultpage() {
 
@@ -11,6 +9,7 @@ export default function Resultpage() {
     <div className='p-7 m-5'>
       <Receipt />
       <AddGame />
+      <Detail />
     </div>
   );
 }

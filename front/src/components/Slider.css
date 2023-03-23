@@ -1,8 +1,4 @@
-.box {
-    border: 2px solid red;
-    width: 200px;
-    height: 300px;
-}.bodyslider {
+.bodyslider {
   align-items: center;
   display: flex;
   justify-content: center;

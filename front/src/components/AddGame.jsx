@@ -4,7 +4,6 @@ export default function AddGame() {
     const [addgame, setaddgame] = useState(false);
 
     const showaddgame = () => {
-        console.log(addgame);
         setaddgame(!addgame);
     };
 
