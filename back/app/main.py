@@ -2,6 +2,8 @@ import requests
 from fastapi import FastAPI, Depends
 from starlette.requests import Request
 from steamsignin import SteamSignIn
+from recommend import recommend_game
+from typing import List
 
 app = FastAPI()
 api_url = "http://127.0.0.1:8000"
@@ -49,9 +51,11 @@ def get_game_by_table(table_list: str):
 # 뽑은 게임 리스트에 대한 매치율 저장
 
 
-@app.get("/games/rate")
-def get_rate():
-    return {"Hello": "World"}
+@app.post("/games/rate")
+def get_rate(preference: list,
+             games: list):
+    result = recommend_game.get_result(preference, games)
+    return result
 
 # 뽑은 리스트랑 비슷한 거 추천
 
