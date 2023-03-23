@@ -15,4 +15,3 @@ class Game(Document):
     image = StringField()
     about_the_game = StringField(null=True)
     screenshots = StringField()
-
