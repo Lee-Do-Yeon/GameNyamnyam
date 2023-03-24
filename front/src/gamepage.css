@@ -70,13 +70,21 @@
     z-index: 4;
 }
 .firstTrail {
-  width: 100vw;
-  height: 30vh;
-  display:flex;
+  height: 20vh;
+  width: 100vw; 
+  position: absolute; 
+  overflow: hidden; 
+  display: block;
+}
+.movingPlate {
+  height: 150px; 
+  position: absolute;
 }
 .setDish {
-  width: 70vw;
-  height: 30vh;
-  display: flex;
-
+  height: 20vh;
+  width: 100vw; 
+  position: absolute; 
+  overflow: hidden; 
+  display: block;
+  bottom: 10px;
 }
