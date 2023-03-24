@@ -40,9 +40,9 @@
 
 .slider::before, .slider::after {
   content: "";
-  height: 150px;
+ 
   position: absolute;
-  width: 200px;
+ 
   z-index: 2;
 }
 .slider::after {
@@ -69,5 +69,9 @@
   height: 150px;
   width: 250px;
 }
-
+.slider .slide-track:active {
+  cursor: grabbing;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
 /* Sliding Banner End */
