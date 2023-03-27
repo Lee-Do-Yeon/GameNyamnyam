@@ -28,7 +28,7 @@ export default function Detail({ setInfo }) {
           </div>
           <div className="col-span-7 h-18 ">
             <img
-              src="https://cdn.akamai.steamstatic.com/steam/apps/793543/header.jpg?t=1520446355"
+              src="https://cdn.akamai.steamstatic.com/steam/apps/1719130/header.jpg?t=1633971435"
               alt=""
               className="w-full h-full rounded"
             />
