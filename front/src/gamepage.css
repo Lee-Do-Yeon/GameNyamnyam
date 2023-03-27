@@ -11,6 +11,9 @@
     display: block;
     background-position: fixed;
   }
+  .kitchen {
+    height: 25vh;
+  }
   .gamePlate {
     margin-top: 20px;
     width: 200px;
@@ -69,6 +72,11 @@
     border-radius:50% / 50%;
     z-index: 4;
 }
+.sushiBar {
+  display: flex;
+  height: 40vh;
+  width: 100vw; 
+}
 .firstTrail {
   height: 20vh;
   width: 100vw; 
@@ -76,15 +84,32 @@
   overflow: hidden; 
   display: block;
 }
-.movingPlate {
-  height: 150px; 
-  position: absolute;
-}
-.setDish {
+.secondTrail {
   height: 20vh;
   width: 100vw; 
   position: absolute; 
   overflow: hidden; 
   display: block;
+  bottom: 32vh;
+  z-index: 0;
+}
+.rightMovingPlate {
+  height: 150px; 
+  position: absolute;
+}
+.leftMovingPlate {
+  height: 150px; 
+  position: absolute;
+}
+.setDish {
+  height: 20vh;
+  width: 70vw; 
+  position: absolute; 
+  overflow: hidden; 
+  display: flex;
   bottom: 10px;
+}
+.myPlate {
+  position: relative;
+  margin-right: 40px;
 }

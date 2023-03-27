@@ -3,84 +3,142 @@ import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
 import '../../components/Slider.css';
 export default function Gamepage() {
-  const sushis = [
+  const FirstSushis = [
     { id: '1', name: 'Tuna Sushi' },
     { id: '2', name: 'Salmon Sushi' },
     { id: '3', name: 'Eel Sushi' },
     { id: '4', name: 'Shrimp Sushi' },
     { id: '5', name: 'Octopus Sushi' },
-    { id: '6', name: 'Octopus Sushi' },
-    { id: '7', name: 'Octopus Sushi' },
-    { id: '8', name: 'Octopus Sushi' },
-    { id: '9', name: 'Octopus Sushi' },
-    { id: '10', name: 'Octopus Sushi' },
+    { id: '6', name: 'Uni Sushi' },
+    { id: '7', name: 'Stake Sushi' },
+    { id: '8', name: 'Tamago Sushi' },
+    { id: '9', name: 'Tofu Sushi' },
+    { id: '10', name: 'Flatfish Sushi' },
+  ];
+  const SecondSushis = [
+    { id: '11', name: 'Tuna Sushi' },
+    { id: '12', name: 'Salmon Sushi' },
+    { id: '13', name: 'Eel Sushi' },
+    { id: '14', name: 'Shrimp Sushi' },
+    { id: '15', name: 'Octopus Sushi' },
+    { id: '16', name: 'Uni Sushi' },
+    { id: '17', name: 'Stake Sushi' },
+    { id: '18', name: 'Tamago Sushi' },
+    { id: '19', name: 'Tofu Sushi' },
+    { id: '20', name: 'Flatfish Sushi' },
   ];
   const [plates, setPlates] = useState([]);
-  // const onDragStart = (result) => {
-  //   const { source } = result;
-  //   const sushi = sushis.find((sushi) => sushi.id === source.draggableId);
-  //   console.log(sushis.indexOf(sushi) - 1);
-  //   sushis.map((sushi) => {
-  //     if (sushi.id === result.draggableId) {
-  //       const banneridnum = sushis.indexOf(sushi) + 1;
-  //       const getSushi = document.querySelector(`#banner${banneridnum}`);
-  //       console.log(getSushi);
-  //     }
-  //   });
-  // };
+  const onDragStart = (result) => {
+    const { source } = result;
+
+    console.log('source.droppableId: ', source.droppableId);
+    console.log(FirstSushis[source.index]);
+    const banneridnum = source.index + 1;
+    if (source.droppableId === 'first-sushi-bar') {
+      const getSushi = document.querySelector(`#firstPlate${banneridnum}`);
+      console.log(getSushi);
+      setInterval(() => {
+        getSushi.style.left = `${getSushi.offsetLeft + 1}px`;
+      }, 8);
+    } else if (source.droppableId === 'second-sushi-bar') {
+      const getSushi = document.querySelector(`#secondPlate${banneridnum}`);
+      console.log(getSushi);
+      setInterval(() => {
+        getSushi.style.left = `${getSushi.offsetLeft - 1}px`;
+      }, 8);
+    }
+  };
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
+    const banneridnum = source.index + 1;
+
+    if (source.droppableId === 'first-sushi-bar') {
+      const getSushi = document.querySelector(`#firstPlate${banneridnum}`);
+      setInterval(() => {
+        getSushi.style.left = `${getSushi.offsetLeft - 1}px`;
+      }, 8);
+    } else if (source.droppableId === 'second-sushi-bar') {
+      const getSushi = document.querySelector(`#secondPlate${banneridnum}`);
+      setInterval(() => {
+        getSushi.style.left = `${getSushi.offsetLeft + 1}px`;
+      }, 8);
+    }
     console.log('source', source);
     console.log('destination', destination);
+    //목적지가 없는 경우
     if (!destination) {
+      console.log('목적지 없음');
+      if (source.droppableId === 'first-sushi-bar') {
+        const banneridnum = source.index + 1;
+        const beforePlate = document.querySelector(
+          `#firstPlate${source.index}`,
+        );
+        const nowPlate = document.querySelector(`#firstPlate${banneridnum}`);
+        console.log('nowPlate', nowPlate);
+        nowPlate.style.left = 'initial';
+        console.log(`${beforePlate.offsetLeft + 100 + 200}px`);
+        console.log(nowPlate.style.left);
+      }
       return;
     }
-
+    // 목적지에 잘 도착 한 경우
     if (
-      source.droppableId === 'sushi-bar' &&
+      (source.droppableId === 'first-sushi-bar' ||
+        source.droppableId === 'second-sushi-bar') &&
       destination.droppableId === 'plate-list'
     ) {
-      const sushi = sushis.find((sushi) => sushi.id === result.draggableId);
-      console.log(sushis.indexOf(sushi) - 1);
-      sushis.map((sushi) => {
-        if (sushi.id === result.draggableId) {
-          const banneridnum = sushis.indexOf(sushi) + 1;
-          const getSushi = document.querySelector(`#banner${banneridnum}`);
-          console.log(getSushi);
-          getSushi.setAttribute('style', 'pointer-events:none');
-          getSushi.setAttribute('style', 'visibility:hidden');
-        }
-      });
-      console.log(sushis);
-      const newPlates = [...plates, sushi];
-      setPlates(newPlates);
-    } else if (destination.droppableId !== 'plate-list') {
-      sushis.map((sushi) => {
-        if (sushi.id === result.draggableId) {
-          const banneridnum = sushis.indexOf(sushi) + 1;
-          const nowSushi = document.querySelector(`#banner${banneridnum}`);
-          const beforSushi = document.querySelector(
-            `#banner${sushis.indexOf(sushi)}`,
-          );
-          nowSushi.style.left = `${beforSushi.offsetLeft + 100 + 200}px`;
-        }
-      });
+      if (source.droppableId === 'first-sushi-bar') {
+        const sushi = FirstSushis.find(
+          (sushi) => sushi.id === result.draggableId,
+        );
+        FirstSushis.map((sushi) => {
+          if (sushi.id === result.draggableId) {
+            const banneridnum = FirstSushis.indexOf(sushi) + 1;
+            const getSushi = document.querySelector(
+              `#firstPlate${banneridnum}`,
+            );
+            console.log(getSushi);
+            getSushi.setAttribute('style', 'pointer-events:none');
+            getSushi.setAttribute('style', 'visibility:hidden');
+          }
+        });
+        const newPlates = [...plates, sushi];
+        setPlates(newPlates);
+      } else if (source.droppableId === 'second-sushi-bar') {
+        const sushi = SecondSushis.find(
+          (sushi) => sushi.id === result.draggableId,
+        );
+        SecondSushis.map((sushi) => {
+          if (sushi.id === result.draggableId) {
+            const banneridnum = SecondSushis.indexOf(sushi) + 1;
+            const getSushi = document.querySelector(
+              `#secondPlate${banneridnum}`,
+            );
+            console.log(getSushi);
+            getSushi.setAttribute('style', 'pointer-events:none');
+            getSushi.setAttribute('style', 'visibility:hidden');
+          }
+        });
+        const newPlates = [...plates, sushi];
+        setPlates(newPlates);
+      }
     }
   };
+  // 첫번 째 스시 바
   useEffect(() => {
     let bannerLeft = 0;
     let first = 1;
     let last;
     let imgCnt = 0;
-    const $plates = document.querySelectorAll('.movingPlate');
+    const $plates = document.querySelectorAll('.leftMovingPlate');
     let $first;
     let $last;
 
     $plates.forEach((plate) => {
       plate.style.left = `${bannerLeft}px`;
       bannerLeft += 100 + 200;
-      plate.setAttribute('id', `banner${++imgCnt}`);
+      plate.setAttribute('id', `firstPlate${++imgCnt}`);
     });
 
     if (imgCnt > 9) {
@@ -89,8 +147,8 @@ export default function Gamepage() {
         $plates.forEach((plate) => {
           plate.style.left = `${plate.offsetLeft - 1}px`;
         });
-        $first = document.querySelector(`#banner${first}`);
-        $last = document.querySelector(`#banner${last}`);
+        $first = document.querySelector(`#firstPlate${first}`);
+        $last = document.querySelector(`#firstPlate${last}`);
         if ($first.offsetLeft < -200) {
           $first.style.left = `${$last.offsetLeft + 100 + 200}px`;
           first++;
@@ -102,48 +160,130 @@ export default function Gamepage() {
             first = 1;
           }
         }
-      }, 10);
+      }, 15);
+    }
+  }, []);
+  // 두번 째 스시 바
+  useEffect(() => {
+    let bannerLeft = 0;
+    let first = 1;
+    let last;
+    let imgCnt = 0;
+    const $plates = document.querySelectorAll('.rightMovingPlate');
+    let $first;
+    let $last;
+
+    $plates.forEach((plate) => {
+      plate.style.left = `${bannerLeft}px`;
+      bannerLeft += 100 + 200;
+      plate.setAttribute('id', `secondPlate${++imgCnt}`);
+    });
+
+    if (imgCnt > 9) {
+      last = imgCnt;
+      setInterval(() => {
+        $plates.forEach((plate) => {
+          plate.style.left = `${plate.offsetLeft + 1}px`;
+        });
+        $first = document.querySelector(`#secondPlate${first}`);
+        $last = document.querySelector(`#secondPlate${last}`);
+        if ($last.offsetLeft > -100) {
+          $first.style.left = `${$last.offsetLeft - 100 - 200}px`;
+          first++;
+          last++;
+          if (last > imgCnt) {
+            last = 1;
+          }
+          if (first > imgCnt) {
+            first = 1;
+          }
+        }
+      }, 15);
     }
   }, []);
   return (
     <div className="gamepage">
-      <DragDropContext onDragEnd={onDragEnd} >
-        <div className="firstTrail">
-          <Droppable droppableId="sushi-bar" direction="horizontal">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                {sushis.map((sushi, index) => (
-                  <Draggable
-                    key={sushi.id}
-                    draggableId={sushi.id}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="movingPlate"
-                      >
-                        <Dish />
+      <div className="kitchen"></div>
+      <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+        <div className="sushiBar">
+          <div className="firstTrail">
+            <Droppable
+              droppableId="first-sushi-bar"
+              direction="horizontal"
+              isDropDisabled={true}
+            >
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {FirstSushis.map((sushi, index) => (
+                    <Draggable
+                      key={sushi.id}
+                      draggableId={sushi.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="leftMovingPlate"
+                        >
+                          <Dish />
 
-                        <p>{sushi.name}</p>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+                          <p>{sushi.name}</p>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
+          <div className="secondTrail">
+            <Droppable
+              droppableId="second-sushi-bar"
+              direction="horizontal"
+              isDropDisabled={true}
+            >
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {SecondSushis.map((sushi, index) => (
+                    <Draggable
+                      key={sushi.id}
+                      draggableId={sushi.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="rightMovingPlate"
+                        >
+                          <Dish />
+
+                          <p>{sushi.name}</p>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
         </div>
-
-        <div className="setDish">
+        <div>
           <Droppable droppableId="plate-list" direction="horizontal">
             {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="setDish"
+              >
                 {plates.map((plate, index) => (
                   <Draggable
+                    isDragDisabled={true}
                     key={plate.id}
                     draggableId={plate.id}
                     index={index}
