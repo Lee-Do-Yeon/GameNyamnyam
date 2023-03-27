@@ -3,8 +3,11 @@ import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
 import Receipt from '../../components/Receipt';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { userGame } from '../../../recoil/user/atoms';
 
 export default function Gamepage() {
+  const [theEnd, setTheEnd] = useState('false');
   const navigate = useNavigate();
   const FirstSushis = [
     { id: '1', name: 'Tuna Sushi', price: 10000 },
@@ -30,7 +33,8 @@ export default function Gamepage() {
     { id: '19', name: 'Tofu Sushi', price: 100000 },
     { id: '20', name: 'Flatfish Sushi', price: 10000 },
   ];
-  const [plates, setPlates] = useState([]);
+  const [plates, setPlates] = useRecoilState(userGame);
+
   const onDragStart = (result) => {
     const { source } = result;
 
@@ -146,7 +150,7 @@ export default function Gamepage() {
 
     if (imgCnt > 9) {
       last = imgCnt;
-      setInterval(() => {
+      const intervalId = setInterval(() => {
         $plates.forEach((plate) => {
           plate.style.left = `${plate.offsetLeft - 1}px`;
         });
@@ -164,6 +168,9 @@ export default function Gamepage() {
           }
         }
       }, 15);
+      return () => {
+        clearInterval(intervalId);
+      };
     }
   }, []);
   // 두번 째 스시 바
@@ -175,16 +182,17 @@ export default function Gamepage() {
     const $plates = document.querySelectorAll('.rightMovingPlate');
     let $first;
     let $last;
-
+  
     $plates.forEach((plate) => {
       plate.style.left = `${bannerLeft}px`;
       bannerLeft += 100 + 200;
       plate.setAttribute('id', `secondPlate${++imgCnt}`);
     });
-
+  
     if (imgCnt > 9) {
+      console.log(theEnd);
       last = imgCnt;
-      setInterval(() => {
+      const intervalId = setInterval(() => {
         $plates.forEach((plate) => {
           plate.style.left = `${plate.offsetLeft + 1}px`;
         });
@@ -202,9 +210,14 @@ export default function Gamepage() {
           }
         }
       }, 15);
+  
+      return () => {
+        clearInterval(intervalId);
+      };
     }
   }, []);
   const navigateToResult = () => {
+    setTheEnd('true');
     navigate('/result');
   };
   return (
