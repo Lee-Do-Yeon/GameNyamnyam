@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
-import '../../components/Slider.css';
+import Receipt from '../../components/Receipt';
+import { useNavigate } from 'react-router-dom';
+
 export default function Gamepage() {
+  const navigate = useNavigate();
   const FirstSushis = [
-    { id: '1', name: 'Tuna Sushi' },
-    { id: '2', name: 'Salmon Sushi' },
-    { id: '3', name: 'Eel Sushi' },
-    { id: '4', name: 'Shrimp Sushi' },
-    { id: '5', name: 'Octopus Sushi' },
-    { id: '6', name: 'Uni Sushi' },
-    { id: '7', name: 'Stake Sushi' },
-    { id: '8', name: 'Tamago Sushi' },
-    { id: '9', name: 'Tofu Sushi' },
-    { id: '10', name: 'Flatfish Sushi' },
+    { id: '1', name: 'Tuna Sushi', price: 10000 },
+    { id: '2', name: 'Salmon Sushi', price: 30000 },
+    { id: '3', name: 'Eel Sushi', price: 50000 },
+    { id: '4', name: 'Shrimp Sushi', price: 10000 },
+    { id: '5', name: 'Octopus Sushi', price: 10000 },
+    { id: '6', name: 'Uni Sushi', price: 10000 },
+    { id: '7', name: 'Stake Sushi', price: 30000 },
+    { id: '8', name: 'Tamago Sushi', price: 10000 },
+    { id: '9', name: 'Tofu Sushi', price: 10000 },
+    { id: '10', name: 'Flatfish Sushi', price: 50000 },
   ];
   const SecondSushis = [
-    { id: '11', name: 'Tuna Sushi' },
-    { id: '12', name: 'Salmon Sushi' },
-    { id: '13', name: 'Eel Sushi' },
-    { id: '14', name: 'Shrimp Sushi' },
-    { id: '15', name: 'Octopus Sushi' },
-    { id: '16', name: 'Uni Sushi' },
-    { id: '17', name: 'Stake Sushi' },
-    { id: '18', name: 'Tamago Sushi' },
-    { id: '19', name: 'Tofu Sushi' },
-    { id: '20', name: 'Flatfish Sushi' },
+    { id: '11', name: 'Tuna Sushi', price: 10000 },
+    { id: '12', name: 'Salmon Sushi', price: 10000 },
+    { id: '13', name: 'Eel Sushi', price: 50000 },
+    { id: '14', name: 'Shrimp Sushi', price: 0 },
+    { id: '15', name: 'Octopus Sushi', price: 10000 },
+    { id: '16', name: 'Uni Sushi', price: 50000 },
+    { id: '17', name: 'Stake Sushi', price: 30000 },
+    { id: '18', name: 'Tamago Sushi', price: 0 },
+    { id: '19', name: 'Tofu Sushi', price: 100000 },
+    { id: '20', name: 'Flatfish Sushi', price: 10000 },
   ];
   const [plates, setPlates] = useState([]);
   const onDragStart = (result) => {
@@ -39,13 +42,13 @@ export default function Gamepage() {
       console.log(getSushi);
       setInterval(() => {
         getSushi.style.left = `${getSushi.offsetLeft + 1}px`;
-      }, 8);
+      }, 15);
     } else if (source.droppableId === 'second-sushi-bar') {
       const getSushi = document.querySelector(`#secondPlate${banneridnum}`);
       console.log(getSushi);
       setInterval(() => {
         getSushi.style.left = `${getSushi.offsetLeft - 1}px`;
-      }, 8);
+      }, 15);
     }
   };
 
@@ -57,12 +60,12 @@ export default function Gamepage() {
       const getSushi = document.querySelector(`#firstPlate${banneridnum}`);
       setInterval(() => {
         getSushi.style.left = `${getSushi.offsetLeft - 1}px`;
-      }, 8);
+      }, 15);
     } else if (source.droppableId === 'second-sushi-bar') {
       const getSushi = document.querySelector(`#secondPlate${banneridnum}`);
       setInterval(() => {
         getSushi.style.left = `${getSushi.offsetLeft + 1}px`;
-      }, 8);
+      }, 15);
     }
     console.log('source', source);
     console.log('destination', destination);
@@ -201,9 +204,16 @@ export default function Gamepage() {
       }, 15);
     }
   }, []);
+  const navigateToResult = () => {
+    navigate('/result');
+  };
   return (
     <div className="gamepage">
-      <div className="kitchen"></div>
+      <div className="kitchen">
+        <div>
+          <Receipt />
+        </div>
+      </div>
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <div className="sushiBar">
           <div className="firstTrail">
@@ -227,7 +237,7 @@ export default function Gamepage() {
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
                         >
-                          <Dish />
+                          <Dish price={sushi.price} />
 
                           <p>{sushi.name}</p>
                         </div>
@@ -260,7 +270,7 @@ export default function Gamepage() {
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
                         >
-                          <Dish />
+                          <Dish price={sushi.price} />
 
                           <p>{sushi.name}</p>
                         </div>
@@ -273,13 +283,13 @@ export default function Gamepage() {
             </Droppable>
           </div>
         </div>
-        <div>
+        <div className="clientTable">
           <Droppable droppableId="plate-list" direction="horizontal">
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="setDish"
+                className="setDish overflow-x-auto"
               >
                 {plates.map((plate, index) => (
                   <Draggable
@@ -295,7 +305,7 @@ export default function Gamepage() {
                         {...provided.dragHandleProps}
                         className="myPlate"
                       >
-                        <Dish />
+                        <Dish price={plate.price} />
                         <p>{plate.name}</p>
                       </div>
                     )}
@@ -305,6 +315,7 @@ export default function Gamepage() {
               </div>
             )}
           </Droppable>
+          <div className="bell" onClick={navigateToResult}></div>
         </div>
       </DragDropContext>
     </div>
