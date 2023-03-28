@@ -66,8 +66,8 @@ def get_similar_game():
     return {"Hello": "World"}
 
 
-@app.get("/games/{appid}")
-def get_game_detail():
+@app.get("/games/detail/{appid}")
+def get_game_detail(appid: int):
     """게임 상세 정보 반환 함수.
 
     Args:
@@ -81,16 +81,20 @@ def get_game_detail():
 
 
     # 임시 데이터...
-    result = {"data":{
-                    "name" : "Raft",
-                    "short_description" : "Raft throws you and your friends into an epic oceanic adventure! Alone or together, players battle to survive a perilous voyage across a vast sea! Gather debris, scavenge reefs and build your own floating home, but be wary of the man-eating sharks!",
-                    "price" : 21000,
-                    "categories" : "싱글 플레이어,멀티플레이어,협동,온라인 협동,Steam 도전 과제,Steam Cloud", # 구분자 ','
-                    "genres" : "어드벤처,인디,시뮬레이션", # 구분자 ','
-                    "release_date" : "2022-06-20",
-                    "developers" : "Redbeet Interactive", # 구분자 '///'
-                    "screenshots" : "https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_c22b2ff5ba5609f74e61b5feaa5b7a1d7fd1dbd3.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_2adb248f4d501cf58344d9af1d8a9e56c74647ee.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_56914c026da8c8411974bd0e2e8cb81a0331ba99.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_ef26440dc87e4d571139f5c64a22035d86723442.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_dddecb78ba5ae9eecbe17a22f09f5281609d63a0.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_594b5fab052123e5f96088df3ec3c9b7cec62e88.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_7e366c948ed3847f33693cebd23aaaf6458cbf46.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_e5d26eea3a2e068518095a9596380ab384da6e80.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_0e062ec493bba26edaf0f7e6a6e815e713e694b5.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_c885b2df8492951552fe4ef00ca23a81321f0bb3.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_fddb32f91f59dc076b60eebf6d013fc9a636e0e1.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_d1ab60ade693c7ce90bcd0ba5400f8ea39e73edb.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_363d79b1d6da0ec6dbccdff1c1f07e189664965a.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_fdf998ea2eca1e79c0141b83ef32c5fadecd9a0e.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_189ac1fa4505a10365bcf9c0c3ba61e7a618ae0f.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_b327651cc0fdd24615b5e9e4f71f53f032ab712a.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_9784377e0e3bcfd2be609721326ab336a39c34b8.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_c2cf9eaa982cdf83d4aecd67626f6684cdd2ea2f.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_4ef5feab40a770daca055a1a446ad3f9ba8fc50c.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_7f3903e7a34e8992e12449f168744315a4e2cd49.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_df564f8e61a046e6512b1900aacd8802274c183d.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_ce675c9e2bee34a08c6e2f0c8357354bcd4e5f1d.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_02579aefd100d68c82bd06d2de05bfb915214266.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_79738b5ac475030ea583aea92b487f73c7e02572.1920x1080.jpg?t=1655744208" # 구분자 ','
-                }
-              }
+    result = {
+        "data":{
+            "name" : "Raft",
+            "short_description" : "Raft throws you and your friends into an epic oceanic adventure! Alone or together, players battle to survive a perilous voyage across a vast sea! Gather debris, scavenge reefs and build your own floating home, but be wary of the man-eating sharks!",
+            "price" : 21000,
+            "categories" : "싱글 플레이어,멀티플레이어,협동,온라인 협동,Steam 도전 과제,Steam Cloud", # 구분자 ','
+            "genres" : "어드벤처,인디,시뮬레이션", # 구분자 ','
+            "release_date" : "2022-06-20",
+            "developers" : "Redbeet Interactive", # 구분자 '///'
+            "screenshots" : "https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_c22b2ff5ba5609f74e61b5feaa5b7a1d7fd1dbd3.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_2adb248f4d501cf58344d9af1d8a9e56c74647ee.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_56914c026da8c8411974bd0e2e8cb81a0331ba99.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_ef26440dc87e4d571139f5c64a22035d86723442.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_dddecb78ba5ae9eecbe17a22f09f5281609d63a0.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_594b5fab052123e5f96088df3ec3c9b7cec62e88.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_7e366c948ed3847f33693cebd23aaaf6458cbf46.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_e5d26eea3a2e068518095a9596380ab384da6e80.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_0e062ec493bba26edaf0f7e6a6e815e713e694b5.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_c885b2df8492951552fe4ef00ca23a81321f0bb3.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_fddb32f91f59dc076b60eebf6d013fc9a636e0e1.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_d1ab60ade693c7ce90bcd0ba5400f8ea39e73edb.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_363d79b1d6da0ec6dbccdff1c1f07e189664965a.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_fdf998ea2eca1e79c0141b83ef32c5fadecd9a0e.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_189ac1fa4505a10365bcf9c0c3ba61e7a618ae0f.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_b327651cc0fdd24615b5e9e4f71f53f032ab712a.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_9784377e0e3bcfd2be609721326ab336a39c34b8.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_c2cf9eaa982cdf83d4aecd67626f6684cdd2ea2f.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_4ef5feab40a770daca055a1a446ad3f9ba8fc50c.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_7f3903e7a34e8992e12449f168744315a4e2cd49.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_df564f8e61a046e6512b1900aacd8802274c183d.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_ce675c9e2bee34a08c6e2f0c8357354bcd4e5f1d.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_02579aefd100d68c82bd06d2de05bfb915214266.1920x1080.jpg?t=1655744208,https://cdn.akamai.steamstatic.com/steam/apps/648800/ss_79738b5ac475030ea583aea92b487f73c7e02572.1920x1080.jpg?t=1655744208" # 구분자 ','
+        }
+    }
+    # TO DO
+    # 1) categories, genres, screenshots 쉼표로 구분하여 리스트화
+    # 2) developers '///'로 구분하여 리스트화
     
     return result
