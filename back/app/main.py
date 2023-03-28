@@ -5,8 +5,25 @@ from mongoengine import connect
 from openpyxl import load_workbook
 from starlette.requests import Request
 from steamsignin import SteamSignIn
-import models
-import json
+from recommend import recommend_game
+from typing import List
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+mongodb_root = os.environ.get('mongodb_root')
+mongodb_URI = f"mongodb+srv://root:{mongodb_root}@gamenyamnaym.t2iixnv.mongodb.net/test"
+
+# DB 연결
+client = MongoClient(mongodb_URI)
+
+# DB 접근
+db = client['nyamnyam']
+
+# Collection 접근
+games = db['game']
+
 
 app = FastAPI()
 # db 연동
@@ -56,9 +73,11 @@ def get_game_by_table(table_list: str):
 # 뽑은 게임 리스트에 대한 매치율 저장
 
 
-@app.get("/games/rate")
-def get_rate():
-    return {"Hello": "World"}
+@app.post("/games/rate")
+def get_rate(preference: list,
+             games: list):
+    result = recommend_game.get_result(preference, games)
+    return result
 
 # 뽑은 리스트랑 비슷한 거 추천
 
@@ -68,52 +87,28 @@ def get_similar_game():
 
     return {"Hello": "World"}
 
-# 저장된 game 데이터 전체 가져오기
-@app.get("/get_game")
-def get_all_game():
-    # 객체 가져오기
-    games = models.Game.objects()
-    # return list(games)
 
-    # json으로 형변환 후 return
-    games_json = games.to_json()
-    return JSONResponse(json.loads(games_json))
+@app.get("/games/detail/{appid}")
+def get_game_detail(appid: str):
+    """게임 상세 정보 반환 함수.
 
-# 엑셀파일 불러와서 데이터 넣기
-@app.get("/insert_excel")
-def excel_to_db():
-    print("insert data...")
+    Args:
+        appid : 게임의 앱 아이디
 
-    # 엑셀파일 열기
-    excel_filename = "./game_data_50000.xlsx"
-    wb = load_workbook(excel_filename)
-    ws = wb.active
+    Returns:
+        제목, 가격, 스크린샷, 짧은 설명, 개발사, 출시일, 장르, 카테고리
+    """
+    result = {}
+    
+    # DB 조회
+    get_game = games.find_one({"appid":appid},{"_id":0, "recommendations":0, "metacritic":0, "about_the_game":0})
 
-    for x in range(2, ws.max_row):
-        # 엑셀 파일에서 하나씩 데이터 뽑아오기
-        appid = ws.cell(row=x, column=2).value
-        name = str(ws.cell(row=x,column=3).value)
-        short_description = str(ws.cell(row=x,column=4).value)
-        price = ws.cell(row=x, column=5).value
-        categories = ws.cell(row=x, column=6).value
-        genres = ws.cell(row=x, column=7).value
-        recommendations = ws.cell(row=x,column=8).value
-        release_date = ws.cell(row=x, column=9).value
-        developers = str(ws.cell(row=x, column=10).value)
-        metacritic = ws.cell(row=x, column=11).value
-        image = str(ws.cell(row=x, column=12).value)
-        about_the_game = str(ws.cell(row=x, column=13).value)
-        screenshots = str(ws.cell(row=x, column=14).value)
+    # categories, genres, screenshots, developers 리스트화
+    get_game["categories"] = get_game["categories"].split(",")
+    get_game["genres"] = get_game["genres"].split(",")
+    get_game["screenshots"] = get_game["screenshots"].split(",")
+    get_game["developers"] = get_game["developers"].split("///")
 
-        # str split -> 리스트로 변환 
-        categories_list = categories.split(",")
-        genres_list = genres.split(",")
+    result["data"] = get_game
 
-        g = models.Game(appid=appid, name=name, short_description=short_description,price=price,recommendations=recommendations,release_date=release_date,developers=developers,metacritic=metacritic,image=image,about_the_game=about_the_game,screenshots=screenshots)
-        g.categories = categories_list
-        g.genres = genres_list
-
-        g.save() # 저장하기
-        
-
-
+    return result
