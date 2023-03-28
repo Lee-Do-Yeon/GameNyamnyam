@@ -1,5 +1,8 @@
 import requests
 from fastapi import FastAPI, Depends
+from fastapi.responses import JSONResponse
+from mongoengine import connect
+from openpyxl import load_workbook
 from starlette.requests import Request
 from steamsignin import SteamSignIn
 from recommend import recommend_game
@@ -23,6 +26,8 @@ games = db['game']
 
 
 app = FastAPI()
+# db 연동
+connect(db="nyamnyam", host="localhost", port=27017)
 api_url = "http://127.0.0.1:8000"
 
 
