@@ -9,8 +9,7 @@ export default function Receipt() {
     };
 
     return (
-        <div className='border-2'>
-            <button onClick={openreceipt}> 메뉴판 보기 </button>
+        <div className="menu" onClick={openreceipt}> 
             {receipt && <ReceiptModal setreceipt = {openreceipt} />}
         </div>
     );
