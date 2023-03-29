@@ -222,13 +222,23 @@ def get_rate(preference: list,
     result = recommend_game.get_result(preference, games)
     return result
 
-# 뽑은 리스트랑 비슷한 거 추천
+
+@app.post("/games/similar")
+def get_similar_game(games: list):
+    """비슷한 게임 추천.
+
+    Args:
+        games : 게임의 앱 아이디가 담긴 리스트
+
+    Returns:
+        비슷한 게임들의 앱아이디, 제목, 이미지
+    """
+    result = {}
+    result["data"] = []
 
 
-@app.get("/games/similar")
-def get_similar_game():
 
-    return {"Hello": "World"}
+    return result
 
 
 @app.get("/games/detail/{appid}")
