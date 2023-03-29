@@ -11,6 +11,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# CORS 설정
 origins = [
     "*"
 ]
@@ -23,23 +24,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# env
 load_dotenv()
 mongodb_root = os.environ.get('mongodb_root')
 steam_key = os.getenv('steam_key')
+
+# mongoDB 연결
 mongodb_URI = f"mongodb+srv://root:{mongodb_root}@gamenyamnaym.t2iixnv.mongodb.net/test"
+client = MongoClient(mongodb_URI) # DB 연결
+db = client['nyamnyam'] # DB 접근
+games = db['game']# Collection 접근
 
-# DB 연결
-client = MongoClient(mongodb_URI)
-
-# DB 접근
-db = client['nyamnyam']
-
-# Collection 접근
-games = db['game']
-
-app = FastAPI()
 api_url = "http://127.0.0.1:8000"
 
+@app.get('/login')
+async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
+    url = steam_signin.ConstructURL(api_url+'/processlogin')
+    return steam_signin.RedirectUser(url)
+
+
+@app.get('/processlogin')
+async def pr(request: Request, steam_signin: SteamSignIn = Depends(SteamSignIn)):
+    return steam_signin.ValidateResults(request.query_params)
 
 @app.get("/games/{steamId}")
 async def get_game_count(steamId: str):
@@ -56,18 +62,6 @@ async def get_game_count(steamId: str):
     json_response = response.json()
     game_count = json_response["response"]["game_count"]
     return game_count
-
-
-@app.get('/login')
-async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
-    url = steam_signin.ConstructURL(api_url+'/processlogin')
-    return steam_signin.RedirectUser(url)
-
-
-@app.get('/processlogin')
-async def pr(request: Request, steam_signin: SteamSignIn = Depends(SteamSignIn)):
-    return steam_signin.ValidateResults(request.query_params)
-
 
 @app.post("/games/test")
 def get_test():
@@ -172,15 +166,13 @@ def get_all_game(steamId: str, preference: list):
     #print(len(result["data"]))
     return result
 
-# 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 (태그) 분석
 
-
-@app.get("/games/result/{userid}")
-def get_game_by_tag(userid: str):
+@app.get("/games/result/{steamId}")
+def get_game_by_tag(steamId: str):
     """ 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 태그 분석
 
     Args:
-        userid : 유저 아이디
+        steamId : 유저 아이디
 
     Returns:
         전에 플레이했던 장르 중 가장 많은 태그 5개
@@ -192,7 +184,7 @@ def get_game_by_tag(userid: str):
     appids = []
     playedGenres = []
     result = {}
-    url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={userid}"
+    url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={steamId}"
     response = requests.get(url)
     json_response = response.json()
     playedGames = json_response["response"]["games"]
@@ -211,11 +203,17 @@ def get_game_by_tag(userid: str):
 
     return result
 
-# 5개 미만 플레이한 사용자의 장바구니 기반으로 (태그) 분석
-
-
 @app.post("/games/result")
 def get_game_by_table(table_list: list):
+    """ 5개 미만 플레이한 사용자의 장바구니 기반으로 (태그) 분석
+
+    Args:
+        steamId : 유저 아이디
+
+    Returns:
+        전에 플레이했던 장르 중 가장 많은 태그 5개
+
+    """
     # 1. 불러온 appid를 이용해 db에서 game detail 가져오기
     playedGenres = []
     result = {}
@@ -229,12 +227,18 @@ def get_game_by_table(table_list: list):
 
     return result
 
-# 뽑은 게임 리스트에 대한 매치율 저장
-
-
 @app.post("/games/rate")
 def get_rate(preference: list,
              games: list):
+    """뽑은 게임 리스트에 대한 매치율 저장
+
+    Args:
+        games : 게임의 앱 아이디가 담긴 리스트
+        preference : 선호 장르 리스트
+
+    Returns:
+        비슷한 게임들의 앱아이디, 제목, 이미지
+    """
     result = recommend_game.get_result(preference, games)
     return result
 
@@ -252,7 +256,7 @@ def get_similar_game(games: list):
     result = {}
     result["data"] = []
 
-
+    # ★★★★추가하기★★★★
 
     return result
 
