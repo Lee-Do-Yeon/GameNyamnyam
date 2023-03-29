@@ -5,7 +5,8 @@ export default function Detail() {
   const [Info, setInfo] = useState(false);
 
   const showInfo = () => {
-      setInfo(true);
+    setInfo(true);
+    console.log(Info);
   };
   return (
     <div>

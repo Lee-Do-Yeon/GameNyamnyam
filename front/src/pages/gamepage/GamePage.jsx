@@ -6,10 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userGame } from '../../../recoil/user/atoms';
 import axios from 'axios';
-
+import DetailModal from '../../components/DetailModal';
 export default function Gamepage() {
   const [gameData, setGameData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [Info, setInfo] = useState(false);
+  const [gameDetail, setGameDetail] = useState('');
+  // const [addGame, setAddGame] = useState('');
+  const showInfo = (id) => {
+    setInfo(!Info);
+    setGameDetail(id);
+  };
+
   useEffect(() => {
     axios
       .post('http://127.0.0.1:8000/games/test')
@@ -259,10 +267,11 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
+                          onClick={()=>showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p>{sushi.name}</p>
+                          <p className="truncate">{sushi.name}</p>
                         </div>
                       )}
                     </Draggable>
@@ -292,10 +301,11 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
+                          onClick={()=>showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p>{sushi.name}</p>
+                          <p className="truncate">{sushi.name}</p>
                         </div>
                       )}
                     </Draggable>
@@ -327,9 +337,10 @@ export default function Gamepage() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         className="myPlate"
+                        onClick={()=>showInfo(plate.appid)}
                       >
                         <Dish price={plate.price} image={plate.image} />
-                        <p>{plate.name}</p>
+                        <p className="truncate">{plate.name}</p>
                       </div>
                     )}
                   </Draggable>
@@ -341,6 +352,7 @@ export default function Gamepage() {
           <div className="bell" onClick={navigateToResult}></div>
         </div>
       </DragDropContext>
+      {Info && <DetailModal Info={Info} setInfo={setInfo} id={gameDetail} plate={setPlates}/>}
     </div>
   );
 }
