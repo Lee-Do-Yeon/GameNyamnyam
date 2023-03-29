@@ -7,6 +7,21 @@ from typing import List
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+from starlette.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 load_dotenv()
 mongodb_root = os.environ.get('mongodb_root')
@@ -22,7 +37,7 @@ db = client['nyamnyam']
 games = db['game']
 
 
-app = FastAPI()
+
 api_url = "http://127.0.0.1:8000"
 
 
@@ -82,18 +97,19 @@ def get_all_game(preference: list):
         60개의 게임 리스트 (appid, image, name)
     """
     result = []
-    already_play = []
+    already_selected = [] # 이미 플레이한 게임 담기
     # 신규 게임 5개 가져오기
 
     # 무작위 30개 가져오기
     random_game = games.aggregate([
-        { "$match": { "appid": { "$nin": already_play } } },
-        { "$sample": { "size": 60 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$sample": { "size": 30 } },
         { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
     ])
 
     for game in random_game:
         result.append(game)
+        already_selected.append(game["appid"])
 
     # 인기순위 25개 가져오기
 
