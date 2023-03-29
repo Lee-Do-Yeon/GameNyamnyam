@@ -4,10 +4,10 @@ import Dish from '../../components/Dish';
 
 export default function Resultpage() {
   return (
-    <div className="h-screen bg-yellow-700 font-semibold">
+    <div className="h-screen bg-yellow-200 font-semibold">
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
-          <div className="text-center text-2xl">제목입니다? 열.받.으.시.나.요.?/</div>
+          <div className="text-center text-2xl">내취향? 열.받.으.시.나.요.?/</div>
         </div>
       </div>
       <div className="flex h-4/6">
