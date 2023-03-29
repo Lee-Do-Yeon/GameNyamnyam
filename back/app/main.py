@@ -84,7 +84,7 @@ def get_test():
 
 
 @app.post("/games/all")
-def get_all_game(steamId: str):
+def get_all_game(steamId: str, preference: list):
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
 
@@ -100,6 +100,7 @@ def get_all_game(steamId: str):
     Returns:
         60개의 게임 리스트 (appid, image, name)
     """
+
     result = {}
     result["data"] = []
     random_game = []
@@ -144,7 +145,7 @@ def get_all_game(steamId: str):
         popular_game.append(game)
         already_selected.append(game["appid"])
 
-    if(steamId != None): # 게임 기록이 5개 이상인 사용자
+    if(len(preference) != 0): # 게임 기록이 5개 이상인 사용자
         # 추천 게임 30개 가져오기 (★★★★추가하기★★★★)
         print("Yes Data")
 
