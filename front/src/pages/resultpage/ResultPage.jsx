@@ -13,6 +13,7 @@ export default function Resultpage() {
       {gameValue.map((game) => (
         <h1 key={game.id}>{game.name}</h1>
       ))}
+      
       <Receipt />
       <AddGame />
       <Detail />
