@@ -12,7 +12,6 @@ export default function Gamepage() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [Info, setInfo] = useState(false);
   const [gameDetail, setGameDetail] = useState('');
-  // const [addGame, setAddGame] = useState('');
   const showInfo = (id) => {
     setInfo(!Info);
     setGameDetail(id);

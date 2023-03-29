@@ -1,6 +1,6 @@
 import React from 'react';
 import AddGame from '../../components/AddGame';
-import Dish from '../../components/Dish';
+
 
 export default function Resultpage() {
   return (
