@@ -10,6 +10,21 @@ from typing import List
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+from starlette.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 load_dotenv()
 mongodb_root = os.environ.get('mongodb_root')
@@ -24,7 +39,6 @@ db = client['nyamnyam']
 
 # Collection 접근
 games = db['game']
-
 
 app = FastAPI()
 api_url = "http://127.0.0.1:8000"
@@ -48,12 +62,73 @@ async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
 @app.get('/processlogin')
 async def pr(request: Request, steam_signin: SteamSignIn = Depends(SteamSignIn)):
     return steam_signin.ValidateResults(request.query_params)
-# 규칙에 따른 추천 게임 리스트 (인기 게임 몇 개, 사용자 리스트 기반 몇 개 ...)
 
 
-@app.get("/games/all")
-def get_all_game():
-    return {"Hello": "World"}
+@app.post("/games/test")
+def get_test():
+    result = []
+    already_play = []
+    # 신규 게임 5개 가져오기
+
+    # 무작위 30개 가져오기
+    random_game = games.aggregate([
+        {"$match": {"appid": {"$nin": already_play}}},
+        {"$sample": {"size": 60}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
+    ])
+
+    for game in random_game:
+        result.append(game)
+
+    return result
+
+
+@app.post("/games/all")
+def get_all_game(preference: list):
+    """선호도에 게임 리스트 출력
+    1) 이미 플레이한 게임은 나오지 않음.
+
+    2) 게임 기록이 5개 미만 사용자 = preference 리스트 길이가 0
+    → 총 60개 (사용자 정보 기반 추천 게임 30개, 무작위 15개, 인기순위 10개, 신규게임 5개)
+
+    3) 게임 기록이 5개 이상 사용자 = preference 리스트 길이가 0보다 큼
+    → 총 60개 (무작위 30개, 인기순위 25개, 신규게임 5개)
+
+    Args:
+        preference : 선호 장르 리스트
+
+    Returns:
+        60개의 게임 리스트 (appid, image, name)
+    """
+    result = []
+    already_selected = []  # 이미 플레이한 게임 담기
+    # 신규 게임 5개 가져오기
+
+    # 무작위 30개 가져오기
+    random_game = games.aggregate([
+        {"$match": {"appid": {"$nin": already_selected}}},
+        {"$sample": {"size": 30}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
+    ])
+
+    for game in random_game:
+        result.append(game)
+        already_selected.append(game["appid"])
+
+    # 인기순위 25개 가져오기
+
+    if (len(preference) != 0):  # 게임 기록이 5개 이상인 사용자
+        # 추천 게임 30개 가져오기
+        print("Yes Data")
+
+        # 무작위 15개 컷
+
+        # 인기순위 10개 컷
+
+    else:  # 게임 기록이 5개 미만인 사용자
+        print("No Data")
+
+    return result
 
 # 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 (태그) 분석
 
