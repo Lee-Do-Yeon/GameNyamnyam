@@ -1,0 +1,83 @@
+.bodyslider {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+  
+@-webkit-keyframes scroll {
+  0% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(calc(-250px * 7));
+            transform: translateX(calc(-250px * 7));
+  }
+}
+
+/* 움직이게 하는 역할 */
+@keyframes scroll {
+  0% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(calc(-250px * 5));
+            transform: translateX(calc(-250px * 5));
+  }
+}
+
+/* 전체 넓이를  조절함 */
+.slider {
+  display: flex;
+  height: 450px;
+  width: 100%;
+  overflow: hidden;
+}
+
+
+.slider::before, .slider::after {
+  content: "";
+ 
+  position: absolute;
+  width: 200px;
+  /* z-index: 2; */
+}
+.slider::after {
+  right: 0;
+  top: 0;
+  -webkit-transform: rotateZ(180deg);
+          transform: rotateZ(180deg);
+}
+
+.slider::before {
+  left: 0;
+  top: 0;
+}
+
+.slider .slide-track {
+  -moz-animation: scroll 10s linear infinite;
+  -webkit-animation: scroll 15s linear infinite;
+          animation: scroll 15s linear infinite;
+  display: flex;
+  width: calc(250px * 30 );
+  height: 100%;
+  /* cursor: grab; */
+}
+
+.slider .slide-track:active {
+  cursor: grabbing;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.slider .slide {
+  height: 150px;
+  width: 300px;
+}
+.slider .slide-track:active {
+  cursor: grabbing;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+/* Sliding Banner End */
