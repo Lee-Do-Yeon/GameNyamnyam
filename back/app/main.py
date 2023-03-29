@@ -1,8 +1,5 @@
 import requests
 from fastapi import FastAPI, Depends
-from fastapi.responses import JSONResponse
-from mongoengine import connect
-from openpyxl import load_workbook
 from starlette.requests import Request
 from steamsignin import SteamSignIn
 from recommend import recommend_game
@@ -46,6 +43,14 @@ api_url = "http://127.0.0.1:8000"
 
 @app.get("/games/{steamId}")
 async def get_game_count(steamId: str):
+    """소유한 게임 개수 반환 함수.
+
+    Args:
+        steamId : 사용자 고유 식별번호.
+
+    Returns:
+        소유한 게임 개수
+    """
     url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steam_key}&steamid={steamId}&format=json"
     response = requests.get(url)
     json_response = response.json()
