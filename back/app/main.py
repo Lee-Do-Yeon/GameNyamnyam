@@ -1,5 +1,8 @@
 import requests
 from fastapi import FastAPI, Depends
+from fastapi.responses import JSONResponse
+from mongoengine import connect
+from openpyxl import load_workbook
 from starlette.requests import Request
 from steamsignin import SteamSignIn
 from recommend import recommend_game
@@ -25,6 +28,7 @@ app.add_middleware(
 
 load_dotenv()
 mongodb_root = os.environ.get('mongodb_root')
+steam_key = os.getenv('steam_key')
 mongodb_URI = f"mongodb+srv://root:{mongodb_root}@gamenyamnaym.t2iixnv.mongodb.net/test"
 
 # DB 연결
@@ -36,8 +40,7 @@ db = client['nyamnyam']
 # Collection 접근
 games = db['game']
 
-
-
+app = FastAPI()
 api_url = "http://127.0.0.1:8000"
 
 
@@ -60,6 +63,7 @@ async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
 async def pr(request: Request, steam_signin: SteamSignIn = Depends(SteamSignIn)):
     return steam_signin.ValidateResults(request.query_params)
 
+
 @app.post("/games/test")
 def get_test():
     result = []
@@ -68,9 +72,9 @@ def get_test():
 
     # 무작위 30개 가져오기
     random_game = games.aggregate([
-        { "$match": { "appid": { "$nin": already_play } } },
-        { "$sample": { "size": 60 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+        {"$match": {"appid": {"$nin": already_play}}},
+        {"$sample": {"size": 60}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
     ])
 
     for game in random_game:
@@ -143,7 +147,7 @@ def get_all_game(steamId: str):
     if(steamId != None): # 게임 기록이 5개 이상인 사용자
         # 추천 게임 30개 가져오기 (★★★★추가하기★★★★)
         print("Yes Data")
-        
+
         # 무작위 15개 컷
         #result["data"].extend(random_game[:16])
 
@@ -166,8 +170,40 @@ def get_all_game(steamId: str):
 
 
 @app.get("/games/result/{userid}")
-def get_game_by_tag():
-    return {"Hello": "World"}
+def get_game_by_tag(userid: str):
+    """ 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 태그 분석
+
+    Args:
+        userid : 유저 아이디
+
+    Returns:
+        전에 플레이했던 장르 중 가장 많은 태그 5개
+
+    """
+
+    # 1. 플레이했던 게임 정보(appid) 불러오기
+    playedGames = {}
+    appids = []
+    playedGenres = []
+    result = {}
+    url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={userid}"
+    response = requests.get(url)
+    json_response = response.json()
+    playedGames = json_response["response"]["games"]
+
+    for k in playedGames:
+        appids.append(k['appid'])
+
+    # 2. 불러온 appid를 이용해 db에서 game detail 가져오기
+
+    for k in appids:
+        playedGenres.append(games.find_one({"appid": str(k)}, {
+            "_id": 0, "genres": 1}))
+
+    # 3. game detail list에서 장르 뽑아서 5개 가져오기
+    result = recommend_game.get_preference(playedGenres)
+
+    return result
 
 # 5개 미만 플레이한 사용자의 장바구니 기반으로 (태그) 분석
 
@@ -205,9 +241,10 @@ def get_game_detail(appid: str):
         제목, 가격, 스크린샷, 짧은 설명, 개발사, 출시일, 장르, 카테고리
     """
     result = {}
-    
+
     # DB 조회
-    get_game = games.find_one({"appid":appid},{"_id":0, "recommendations":0, "metacritic":0, "about_the_game":0})
+    get_game = games.find_one({"appid": appid}, {
+                              "_id": 0, "recommendations": 0, "metacritic": 0, "about_the_game": 0})
 
     # categories, genres, screenshots, developers 리스트화
     get_game["categories"] = get_game["categories"].split(",")
