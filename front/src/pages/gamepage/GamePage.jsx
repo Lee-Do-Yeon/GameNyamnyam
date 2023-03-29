@@ -1,26 +1,126 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
 import Receipt from '../../components/Receipt';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userGame } from '../../../recoil/user/atoms';
-import Dummy from '../../../DB/front_game_data21.json';
 import axios from 'axios';
 
 export default function Gamepage() {
+  const [gameData, setGameData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     axios
       .post('http://127.0.0.1:8000/games/test')
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
+        setGameData(response.data);
+        setDataLoaded(true);
+        console.log(dataLoaded);
       })
       .catch(function (error) {
         console.log(error);
       });
   }, []);
-  const testDummy1 = Dummy.data.slice(0, 30);
-  const testDummy2 = Dummy.data.slice(30);
+  // 첫번 째 스시 바
+  useEffect(() => {
+    console.log(dataLoaded);
+    if (dataLoaded) {
+      let bannerLeft = 0;
+      let first = 1;
+      let last;
+      let imgCnt = 0;
+      const $plates = document.querySelectorAll('.leftMovingPlate');
+      console.log($plates);
+      let $first;
+      let $last;
+
+      $plates.forEach((plate) => {
+        plate.style.left = `${bannerLeft}px`;
+        bannerLeft += 100 + 200;
+        plate.setAttribute('id', `firstPlate${++imgCnt}`);
+      });
+      console.log($first, $last);
+
+      if (imgCnt > 9) {
+        last = imgCnt;
+        const intervalId = setInterval(() => {
+          $plates.forEach((plate) => {
+            plate.style.left = `${plate.offsetLeft - 1}px`;
+          });
+          // console.log('first', first);
+          // console.log('last', last);
+          $first = document.querySelector(`#firstPlate${first}`);
+          $last = document.querySelector(`#firstPlate${last}`);
+          // console.log('$first', $first);
+          // console.log('$last', $last);
+          if ($first.offsetLeft < -200) {
+            $first.style.left = `${$last.offsetLeft + 100 + 200}px`;
+            first++;
+            last++;
+            if (last > imgCnt) {
+              last = 1;
+            }
+            if (first > imgCnt) {
+              first = 1;
+            }
+          }
+        }, 15);
+        return () => {
+          clearInterval(intervalId);
+        };
+      }
+    }
+  }, [dataLoaded]);
+  // 두번 째 스시 바
+  useEffect(() => {
+    if (dataLoaded) {
+      let bannerLeft = 0;
+      let first = 1;
+      let last;
+      let imgCnt = 0;
+      const $plates = document.querySelectorAll('.rightMovingPlate');
+      let $first;
+      let $last;
+
+      $plates.forEach((plate) => {
+        plate.style.left = `${bannerLeft}px`;
+        bannerLeft += 100 + 200;
+        plate.setAttribute('id', `secondPlate${++imgCnt}`);
+      });
+      console.log('imgCnt', imgCnt);
+      if (imgCnt > 9) {
+        last = imgCnt;
+        const intervalId = setInterval(() => {
+          $plates.forEach((plate) => {
+            plate.style.left = `${plate.offsetLeft + 1}px`;
+          });
+          $first = document.querySelector(`#secondPlate${first}`);
+          $last = document.querySelector(`#secondPlate${last}`);
+          if ($last.offsetLeft > -100) {
+            $first.style.left = `${$last.offsetLeft - 100 - 200}px`;
+            first++;
+            last++;
+
+            if (last > imgCnt) {
+              last = 1;
+            }
+            if (first > imgCnt) {
+              first = 1;
+            }
+          }
+        }, 15);
+
+        return () => {
+          clearInterval(intervalId);
+        };
+      }
+    }
+  }, [dataLoaded]);
+
+  const testDummy1 = gameData.slice(0, 30);
+  const testDummy2 = gameData.slice(30);
 
   const FirstSushis = JSON.parse(JSON.stringify(testDummy1));
   const SecondSushis = JSON.parse(JSON.stringify(testDummy2));
@@ -126,95 +226,7 @@ export default function Gamepage() {
       }
     }
   };
-  // 첫번 째 스시 바
-  useEffect(() => {
-    let bannerLeft = 0;
-    let first = 1;
-    let last;
-    let imgCnt = 0;
-    const $plates = document.querySelectorAll('.leftMovingPlate');
-    let $first;
-    let $last;
 
-    $plates.forEach((plate) => {
-      plate.style.left = `${bannerLeft}px`;
-      bannerLeft += 100 + 200;
-      plate.setAttribute('id', `firstPlate${++imgCnt}`);
-    });
-    console.log($first, $last);
-
-    if (imgCnt > 9) {
-      last = imgCnt;
-      const intervalId = setInterval(() => {
-        $plates.forEach((plate) => {
-          plate.style.left = `${plate.offsetLeft - 1}px`;
-        });
-        // console.log('first', first);
-        // console.log('last', last);
-        $first = document.querySelector(`#firstPlate${first}`);
-        $last = document.querySelector(`#firstPlate${last}`);
-        // console.log('$first', $first);
-        // console.log('$last', $last);
-        if ($first.offsetLeft < -200) {
-          $first.style.left = `${$last.offsetLeft + 100 + 200}px`;
-          first++;
-          last++;
-          if (last > imgCnt) {
-            last = 1;
-          }
-          if (first > imgCnt) {
-            first = 1;
-          }
-        }
-      }, 15);
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, []);
-  // 두번 째 스시 바
-  useEffect(() => {
-    let bannerLeft = 0;
-    let first = 1;
-    let last;
-    let imgCnt = 0;
-    const $plates = document.querySelectorAll('.rightMovingPlate');
-    let $first;
-    let $last;
-
-    $plates.forEach((plate) => {
-      plate.style.left = `${bannerLeft}px`;
-      bannerLeft += 100 + 200;
-      plate.setAttribute('id', `secondPlate${++imgCnt}`);
-    });
-    console.log('imgCnt', imgCnt);
-    if (imgCnt > 9) {
-      last = imgCnt;
-      const intervalId = setInterval(() => {
-        $plates.forEach((plate) => {
-          plate.style.left = `${plate.offsetLeft + 1}px`;
-        });
-        $first = document.querySelector(`#secondPlate${first}`);
-        $last = document.querySelector(`#secondPlate${last}`);
-        if ($last.offsetLeft > -100) {
-          $first.style.left = `${$last.offsetLeft - 100 - 200}px`;
-          first++;
-          last++;
-
-          if (last > imgCnt) {
-            last = 1;
-          }
-          if (first > imgCnt) {
-            first = 1;
-          }
-        }
-      }, 15);
-
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, []);
   const navigateToResult = () => {
     navigate('/result');
   };
@@ -248,7 +260,7 @@ export default function Gamepage() {
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
                         >
-                          <Dish price={sushi.price} />
+                          <Dish price={sushi.price} image={sushi.image} />
 
                           <p>{sushi.name}</p>
                         </div>
@@ -281,7 +293,7 @@ export default function Gamepage() {
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
                         >
-                          <Dish price={sushi.price} />
+                          <Dish price={sushi.price} image={sushi.image} />
 
                           <p>{sushi.name}</p>
                         </div>
@@ -316,7 +328,7 @@ export default function Gamepage() {
                         {...provided.dragHandleProps}
                         className="myPlate"
                       >
-                        <Dish price={plate.price} />
+                        <Dish price={plate.price} image={plate.image} />
                         <p>{plate.name}</p>
                       </div>
                     )}
