@@ -84,7 +84,7 @@ def get_test():
 
 
 @app.post("/games/all")
-def get_all_game(preference: list):
+def get_all_game(steamId: str):
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
 
@@ -95,39 +95,75 @@ def get_all_game(preference: list):
     → 총 60개 (무작위 30개, 인기순위 25개, 신규게임 5개)
 
     Args:
-        preference : 선호 장르 리스트
+        steamId : 사용자 고유 식별 아이디
 
     Returns:
         60개의 게임 리스트 (appid, image, name)
     """
-    result = []
-    already_selected = []  # 이미 플레이한 게임 담기
-    # 신규 게임 5개 가져오기
+    result = {}
+    result["data"] = []
+    random_game = []
+    popular_game = []
+    already_selected = [] # 이미 플레이한 게임 담기
 
-    # 무작위 30개 가져오기
-    random_game = games.aggregate([
-        {"$match": {"appid": {"$nin": already_selected}}},
-        {"$sample": {"size": 30}},
-        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
+    # 신규 게임 5개 가져오기
+    latest_game = games.aggregate([
+        { "$sort": { "release_date": -1 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$limit": 30 },
+        { "$sample": { "size": 5 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
     ])
 
-    for game in random_game:
-        result.append(game)
+    for game in latest_game:
+        result["data"].append(game)
+        already_selected.append(game["appid"])
+    
+
+    # 무작위 30개 가져오기
+    random_game_cur = games.aggregate([
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$sample": { "size": 30 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+
+    for game in random_game_cur:
+        random_game.append(game)
         already_selected.append(game["appid"])
 
     # 인기순위 25개 가져오기
+    popular_game_cur = games.aggregate([
+        { "$sort": { "recommendations": -1 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$limit": 100 },
+        { "$sample": { "size": 25 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+  
+    for game in popular_game_cur:
+        popular_game.append(game)
+        already_selected.append(game["appid"])
 
-    if (len(preference) != 0):  # 게임 기록이 5개 이상인 사용자
-        # 추천 게임 30개 가져오기
+    if(steamId != None): # 게임 기록이 5개 이상인 사용자
+        # 추천 게임 30개 가져오기 (★★★★추가하기★★★★)
         print("Yes Data")
 
         # 무작위 15개 컷
+        #result["data"].extend(random_game[:16])
 
         # 인기순위 10개 컷
+        #result["data"].extend(popular_game[:11])
 
-    else:  # 게임 기록이 5개 미만인 사용자
+        result["data"].extend(random_game)
+        result["data"].extend(popular_game)
+
+    else: # 게임 기록이 5개 미만인 사용자
         print("No Data")
 
+        result["data"].extend(random_game)
+        result["data"].extend(popular_game)
+    
+    #print(len(result["data"]))
     return result
 
 # 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 (태그) 분석
