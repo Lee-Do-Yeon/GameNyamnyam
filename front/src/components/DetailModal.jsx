@@ -50,7 +50,7 @@ export default function Dish({ Info, setInfo, id }) {
           </div>
           <div className="col-span-7 h-18 ">
             <img
-              src={gameDetail.image}
+              src="https://cdn.akamai.steamstatic.com/steam/apps/1719130/header.jpg?t=1633971435"
               alt=""
               className="w-full h-full rounded"
             />
