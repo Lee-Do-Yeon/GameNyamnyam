@@ -1,19 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
-import axios  from 'axios';
+// import { axios } from 'axios';
 export default function Mainpage() {
 
-  const goLogin =useEffect(() => {
-    axios
-      .get('http://127.0.0.1:8000/login')
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://127.0.0.1:8000/login')
+  //     .then(function (response) {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
   
   const leftDoorRef = useRef(null);
   const rightDoorRef = useRef(null);
@@ -53,7 +53,7 @@ export default function Mainpage() {
         </div>
       </div>
 
-      <div className="steamLoginBtn" onClick={goLogin}>
+      <div className="steamLoginBtn" onClick={doorOpen}>
         <div className="steamTxt">continue with steam login</div>
         <div className="steamImg"></div>
       </div>
