@@ -69,6 +69,7 @@
     left: 50px;
     bottom: 25px;
     border-radius:50% / 50%;
+    
   }
 .plate1 {
     position:relative;
@@ -79,7 +80,7 @@
     border-radius:50% / 50%;
     display: flex;
     justify-content: center;
-    z-index: 2;
+    z-index: 1;
 }
 .plate2 {
     position:absolute;
@@ -91,7 +92,7 @@
     border: solid white 2px;
     display: flex;
     justify-content: center;
-    z-index: 3;
+ 
 }
 .plate3 {
     position:absolute;
@@ -100,7 +101,7 @@
     width:170px;
     height: 65px;
     border-radius:50% / 50%;
-    z-index: 4;
+
 }
 .sushiBar {
   display: flex;
@@ -121,7 +122,6 @@
   overflow: hidden; 
   display: block;
   bottom: 32vh;
-  z-index: 0;
 }
 .rightMovingPlate {
   height: 150px; 
@@ -149,6 +149,7 @@
   display: flex;
   position: absolute; 
   bottom: 10px;
+ 
 }
 .bell {
   background-image: url('assets/bell.png');
@@ -157,4 +158,14 @@
   width: 10vw;
   position: absolute;
   right: 10px;
+}
+
+.modalclick{
+  height: 100px;
+  width: 100px;
+  opacity: 0;
+}
+
+.zindex {
+  z-index:3;
 }
