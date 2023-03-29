@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.gamepage {
+    height: 100vh;
+    width: 100vw;
+    background-image: url(assets/gameChoicePage.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: block;
+    background-position: fixed;
+  }
+  .kitchen {
+    height: 25vh;
+    display: flex;
+    justify-content: right;
+  }
+  .menu {
+    background-image: url(assets/receipt.png);
+    height: 16vh;
+    width: 6vw;
+    margin-top: 3vh;
+    margin-right: 10vw;
+    background-size: cover;
+    
+  }
+  .gamePlate {
+    margin-top: 20px;
+    width: 200px;
+    height: 100px;
+
+  }
+  .gamePic {
+    position: relative;
+    width:184px;
+    height: 86px;
+    right: 7px;
+    bottom:30px;
+    border-radius: 10px;
+    background-image: url(https://cdn.akamai.steamstatic.com/steam/apps/1610670/header.jpg?t=1629961128);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .gamePicHover {
+    width: inherit;
+    height: inherit;
+    border-radius: 10px;
+    background-color: black;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .gamePicHover:hover {
+    opacity: 0.5;
+  }
+
+  .searchIcon {
+    position: absolute;
+    top: 25%
+    ;
+  }
+  .plateBottom {
+    position: relative;
+    background-color: #D3D3D3;
+    width:120px;
+    height: 30px;
+    left: 50px;
+    bottom: 25px;
+    border-radius:50% / 50%;
+    
+  }
+.plate1 {
+    position:relative;
+    margin-top:10px;
+    background-color:#DB4646;
+    width:220px;
+    height:90px;
+    border-radius:50% / 50%;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+}
+.plate2 {
+    position:absolute;
+    margin-top: 5px;
+    background-color:#DB4646;
+    width:200px;
+    height: 80px;
+    border-radius:50% / 50%;
+    border: solid white 2px;
+    display: flex;
+    justify-content: center;
+ 
+}
+.plate3 {
+    position:absolute;
+    margin-top: 5px;
+    background:white;
+    width:170px;
+    height: 65px;
+    border-radius:50% / 50%;
+
+}
+.sushiBar {
+  display: flex;
+  height: 40vh;
+  width: 100vw; 
+}
+.firstTrail {
+  height: 20vh;
+  width: 100vw; 
+  position: absolute; 
+  overflow: hidden; 
+  display: block;
+}
+.secondTrail {
+  height: 20vh;
+  width: 100vw; 
+  position: absolute; 
+  overflow: hidden; 
+  display: block;
+  bottom: 32vh;
+}
+.rightMovingPlate {
+  height: 150px; 
+  position: absolute;
+}
+.leftMovingPlate {
+  height: 150px; 
+  position: absolute;
+}
+.setDish {
+  height: 22vh;
+  width: 70vw; 
+  position: absolute; 
+  display: flex;
+  bottom: 10px;
+}
+.myPlate {
+  position: relative;
+  margin-right: 40px;
+}
+.clientTable {
+  height: 22vh;
+  width: 100vw;
+  flex-direction: row;
+  display: flex;
+  position: absolute; 
+  bottom: 10px;
+ 
+}
+.bell {
+  background-image: url('assets/bell.png');
+  background-size: cover;
+  height: 20vh;
+  width: 10vw;
+  position: absolute;
+  right: 10px;
+}
+
+.modalclick{
+  height: 100px;
+  width: 100px;
+  opacity: 0;
+}
+
+.zindex {
+  z-index:3;
+}
