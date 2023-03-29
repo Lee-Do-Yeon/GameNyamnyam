@@ -44,9 +44,9 @@ app = FastAPI()
 api_url = "http://127.0.0.1:8000"
 
 
-@app.get("/games/{user_id}")
-async def get_game_count(user_id: str):
-    url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=FF1F5EF115E50CEBE0A7C11123959310&steamid={user_id}&format=json"
+@app.get("/games/{steamId}")
+async def get_game_count(steamId: str):
+    url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steam_key}&steamid={steamId}&format=json"
     response = requests.get(url)
     json_response = response.json()
     game_count = json_response["response"]["game_count"]
@@ -222,13 +222,23 @@ def get_rate(preference: list,
     result = recommend_game.get_result(preference, games)
     return result
 
-# 뽑은 리스트랑 비슷한 거 추천
+
+@app.post("/games/similar")
+def get_similar_game(games: list):
+    """비슷한 게임 추천.
+
+    Args:
+        games : 게임의 앱 아이디가 담긴 리스트
+
+    Returns:
+        비슷한 게임들의 앱아이디, 제목, 이미지
+    """
+    result = {}
+    result["data"] = []
 
 
-@app.get("/games/similar")
-def get_similar_game():
 
-    return {"Hello": "World"}
+    return result
 
 
 @app.get("/games/detail/{appid}")
