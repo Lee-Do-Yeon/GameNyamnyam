@@ -1,8 +1,7 @@
 import React from 'react';
 
-export default function Dish({ price }) {
+export default function Dish({ price, image }) {
   const changeColor = (price) => {
-    console.log(price);
     if (price === 0) {
       return '#FEF874';
     } else if (0 < price && price <= 10000) {
@@ -17,13 +16,15 @@ export default function Dish({ price }) {
   };
 
   const backgroundColor = changeColor(price);
-
   return (
     <div className="gamePlate">
       <div className="plate1" style={{ backgroundColor: backgroundColor }}>
         <div className="plate2" style={{ backgroundColor: backgroundColor }}>
           <div className="plate3">
-            <div className="gamePic">
+            <div
+              className="gamePic"
+              style={{ backgroundImage: `url(${image})` }}
+            >
               <div className="gamePicHover">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
