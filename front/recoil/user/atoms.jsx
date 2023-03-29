@@ -1,9 +1,10 @@
 import { atom } from 'recoil';
 
 export const DEFAULT_USERGAME = {
-  id: null,
-  name: null,
+  appid: null,
   price: null,
+  image: null,
+  name: null,
 };
 
 export const userGame = atom({
