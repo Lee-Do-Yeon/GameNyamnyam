@@ -258,6 +258,11 @@ def get_game_detail(appid: str):
 
     # categories, genres, screenshots, developers 리스트화
     result["categories"] = result["categories"].split(",")
+
+    for category in result["categories"]:
+        if("Steam" in category):
+            result["categories"].remove(category)
+
     result["genres"] = result["genres"].split(",")
     result["screenshots"] = result["screenshots"].split(",")
     result["developers"] = result["developers"].split("///")
