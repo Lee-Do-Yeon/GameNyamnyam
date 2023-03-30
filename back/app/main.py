@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-# from api.api import api_router
+from api.api import api_router
 
 app = FastAPI(
     title="Game Nyamnyam API"
@@ -19,4 +19,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.include_router(api_router)
+app.include_router(api_router)
