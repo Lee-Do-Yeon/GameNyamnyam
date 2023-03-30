@@ -71,7 +71,7 @@ export default function Dish({ Info, setInfo, id }) {
                 <GenreTag props={genre} key={index} />
               ))}
             </div>
-            <div className="ml-4 p-2 flex flex-wrap space-x-2">
+            <div className="ml-4 p-2 flex flex-wrap space-x-2 parent">
               <div className='p-1'>
               태그 :
               </div>
