@@ -56,12 +56,8 @@ export default function Gamepage() {
           $plates.forEach((plate) => {
             plate.style.left = `${plate.offsetLeft - 1}px`;
           });
-          // console.log('first', first);
-          // console.log('last', last);
           $first = document.querySelector(`#firstPlate${first}`);
           $last = document.querySelector(`#firstPlate${last}`);
-          // console.log('$first', $first);
-          // console.log('$last', $last);
           if ($first.offsetLeft < -200) {
             $first.style.left = `${$last.offsetLeft + 100 + 200}px`;
             first++;
@@ -266,11 +262,13 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
-                          onClick={()=>showInfo(sushi.appid)}
+                          onClick={() => showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate">{sushi.name}</p>
+                          <p className="truncate w-5/6 titleP text-center">
+                            {sushi.name}
+                          </p>
                         </div>
                       )}
                     </Draggable>
@@ -300,11 +298,13 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
-                          onClick={()=>showInfo(sushi.appid)}
+                          onClick={() => showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate">{sushi.name}</p>
+                          <p className="truncate w-5/6 titleP text-center">
+                            {sushi.name}
+                          </p>
                         </div>
                       )}
                     </Draggable>
@@ -336,10 +336,12 @@ export default function Gamepage() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         className="myPlate"
-                        onClick={()=>showInfo(plate.appid)}
+                        onClick={() => showInfo(plate.appid)}
                       >
                         <Dish price={plate.price} image={plate.image} />
-                        <p className="truncate">{plate.name}</p>
+                        <p className="truncate w-5/6 titleP text-center">
+                          {plate.name}
+                        </p>
                       </div>
                     )}
                   </Draggable>
@@ -351,7 +353,14 @@ export default function Gamepage() {
           <div className="bell" onClick={navigateToResult}></div>
         </div>
       </DragDropContext>
-      {Info && <DetailModal Info={Info} setInfo={setInfo} id={gameDetail} plate={setPlates}/>}
+      {Info && (
+        <DetailModal
+          Info={Info}
+          setInfo={setInfo}
+          id={gameDetail}
+          plate={setPlates}
+        />
+      )}
     </div>
   );
 }
