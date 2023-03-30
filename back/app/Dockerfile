@@ -1,7 +1,7 @@
 FROM python:3.11
 
 COPY ./main.py /app/
-COPY ./api.py /app/
+COPY ./app/api/api.py /app/api/
 COPY ./requirements.txt /app/
 
 WORKDIR /app
