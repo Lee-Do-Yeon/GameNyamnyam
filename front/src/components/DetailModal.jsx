@@ -13,10 +13,10 @@ export default function Dish({ Info, setInfo, id }) {
     axios
       .get(`http://127.0.0.1:8000/games/detail/${id}`)
       .then(function (response) {
-        console.log(response.data.data);
-        setGameDetail(response.data.data);
-        setGameCategories(response.data.data.categories)
-        setGameGenres(response.data.data.genres)
+        console.log(response.data);
+        setGameDetail(response.data);
+        setGameCategories(response.data.categories)
+        setGameGenres(response.data.genres)
       })
       .catch(function (error) {
         console.log(error);
