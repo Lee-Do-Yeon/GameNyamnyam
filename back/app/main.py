@@ -208,7 +208,7 @@ def get_game_by_table(table_list: list):
     """ 5개 미만 플레이한 사용자의 장바구니 기반으로 (태그) 분석
 
     Args:
-        steamId : 유저 아이디
+        table_list : 장바구니 게임
 
     Returns:
         전에 플레이했던 장르 중 가장 많은 태그 5개
@@ -229,7 +229,7 @@ def get_game_by_table(table_list: list):
 
 @app.post("/games/rate")
 def get_rate(preference: list,
-             games: list):
+             table_list: list):
     """뽑은 게임 리스트에 대한 매치율 저장
 
     Args:
@@ -239,12 +239,17 @@ def get_rate(preference: list,
     Returns:
         비슷한 게임들의 앱아이디, 제목, 이미지
     """
-    result = recommend_game.get_result(preference, games)
+    game_genrs = []
+    # DB 조회
+    for appid in table_list:
+        game_genrs.append(games.find_one({"appid": appid}, {"_id": 0, "appid":1, "genres": 1}))
+    
+    result = recommend_game.get_result(preference, game_genrs)
     return result
 
 
 @app.post("/games/similar")
-def get_similar_game(games: list):
+def get_similar_game(table_list: list):
     """비슷한 게임 추천.
 
     Args:
