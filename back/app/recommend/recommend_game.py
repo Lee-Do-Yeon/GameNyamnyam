@@ -49,13 +49,13 @@ Output: 게임별 매치율 리스트
 def get_result(preference, games):
 
     # appid가 0이면 '나'
-    games.append({'appid': 0, 'genres': ', '.join(preference)})
+    games.append({'appid': 0, 'genres': ','.join(preference)})
 
     df = pd.DataFrame(games).set_index('appid')
 
     # genres열 원핫인코딩
     one_hot_genres = pd.get_dummies(df['genres'].str.split(
-        ', ', expand=True).stack()).groupby(level=0).sum()
+        ',', expand=True).stack()).groupby(level=0).sum()
 
     # 코사인 유사도
     cosine_similar = cosine_similarity(
