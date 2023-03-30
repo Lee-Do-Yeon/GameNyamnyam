@@ -31,108 +31,6 @@ async def get_game_count(steamId: str):
     game_count = json_response["response"]["game_count"]
     return game_count
 
-@router.post("/test")
-def get_test():
-    result = []
-    already_play = []
-    # 신규 게임 5개 가져오기
-
-    # 무작위 30개 가져오기
-    random_game = games.aggregate([
-        {"$match": {"appid": {"$nin": already_play}}},
-        {"$sample": {"size": 60}},
-        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
-    ])
-
-    for game in random_game:
-        result.append(game)
-
-    return result
-
-
-@router.post("/all")
-def get_all_game(steamId: str, preference: list):
-    """선호도에 게임 리스트 출력
-    1) 이미 플레이한 게임은 나오지 않음.
-
-    2) 게임 기록이 5개 미만 사용자 = preference 리스트 길이가 0
-    → 총 60개 (사용자 정보 기반 추천 게임 30개, 무작위 15개, 인기순위 10개, 신규게임 5개)
-
-    3) 게임 기록이 5개 이상 사용자 = preference 리스트 길이가 0보다 큼
-    → 총 60개 (무작위 30개, 인기순위 25개, 신규게임 5개)
-
-    Args:
-        steamId : 사용자 고유 식별 아이디
-
-    Returns:
-        60개의 게임 리스트 (appid, image, name)
-    """
-
-    result = {}
-    result["data"] = []
-    random_game = []
-    popular_game = []
-    already_selected = [] # 이미 플레이한 게임 담기
-
-    # 신규 게임 5개 가져오기
-    latest_game = games.aggregate([
-        { "$sort": { "release_date": -1 } },
-        { "$match": { "appid": { "$nin": already_selected } } },
-        { "$limit": 30 },
-        { "$sample": { "size": 5 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
-    ])
-
-    for game in latest_game:
-        result["data"].append(game)
-        already_selected.append(game["appid"])
-    
-
-    # 무작위 30개 가져오기
-    random_game_cur = games.aggregate([
-        { "$match": { "appid": { "$nin": already_selected } } },
-        { "$sample": { "size": 30 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
-    ])
-
-    for game in random_game_cur:
-        random_game.append(game)
-        already_selected.append(game["appid"])
-
-    # 인기순위 25개 가져오기
-    popular_game_cur = games.aggregate([
-        { "$sort": { "recommendations": -1 } },
-        { "$match": { "appid": { "$nin": already_selected } } },
-        { "$limit": 100 },
-        { "$sample": { "size": 25 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
-    ])
-  
-    for game in popular_game_cur:
-        popular_game.append(game)
-        already_selected.append(game["appid"])
-
-    if(len(preference) != 0): # 게임 기록이 5개 이상인 사용자
-        # 추천 게임 30개 가져오기 (★★★★추가하기★★★★)
-        print("Yes Data")
-
-        # 무작위 15개 컷
-        #result["data"].extend(random_game[:16])
-
-        # 인기순위 10개 컷
-        #result["data"].extend(popular_game[:11])
-
-        result["data"].extend(random_game)
-        result["data"].extend(popular_game)
-
-    else: # 게임 기록이 5개 미만인 사용자
-        print("No Data")
-
-        result["data"].extend(random_game)
-        result["data"].extend(popular_game)
-    
-    #print(len(result["data"]))
-    return result
 
 
 @router.get("/result/{steamId}")
@@ -234,6 +132,116 @@ def get_similar_game(table_list: list):
     return result
 
 
+
+
+####################
+# 게임 관련
+####################
+
+
+@router.post("/test")
+def get_test():
+    result = []
+    already_play = []
+    # 무작위 30개 가져오기
+    random_game = games.aggregate([
+        {"$match": {"appid": {"$nin": already_play}}},
+        {"$sample": {"size": 60}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
+    ])
+
+    for game in random_game:
+        result.append(game)
+
+    return result
+
+
+@router.post("/all", response_description="Get a game list", response_model=list[game.GameBase])
+def get_all_game(steamId: str, preference: list):
+    """선호도에 게임 리스트 출력
+    1) 이미 플레이한 게임은 나오지 않음.
+
+    2) 게임 기록이 5개 미만 사용자 = preference 리스트 길이가 0
+    → 총 60개 (사용자 정보 기반 추천 게임 30개, 무작위 15개, 인기순위 10개, 신규게임 5개)
+
+    3) 게임 기록이 5개 이상 사용자 = preference 리스트 길이가 0보다 큼
+    → 총 60개 (무작위 30개, 인기순위 25개, 신규게임 5개)
+
+    Args:
+        steamId : 사용자 고유 식별 아이디
+
+    Returns:
+        60개의 게임 리스트 (appid, image, name)
+    """
+
+    result = []
+    random_game = []
+    popular_game = []
+    already_selected = [] # 이미 플레이한 게임 담기
+
+    # 신규 게임 5개 가져오기
+    latest_game = games.aggregate([
+        { "$sort": { "release_date": -1 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$limit": 30 },
+        { "$sample": { "size": 5 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+
+    for game in latest_game:
+        result.append(game)
+        already_selected.append(game["appid"])
+    
+
+    # 무작위 30개 가져오기
+    random_game_cur = games.aggregate([
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$sample": { "size": 30 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+
+    for game in random_game_cur:
+        random_game.append(game)
+        already_selected.append(game["appid"])
+
+    # 인기순위 25개 가져오기
+    popular_game_cur = games.aggregate([
+        { "$sort": { "recommendations": -1 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$limit": 100 },
+        { "$sample": { "size": 25 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+  
+    for game in popular_game_cur:
+        popular_game.append(game)
+        already_selected.append(game["appid"])
+
+    if(len(preference) != 0): # 게임 기록이 5개 이상인 사용자
+        # 추천 게임 30개 가져오기 (★★★★추가하기★★★★)
+        print("Yes Data")
+
+        # steamId를 통해서 Owngames의 id 리스트를 구하기.
+
+        # 무작위 15개 컷
+        #result.extend(random_game[:16])
+
+        # 인기순위 10개 컷
+        #result.extend(popular_game[:11])
+
+        result.extend(random_game)
+        result.extend(popular_game)
+
+    else: # 게임 기록이 5개 미만인 사용자
+        print("No Data")
+
+        result.extend(random_game)
+        result.extend(popular_game)
+    
+    #print(len(result))
+    return result
+
+
 @router.get("/detail/{appid}", response_description="Get a game detail", response_model=game.GameDetail)
 def get_game_detail(appid: str):
     """게임 상세 정보 반환 함수.
@@ -245,13 +253,13 @@ def get_game_detail(appid: str):
         제목, 가격, 스크린샷, 짧은 설명, 개발사, 출시일, 장르, 카테고리
     """
     # DB 조회
-    get_game = games.find_one({"appid": appid}, {
+    result = games.find_one({"appid": appid}, {
                               "_id": 0, "recommendations": 0, "metacritic": 0, "about_the_game": 0})
 
     # categories, genres, screenshots, developers 리스트화
-    get_game["categories"] = get_game["categories"].split(",")
-    get_game["genres"] = get_game["genres"].split(",")
-    get_game["screenshots"] = get_game["screenshots"].split(",")
-    get_game["developers"] = get_game["developers"].split("///")
+    result["categories"] = result["categories"].split(",")
+    result["genres"] = result["genres"].split(",")
+    result["screenshots"] = result["screenshots"].split(",")
+    result["developers"] = result["developers"].split("///")
 
-    return get_game
+    return result
