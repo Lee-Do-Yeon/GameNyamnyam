@@ -259,9 +259,12 @@ def get_game_detail(appid: str):
     # categories, genres, screenshots, developers 리스트화
     result["categories"] = result["categories"].split(",")
 
+    # Steam이 포함된 카테고리는 제외.
+    filtered_categories = []
     for category in result["categories"]:
-        if("Steam" in category):
-            result["categories"].remove(category)
+        if "Steam" not in category:
+            filtered_categories.append(category)
+    result["categories"] = filtered_categories
 
     result["genres"] = result["genres"].split(",")
     result["screenshots"] = result["screenshots"].split(",")
