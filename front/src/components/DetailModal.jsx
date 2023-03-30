@@ -11,7 +11,7 @@ export default function Dish({ Info, setInfo, id }) {
   console.log(id);
   useEffect(() => {
     axios
-      .get(`https://j8c204.p.ssafy.io/games/detail/${id}`)
+      .get(`https://j8c204.p.ssafy.io/api/games/detail/${id}`)
       .then(function (response) {
         console.log(response.data);
         setGameDetail(response.data);
