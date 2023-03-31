@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import Slick from "react-slick";
+import React from 'react';
 import '../index.css';
 
 
