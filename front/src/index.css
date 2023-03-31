@@ -82,6 +82,12 @@
   z-index: 3;
 }
 
+.ellipse {
+  border-radius: 50%;
+}
+.aaa {
+  bottom: -135px;
+}
 :root {
   /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
