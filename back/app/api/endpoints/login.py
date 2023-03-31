@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-api_url = "http://127.0.0.1:8000"
+api_url = "https://127.0.0.1:8000"
+
 
 @router.get('/')
 async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
