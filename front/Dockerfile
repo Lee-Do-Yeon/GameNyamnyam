@@ -4,9 +4,9 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-FROM nginx:stable-alpine as production-stage
+# FROM nginx:stable-alpine as production-stage
 
-COPY --from=build-stage /var/jenkins_home/workspace/deploy/front/dist /usr/share/nginx/html
-COPY --from=build-stage /var/jenkins_home/workspace/deploy/front/deploy_conf/nginx.conf /etc/nginx/conf.d/default.conf
+# COPY --from=build-stage /var/jenkins_home/workspace/deploy/front/dist /usr/share/nginx/html
+# COPY --from=build-stage /var/jenkins_home/workspace/deploy/front/deploy_conf/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 5173
-CMD ["nginx", "-g","daemon off;"]
+# CMD ["nginx", "-g","daemon off;"]
