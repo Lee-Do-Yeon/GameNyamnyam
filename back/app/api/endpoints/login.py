@@ -2,7 +2,7 @@ from starlette.requests import Request
 from steamsignin import SteamSignIn
 from fastapi import APIRouter, Depends
 
-router = APIRouter(prefix="/api")
+router = APIRouter()
 
 api_url = "https://j8c204.p.ssafy.io"
 
