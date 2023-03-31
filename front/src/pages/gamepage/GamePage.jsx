@@ -12,7 +12,7 @@ export default function Gamepage() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [Info, setInfo] = useState(false);
   const [gameDetail, setGameDetail] = useState('');
-  const showInfo = (id) => {
+  const showInfo = (id, index) => {
     setInfo(!Info);
     setGameDetail(id);
   };
@@ -167,8 +167,6 @@ export default function Gamepage() {
         getSushi.style.left = `${getSushi.offsetLeft + 1}px`;
       }, 15);
     }
-    console.log('source', source);
-    console.log('destination', destination);
     //목적지가 없는 경우
     if (!destination) {
       console.log('목적지 없음');
@@ -262,7 +260,7 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
-                          onClick={() => showInfo(sushi.appid)}
+                          onClick={() => showInfo(sushi.appid, index)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
@@ -298,7 +296,7 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
-                          onClick={() => showInfo(sushi.appid)}
+                          onClick={() => showInfo(sushi.appid, index)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
