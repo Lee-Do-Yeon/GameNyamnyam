@@ -9,6 +9,7 @@ export default function Dish({ Info, setInfo, id }) {
   const [gameDetail, setGameDetail] = useState([]);
   const [plates, setPlates] = useRecoilState(userGame);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPicked, setIsPicked] = useState(false)
   console.log(id);
   useEffect(() => {
     axios
@@ -33,12 +34,13 @@ export default function Dish({ Info, setInfo, id }) {
   const getGame = () => {
     const newPlates = [...plates, gameDetail];
     setPlates(newPlates);
+    setIsPicked(true);
     return newPlates;
   };
   return (
     <div className="relative font-semibold text-white zindex">
       {isLoading ? (
-        <p>Loding</p>
+        <p></p>
       ) : (
         <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-30 text-center ">
           <div className="w-2/3 rounded-lg bg-neutral-600 grid grid-cols-12 grid-flow-row gap-4 p-4 drop-shadow-2xl">
@@ -80,12 +82,18 @@ export default function Dish({ Info, setInfo, id }) {
                 <div className="bg-yellow-300 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-6">
                   ₩ : {gameDetail.price}
                 </div>
+                {!isPicked ? 
                 <button
-                  className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
-                  onClick={getGame}
+                className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
+                onClick={getGame}
                 >
                   접시 가져오기
                 </button>
+                : <button
+                className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
+                >
+                  가져와짐
+                </button>}
               </div>
             </div>
 
