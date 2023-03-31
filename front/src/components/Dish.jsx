@@ -1,8 +1,8 @@
 import React from 'react';
-
-
+import { useRecoilValue } from 'recoil';
+import { userGame } from '../../recoil/user/atoms'
 export default function Dish({ price, image }) {
-
+  const pickedGame = useRecoilValue(userGame)
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
