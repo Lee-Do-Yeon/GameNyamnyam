@@ -10,3 +10,4 @@ RUN npm run build
 # COPY --from=build-stage /var/jenkins_home/workspace/deploy/front/deploy_conf/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 5173
 # CMD ["nginx", "-g","daemon off;"]
+CMD ["npm", "run", "dev"]
