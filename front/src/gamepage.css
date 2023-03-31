@@ -140,7 +140,8 @@
 }
 .myPlate {
   position: relative;
-  margin-right: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .clientTable {
   height: 22vh;
@@ -149,7 +150,6 @@
   display: flex;
   position: absolute; 
   bottom: 10px;
- 
 }
 .bell {
   background-image: url('assets/bell.png');
@@ -169,3 +169,7 @@
 .zindex {
   z-index:3;
 }
+.titleP {
+  width: 220px;
+}
+
