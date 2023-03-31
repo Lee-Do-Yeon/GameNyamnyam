@@ -104,3 +104,47 @@
   -webkit-text-size-adjust: 100%; */
 }
 
+/* Plate */
+#result_wrap {
+  position: relative;
+  margin: 25px auto;
+border-radius: 20px;
+  perspective: 500px;
+  cursor: pointer;
+}
+
+#result_wrap .card {
+  width: 100%;
+  height: 100%;
+  transition: all .5s;
+  transform-style: preserve-3d;
+}
+#result_wrap:hover .card {
+  transform: rotateY(180deg);
+}
+
+#result_wrap .card > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  border-radius: 10px;
+  backface-visibility: hidden;
+}
+
+#result_wrap .card .card-front {
+  background-color: #f54;
+  z-index: 10;
+}
+
+#result_wrap .card .card-back {
+  background-color: #ccc;
+  z-index: 5;
+  transform: rotateY(180deg);
+}
+
