@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import Slick from "react-slick";
+import React from 'react';
+// import Slider from 'react-slick';
 import '../index.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-
-export default function Plate({myValue}) {
-  
-  console.log(myValue[0].price)
+export default function Plate({ myValue }) {
+  console.log(myValue.price);
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
@@ -19,23 +19,36 @@ export default function Plate({myValue}) {
       return '#373737';
     }
   };
+  const backgroundColor = changeColor(myValue.price);
 
-  const backgroundColor = changeColor(myValue[0].price);
+  // const settings = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  // };
 
   return (
     <div className="relative">
       <div className="flex justify-center items-center">
-        <div className="aaa ellipse bg-gray-200 w-[440px] h-[220px] absolute"></div>
-        <div className={`ellipse bg-[${backgroundColor}] w-[600px] h-[400px] shadow-xl absolute`}></div>
-        <div className={`ellipse w-[550px] h-[350px] bg-[${backgroundColor}] border-4 absolute`} ></div>
+        <div
+          className={`ellipse bg-[${backgroundColor}] w-[600px] h-[400px] shadow-2xl absolute`}
+        ></div>
+        <div
+          className={`ellipse w-[550px] h-[350px] bg-[${backgroundColor}] border-4 absolute`}
+        ></div>
         <div className="ellipse bg-white w-[480px] h-[300px] absolute"></div>
-        
-        <div className="w-[430px] h-[250px] bg-white rounded-lg shadow-2xl absolute">
-          <img 
-          src={myValue[0].image}
-          className="w-full h-full shadow-2xl rounded-lg"
-           />
-           
+        <div className="w-[430px] h-[250px] rounded-lg absolute">
+          <div id="result_wrap">
+            <div className="card">
+              <img
+                src={myValue.image}
+                className="shadow-2xl rounded-lg card-front"
+              />
+              <div className="card-back"> 이거 보시라요 </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
