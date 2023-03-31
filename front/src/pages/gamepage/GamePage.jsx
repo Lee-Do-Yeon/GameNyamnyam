@@ -19,7 +19,7 @@ export default function Gamepage() {
 
   useEffect(() => {
     axios
-      .post('http://j8c204.p.ssafy.io:8000/api/games/test')
+      .post('https://j8c204.p.ssafy.io:8000/api/games/test')
       .then(function (response) {
         console.log(response.data);
         setGameData(response.data);
