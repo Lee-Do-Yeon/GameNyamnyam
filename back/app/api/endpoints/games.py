@@ -142,7 +142,6 @@ def get_similar_game(table_list: list):
 
 @router.post("/test")
 def get_test():
-    print("zzzz 약오르징 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     result = []
     already_play = []
     # 무작위 30개 가져오기
