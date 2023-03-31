@@ -1,19 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
-import { axios } from 'axios';
+// import { axios } from 'axios';
 export default function Mainpage() {
 
-  useEffect(() => {
-    axios
-      .get('https://j8c204.p.ssafy.io/api/login')
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('https://j8c204.p.ssafy.io/api/login')
+  //     .then(function (response) {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
   
   const leftDoorRef = useRef(null);
   const rightDoorRef = useRef(null);
