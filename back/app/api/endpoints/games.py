@@ -7,6 +7,8 @@ import os
 from fastapi import APIRouter
 from db.Database import games
 from schemas import game
+
+from recommend import recommendation_game_final
 # ---------
 
 router = APIRouter()
@@ -14,6 +16,11 @@ router = APIRouter()
 # env
 load_dotenv()
 steam_key = os.getenv('steam_key')
+
+@router.get("/doyeon/test")
+async def mytest():
+    recommendation_game_final
+
 
 @router.get("/count/{steamId}")
 async def get_game_count(steamId: str):
