@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
-// import { axios } from 'axios';
+import  axios  from 'axios';
 export default function Mainpage() {
-
   // useEffect(() => {
   //   axios
   //     .get('http://127.0.0.1:8000/login')
@@ -14,7 +13,7 @@ export default function Mainpage() {
   //       console.log(error);
   //     });
   // }, []);
-  
+
   const leftDoorRef = useRef(null);
   const rightDoorRef = useRef(null);
   const [isLogin, setLogin] = useState(false);
@@ -32,6 +31,14 @@ export default function Mainpage() {
       .to(leftDoorRef.current, { duration: 1, x: -250 })
       .to(rightDoorRef.current, { duration: 1, x: 250 }, '-=1');
     setLogin(true);
+    axios
+      .get('http://127.0.0.1:8000/login')
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
   // function doorClose() {
   //   gsap

@@ -58,8 +58,17 @@
 
   .searchIcon {
     position: absolute;
-    top: 25%
-    ;
+    top: 25%;
+  }
+  .searchIcon1 {
+    position: absolute;
+    top: 25%;
+    left: 12%;
+  }
+  .trashIcon {
+    position: absolute;
+    top: 25%;
+    right: 12%
   }
   .plateBottom {
     position: relative;

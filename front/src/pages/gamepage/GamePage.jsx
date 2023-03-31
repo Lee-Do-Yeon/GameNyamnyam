@@ -7,12 +7,16 @@ import { useRecoilState } from 'recoil';
 import { userGame } from '../../../recoil/user/atoms';
 import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
+import PickedDish from '../../components/PickedDish';
+
 export default function Gamepage() {
   const [gameData, setGameData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [Info, setInfo] = useState(false);
   const [gameDetail, setGameDetail] = useState('');
-  const showInfo = (id, index) => {
+  const [firstIdDict, setFirstIdDict] = useState({});
+  const [secondIdDict, setSecondIdDict] = useState({});
+  const showInfo = (id) => {
     setInfo(!Info);
     setGameDetail(id);
   };
@@ -38,17 +42,18 @@ export default function Gamepage() {
       let first = 1;
       let last;
       let imgCnt = 0;
+      let data = {};
       const $plates = document.querySelectorAll('.leftMovingPlate');
-      console.log($plates);
       let $first;
       let $last;
-
       $plates.forEach((plate) => {
         plate.style.left = `${bannerLeft}px`;
         bannerLeft += 100 + 200;
         plate.setAttribute('id', `firstPlate${++imgCnt}`);
+
+        data[gameData[imgCnt - 1].appid] = `firstPlate${imgCnt}`;
       });
-      console.log($first, $last);
+      setFirstIdDict({ ...firstIdDict, ...data });
 
       if (imgCnt > 9) {
         last = imgCnt;
@@ -70,6 +75,7 @@ export default function Gamepage() {
             }
           }
         }, 15);
+
         return () => {
           clearInterval(intervalId);
         };
@@ -83,6 +89,7 @@ export default function Gamepage() {
       let first = 1;
       let last;
       let imgCnt = 0;
+      let data = {};
       const $plates = document.querySelectorAll('.rightMovingPlate');
       let $first;
       let $last;
@@ -91,8 +98,10 @@ export default function Gamepage() {
         plate.style.left = `${bannerLeft}px`;
         bannerLeft += 100 + 200;
         plate.setAttribute('id', `secondPlate${++imgCnt}`);
+        data[gameData[30 + imgCnt - 1].appid] = `secondPlate${imgCnt}`;
       });
-      console.log('imgCnt', imgCnt);
+      setSecondIdDict({ ...secondIdDict, ...data });
+      // setIdDict((prevState) => [...prevState, ...arr]);
       if (imgCnt > 9) {
         last = imgCnt;
         const intervalId = setInterval(() => {
@@ -151,7 +160,6 @@ export default function Gamepage() {
       }, 15);
     }
   };
-
   const onDragEnd = (result) => {
     const { source, destination } = result;
     const banneridnum = source.index + 1;
@@ -260,7 +268,7 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
-                          onClick={() => showInfo(sushi.appid, index)}
+                          onClick={() => showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
@@ -296,7 +304,7 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
-                          onClick={() => showInfo(sushi.appid, index)}
+                          onClick={() => showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
@@ -334,9 +342,15 @@ export default function Gamepage() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         className="myPlate"
-                        onClick={() => showInfo(plate.appid)}
                       >
-                        <Dish price={plate.price} image={plate.image} />
+                        <PickedDish
+                          showInfo={showInfo}
+                          id={plate.appid}
+                          price={plate.price}
+                          image={plate.image}
+                          firstIdDict={firstIdDict}
+                          secondIdDict={secondIdDict}
+                        />
                         <p className="truncate w-5/6 titleP text-center">
                           {plate.name}
                         </p>
@@ -357,6 +371,8 @@ export default function Gamepage() {
           setInfo={setInfo}
           id={gameDetail}
           plate={setPlates}
+          firstIdDict={firstIdDict}
+          secondIdDict={secondIdDict}
         />
       )}
     </div>
