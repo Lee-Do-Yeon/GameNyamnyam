@@ -1,10 +1,9 @@
 import React from 'react';
-import Slider from 'react-slick';
 
 import { useRecoilValue } from 'recoil';
 import { userGame } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
-import Plate from '../../components/Plate';
+import PlateCopy from '../../components/PlateCopy';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -24,7 +23,7 @@ export default function Resultpage() {
     <div className="h-screen bg-yellow-600 font-semibold">
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
-          <div className="text-center text-2xl">제목 창</div>
+          <div className="text-center text-2xl">카피페이지</div>
         </div>
       </div>
 
@@ -39,16 +38,12 @@ export default function Resultpage() {
             }}
           >
             <div className="relative h-full">
-              <div className="flex justify-center items-center w-4/5 h-5/6 p-4 ml-5 mt-10">
-                <Slider {...settings}>
-                  {myValue.map((Value) => {
-                    return <Plate key={Value.id} myValue={Value} />;
-                  })}
-                </Slider>
+              <div className="w-4/5 h-5/6 p-4 ml-5 mt-10">
+                <PlateCopy />
               </div>
-              <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
-                Go to Eat
-              </button>
+              
+              
+
             </div>
           </div>
         </div>
