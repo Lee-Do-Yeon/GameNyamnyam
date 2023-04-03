@@ -5,4 +5,4 @@ from api.endpoints import games, login
 api_router = APIRouter(prefix="/api")
 
 api_router.include_router(games.router, prefix="/games", tags=["games"])
-# api_router.include_router(login.router, prefix="/login", tags=["login"])
+api_router.include_router(login.router, prefix="/login", tags=["login"])
