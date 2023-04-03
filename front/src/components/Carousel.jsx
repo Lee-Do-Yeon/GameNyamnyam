@@ -4,8 +4,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 export default function Carousels({ images }) {
 
-  console.log(images);
- 
   const settings = {
     dots: true,
     infinite: true,
@@ -14,10 +12,12 @@ export default function Carousels({ images }) {
     slidesToScroll: 1,
   };
   return (
-    <div >
-      <Slider {...settings} >
+    <div>
+      <Slider {...settings}>
         {images.map((image, index) => (
-          <img src={image} alt="" key={index} className='h-1/2'/>
+          <div className="h-[321px] " key={index}>
+            <img src={image} alt=""/>
+          </div>
         ))}
       </Slider>
     </div>
