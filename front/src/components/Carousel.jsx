@@ -3,7 +3,6 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 export default function Carousels({ images }) {
-
   const settings = {
     dots: true,
     infinite: true,
@@ -16,7 +15,7 @@ export default function Carousels({ images }) {
       <Slider {...settings}>
         {images.map((image, index) => (
           <div className="h-[321px] " key={index}>
-            <img src={image} alt=""/>
+            <img src={image} alt="" className="w-full h-full" />
           </div>
         ))}
       </Slider>
