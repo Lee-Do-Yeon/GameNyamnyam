@@ -21,8 +21,6 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
         console.log('???', response.data);
         setGameDetail(response.data);
         setIsLoading(false);
-        // setGameCategories(response.data.categories);
-        // setGameGenres(response.data.genres);
       })
       .catch(function (error) {
         console.log(error);
@@ -75,7 +73,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
                 </svg>
               </button>
             </div>
-            <div className="col-span-7 h-18 z-10 ">
+            <div className="col-span-7 z-10">
               <Carousel images={gameDetail.screenshots} />
             </div>
 
@@ -94,7 +92,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
               </div>
               <div className="absolute bottom-4 flex flex-row">
                 <div className="bg-yellow-300 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-6">
-                  ₩ : {gameDetail.price}
+                  ₩  {gameDetail.price.toLocaleString('ko-KR')}
                 </div>
                 {!isPicked ? (
                   <button

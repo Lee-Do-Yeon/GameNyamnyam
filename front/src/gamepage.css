@@ -182,3 +182,16 @@
   width: 220px;
 }
 
+/* 스크롤바 설정*/
+.box1::-webkit-scrollbar{
+  height: 8px;
+}
+
+/* 스크롤바 막대 설정*/
+.box1::-webkit-scrollbar-thumb{
+  background-color: rgb(155, 141, 141);
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;    
+}
+
+

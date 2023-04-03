@@ -56,7 +56,7 @@
   position: absolute;
   width: 33.4vw;
   height: 63vh;
-  background-color: #747bff;
+  background-image: url(assets/sushiEnter.png);
   bottom: 11vh;
   display: block;
   justify-content: space-between;
