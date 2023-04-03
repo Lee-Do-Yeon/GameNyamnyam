@@ -7,7 +7,7 @@ app = FastAPI(
 )
 
 # CORS 설정
-origins = ["https://steamcommunity.com"]
+origins = ["https://steamcommunity.com", "https://j8c204.p.ssafy.io"]
 
 app.add_middleware(
     CORSMiddleware,
