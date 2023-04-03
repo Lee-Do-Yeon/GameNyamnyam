@@ -8,7 +8,7 @@ import { userGame } from '../../../recoil/user/atoms';
 import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
 import PickedDish from '../../components/PickedDish';
-
+import Spiner from '../../components/Spiner';
 export default function Gamepage() {
   const [gameData, setGameData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -237,7 +237,11 @@ export default function Gamepage() {
   };
 
   const navigateToResult = () => {
-    navigate('/result');
+    if (plates.length === 0) {
+      window.alert('게임을 한 개 이상 선택해주세요');
+    } else {
+      navigate('/result');
+    }
   };
   return (
     <div className="gamepage">
@@ -327,7 +331,7 @@ export default function Gamepage() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="setDish overflow-x-auto"
+                className="setDish overflow-x-auto scroll box1 border-dashed  border-4 border-red-500 pt-1 "
               >
                 {plates.map((plate, index) => (
                   <Draggable
@@ -375,6 +379,6 @@ export default function Gamepage() {
           secondIdDict={secondIdDict}
         />
       )}
-    </div>
+      </div>
   );
 }
