@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 export default function Carousels({ images }) {
-  const [gameImages, setGameImages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  console.log(images);
-  useEffect(() => {
-    if (images) {
-      setGameImages(images);
-      setLoading(false);
-    }
-  }, [images]);
   const settings = {
     dots: true,
     infinite: true,
@@ -20,10 +11,12 @@ export default function Carousels({ images }) {
     slidesToScroll: 1,
   };
   return (
-    <div >
-      <Slider {...settings} >
+    <div>
+      <Slider {...settings}>
         {images.map((image, index) => (
-          <img src={image} alt="" key={index} className='h-1/2'/>
+          <div className="h-[321px] " key={index}>
+            <img src={image} alt="" className="w-full h-full" />
+          </div>
         ))}
       </Slider>
     </div>
