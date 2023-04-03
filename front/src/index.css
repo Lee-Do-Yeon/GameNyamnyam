@@ -141,7 +141,6 @@ border-radius: 20px;
 }
 
 #result_wrap .card .card-back {
-  background-color: #ccc;
   z-index: 5;
   transform: rotateY(180deg);
 }
