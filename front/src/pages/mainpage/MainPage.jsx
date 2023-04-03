@@ -4,7 +4,9 @@ import { userGameCount } from '../../../recoil/user/atoms';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import doorSound from '../../assets/doorSound.wav';
 export default function Mainpage() {
+  const audioRef = useRef(null);
   const [gameCount, setGameCount] = useRecoilState(userGameCount);
   // useEffect(() => {
   //   axios
@@ -29,6 +31,7 @@ export default function Mainpage() {
   };
 
   function doorOpen() {
+    audioRef.current.play();
     gsap
       .timeline()
       .to(leftDoorRef.current, { duration: 1, x: -250 })
@@ -38,7 +41,8 @@ export default function Mainpage() {
       .get('http://127.0.0.1:8000/login')
       .then(function (response) {
         console.log(response);
-        setLogin(true)
+        setLogin(true);
+
         axios
           .get(`http://127.0.0.1:8000/games/count/${response}`)
           .then(function (res) {
@@ -69,16 +73,18 @@ export default function Mainpage() {
         <div className="rightDoor" ref={rightDoorRef}>
           <div className="insideDoor"></div>
         </div>
+        <audio ref={audioRef}>
+          <source src={doorSound} type="audio/wav" />
+        </audio>
       </div>
-      {isLogin ? 
-      <div>로그인 됨</div>
-       : 
-       <div className="steamLoginBtn" onClick={doorOpen}>
-       <div className="steamTxt">continue with steam login</div>
-       <div className="steamImg"></div>
-     </div>
-      
-    }
+      {isLogin ? (
+        <div>로그인 됨</div>
+      ) : (
+        <div className="steamLoginBtn" onClick={doorOpen}>
+          <div className="steamTxt">continue with steam login</div>
+          <div className="steamImg"></div>
+        </div>
+      )}
     </div>
   );
 }
