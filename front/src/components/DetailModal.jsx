@@ -11,6 +11,7 @@ export default function Dish({ Info, setInfo, id }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isPicked, setIsPicked] = useState(false)
   console.log(id);
+  
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/games/detail/${id}`)

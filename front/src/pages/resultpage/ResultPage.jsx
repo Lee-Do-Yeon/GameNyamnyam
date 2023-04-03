@@ -5,12 +5,9 @@ import { useRecoilValue } from 'recoil';
 import { userGame } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-
-// import axios from 'axios';
 
 export default function Resultpage() {
+  // const [gameid, setgameid] = useState();
   const myValue = useRecoilValue(userGame);
   const settings = {
     dots: true,
@@ -24,7 +21,11 @@ export default function Resultpage() {
     <div className="h-screen bg-yellow-600 font-semibold">
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
-          <div className="text-center text-2xl">제목 창</div>
+          <div className="text-center text-2xl">
+            
+             {/* 조건하고  */}
+            {myValue[0].price > 10000 ? <h1>사실입니다.</h1> : <h1>게임을 너무 안하셔서 취향을 알수 없습니다.</h1>}
+          </div>
         </div>
       </div>
 
@@ -39,16 +40,25 @@ export default function Resultpage() {
             }}
           >
             <div className="relative h-full">
-              <div className="flex justify-center items-center w-4/5 h-5/6 p-4 ml-5 mt-10">
+              <div className="w-4/5 h-5/6 p-4 ml-5 mt-5">
                 <Slider {...settings}>
-                  {myValue.map((Value) => {
-                    return <Plate key={Value.id} myValue={Value} />;
-                  })}
+                  {myValue.map((item) => (
+                  <Plate key={item.id} myValue={item} />
+                  ))}
                 </Slider>
               </div>
-              <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
-                Go to Eat
-              </button>
+              
+              <a
+        // href={`https://store.steampowered.com/app/${gameid}/`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20 z-30">
+          Go to Eat
+        </button>
+      </a>
+
+
             </div>
           </div>
         </div>
