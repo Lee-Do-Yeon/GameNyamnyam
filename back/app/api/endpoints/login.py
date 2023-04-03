@@ -11,7 +11,7 @@ api_url = "https://j8c204.p.ssafy.io/api/login"
 async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
     url = steam_signin.ConstructURL(api_url+'/processlogin')
     a = steam_signin.RedirectUser(url)
-    print(a)
+    print("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", a)
     return a
 
 
