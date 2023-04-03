@@ -92,7 +92,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
               </div>
               <div className="absolute bottom-4 flex flex-row">
                 <div className="bg-yellow-300 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-6">
-                  ₩  {gameDetail.price.toLocaleString('ko-KR')}
+                  ₩ {gameDetail.price.toLocaleString('ko-KR')}
                 </div>
                 {!isPicked ? (
                   <button
