@@ -5,13 +5,15 @@ import GenreTag from '../components/GenreTag';
 import Carousel from './Carousel';
 import { userGame } from '../../recoil/user/atoms/';
 import { useRecoilState } from 'recoil';
-export default function Dish({ Info, setInfo, id }) {
+export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
   const [gameDetail, setGameDetail] = useState([]);
   const [plates, setPlates] = useRecoilState(userGame);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPicked, setIsPicked] = useState(false)
+  const [isPicked, setIsPicked] = useState(false);
   console.log(id);
-  
+
+  const totalIdDict = { ...firstIdDict, ...secondIdDict };
+  console.log(totalIdDict);
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/games/detail/${id}`)
@@ -19,23 +21,32 @@ export default function Dish({ Info, setInfo, id }) {
         console.log('???', response.data);
         setGameDetail(response.data);
         setIsLoading(false);
-        // setGameCategories(response.data.categories);
-        // setGameGenres(response.data.genres);
       })
       .catch(function (error) {
         console.log(error);
       });
   }, [id]);
 
+  useEffect(() => {
+    plates.map((plate) => {
+      if (plate.appid === id) {
+        setIsPicked(true);
+      }
+    });
+  }, [plates]);
   console.log('랜더링 후', gameDetail);
   const closeInfo = () => {
     setInfo(!Info);
   };
 
   const getGame = () => {
+    console.log(totalIdDict[id]);
+    const getSushi = document.querySelector(`#${String(totalIdDict[id])}`);
+    console.log(getSushi);
+    getSushi.setAttribute('style', 'pointer-events:none');
+    getSushi.setAttribute('style', 'visibility:hidden');
     const newPlates = [...plates, gameDetail];
     setPlates(newPlates);
-    setIsPicked(true);
     return newPlates;
   };
   return (
@@ -62,8 +73,8 @@ export default function Dish({ Info, setInfo, id }) {
                 </svg>
               </button>
             </div>
-            <div className="col-span-7 h-18 z-10 ">
-                <Carousel images={gameDetail.screenshots} />
+            <div className="col-span-7 z-10">
+              <Carousel images={gameDetail.screenshots} />
             </div>
 
             <div className="col-span-5 text-left bg-neutral-700 rounded-lg pt-2 relative">
@@ -81,20 +92,20 @@ export default function Dish({ Info, setInfo, id }) {
               </div>
               <div className="absolute bottom-4 flex flex-row">
                 <div className="bg-yellow-300 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-6">
-                  ₩ : {gameDetail.price}
+                  ₩ {gameDetail.price.toLocaleString('ko-KR')}
                 </div>
-                {!isPicked ? 
-                <button
-                className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
-                onClick={getGame}
-                >
-                  접시 가져오기
-                </button>
-                : <button
-                className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
-                >
-                  가져와짐
-                </button>}
+                {!isPicked ? (
+                  <button
+                    className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
+                    onClick={getGame}
+                  >
+                    접시 가져오기
+                  </button>
+                ) : (
+                  <button className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20">
+                    가져와짐
+                  </button>
+                )}
               </div>
             </div>
 
