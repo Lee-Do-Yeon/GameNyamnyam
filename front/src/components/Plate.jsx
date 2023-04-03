@@ -1,8 +1,10 @@
 import React from 'react';
 // import axios from 'axios'
 import '../index.css';
+import Tag from './Tag';
 
 export default function Plate({ myValue }) {
+  console.log(myValue.genres);
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
@@ -18,8 +20,6 @@ export default function Plate({ myValue }) {
   };
 
   const backgroundColor = changeColor(myValue.price);
-  console.log(myValue.price);
-  console.log(typeof(myValue.price));
   // const [goEat, setGoEat] =useState([]);
 
   // const getEat = async() => {
@@ -53,7 +53,7 @@ export default function Plate({ myValue }) {
           ></div>
 
           <div
-            className={`ellipse w-[550px] h-[350px] bg-[${backgroundColor}] border-4 absolute`}
+            className={`ellipse w-[550px] h-[350px] border-4 absolute`}
           ></div>
           <div className="ellipse bg-white w-[480px] h-[300px] absolute"></div>
           <div className="w-[430px] h-[250px] rounded-lg absolute"></div>
@@ -63,11 +63,18 @@ export default function Plate({ myValue }) {
                 src={myValue.image}
                 className="shadow-2xl rounded-lg card-front"
               />
-              <div className="card-back">
-                <div>
-                  {/* <div>{goEat.genres}</div> */}
-                  {/* <div>{goEat.categories}</div> */}
+              <div className="card-back bg-black opacity-70">
+                
+                <div className='w-4/5 text-white'>
+                  <div className='text-2xl pb-5 '>{myValue.name}</div>
+                  <div>{myValue .categories[0]}</div>
+                  <div className='py-3 '>
+                  {myValue.genres.map((genre) => (
+                    <Tag key={genre.id} props={genre}/>
+                  ))}
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>
