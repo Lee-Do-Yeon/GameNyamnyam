@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-api_url = "https://j8c204.p.ssafy.io/api"
+api_url = "https://j8c204.p.ssafy.io/api/login"
 
 
 @router.get('/')
 async def main(steam_signin: SteamSignIn = Depends(SteamSignIn)):
-    url = steam_signin.ConstructURL(api_url+'/processlogin')
+    url = steam_signin.ConstructURL(api_url+'processlogin')
     return steam_signin.RedirectUser(url)
 
 
