@@ -109,8 +109,9 @@ def get_rate(preference: list,
     game_genrs = []
     # DB 조회
     for appid in table_list:
-        game_genrs.append(games.find_one({"appid": appid}, {"_id": 0, "appid":1, "genres": 1}))
-    
+        game_genrs.append(games.find_one({"appid": appid}, {
+                          "_id": 0, "appid": 1, "genres": 1}))
+
     result = recommend_game.get_result(preference, game_genrs)
     return result
 
@@ -137,8 +138,6 @@ def get_similar_game(table_list: list):
         result.append(game)
 
     return result
-
-
 
 
 ####################
@@ -264,23 +263,22 @@ def get_games_no_data():
 
     # 신규 게임 5개 가져오기
     latest_game = games.aggregate([
-        { "$sort": { "release_date": -1 } },
-        { "$match": { "appid": { "$nin": already_selected } } },
-        { "$limit": 30 },
-        { "$sample": { "size": 5 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+        {"$sort": {"release_date": -1}},
+        {"$match": {"appid": {"$nin": already_selected}}},
+        {"$limit": 30},
+        {"$sample": {"size": 5}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
     ])
 
     for game in latest_game:
         result.append(game)
         already_selected.append(game["appid"])
-    
 
     # 무작위 30개 가져오기
     random_game_cur = games.aggregate([
-        { "$match": { "appid": { "$nin": already_selected } } },
-        { "$sample": { "size": 30 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+        {"$match": {"appid": {"$nin": already_selected}}},
+        {"$sample": {"size": 30}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
     ])
 
     for game in random_game_cur:
@@ -289,13 +287,13 @@ def get_games_no_data():
 
     # 인기순위 25개 가져오기
     popular_game_cur = games.aggregate([
-        { "$sort": { "recommendations": -1 } },
-        { "$match": { "appid": { "$nin": already_selected } } },
-        { "$limit": 100 },
-        { "$sample": { "size": 25 } },
-        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+        {"$sort": {"recommendations": -1}},
+        {"$match": {"appid": {"$nin": already_selected}}},
+        {"$limit": 100},
+        {"$sample": {"size": 25}},
+        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
     ])
-  
+
     for game in popular_game_cur:
         result.append(game)
         already_selected.append(game["appid"])
@@ -317,7 +315,7 @@ def get_game_detail(appid: str):
     """
     # DB 조회
     result = games.find_one({"appid": appid}, {
-                              "_id": 0, "recommendations": 0, "metacritic": 0, "about_the_game": 0})
+        "_id": 0, "recommendations": 0, "metacritic": 0, "about_the_game": 0})
 
     # categories, genres, screenshots, developers 리스트화
     result["categories"] = result["categories"].split(",")
