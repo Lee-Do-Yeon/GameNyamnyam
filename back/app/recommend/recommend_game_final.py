@@ -1,9 +1,4 @@
 import pandas as pd
-import numpy as np
-
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import RegexpTokenizer
 
 from gensim.models import Word2Vec # word2vec의 알고리즘 호출
 from gensim.models.word2vec import Word2Vec
@@ -11,7 +6,12 @@ from gensim.models.word2vec import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 
 from db.Database import games
-import os
+# ----------------------- 추후 삭제
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import RegexpTokenizer
+import numpy as np
+# -----------------------
 
 
 
@@ -84,12 +84,6 @@ def get_top_200():
 
 
 def get_cosine_similarities(game_df):
-    # Download stopwords
-    nltk.download('stopwords')
-
-    # 파일 경로 설정
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
     #-----------------------------------------------------------------------------------
     # 데이터 정제 (TO DO : 이 부분은 영어 데이터를 직접 정제 후 DB에 삽입하기)
 
@@ -127,13 +121,10 @@ def get_cosine_similarities(game_df):
 
     #------------추후 삭제-----------------------------------------------------------------------
 
-    # word2Vec 모델 생성
-    corpus = [words.split() for words in game_df['cleaned']]
-    word2vec_model = Word2Vec(vector_size=300, window=5, min_count=2, workers=-1) # size 300, window 5 설정
-    word2vec_model.build_vocab(corpus)
-    word2vec_model.wv.vectors_lockf = np.ones(len(word2vec_model.wv))
-    word2vec_model.wv.intersect_word2vec_format(BASE_DIR+'/recommend/GoogleNews-vectors-negative300.bin.gz', lockf=1.0, binary=True) # pre-trained data
-    word2vec_model.train(corpus, total_examples=word2vec_model.corpus_count, epochs=15)
+
+
+
+    word2vec_model = Word2Vec.load("word2vec.model")
 
     document_embedding_list = get_document_vectors(game_df.index.to_list(), game_df['cleaned'], word2vec_model)
     print('Number of document vectors:', len(document_embedding_list))
@@ -154,7 +145,7 @@ def get_recommended_games(owned_games):
     
     game_df = get_top_200()
     game_list = game_df.copy()
-    
+
     cosine_similarities = get_cosine_similarities(game_df)
 
     # DB와 일치하는 유저의 게임 리스트 체크
