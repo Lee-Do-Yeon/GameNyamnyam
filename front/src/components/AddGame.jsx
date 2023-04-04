@@ -12,19 +12,6 @@ export default function AddGame() {
         setaddgame(true);
     };
     
-    // useEffect(() => {
-    //   axios
-    //   .post(`http://127.0.0.1:8000/games/similar/`)
-    //   .then(res => {
-    //     setSimilar(res.data);
-    //     console.log(res.data);
-    //   }
-    //   )
-    //   .catch(err => {
-    //     console.log(err,'nn');
-    //   });
-    // },[]);
-    
 
 
   return (

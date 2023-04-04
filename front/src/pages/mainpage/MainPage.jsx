@@ -21,7 +21,7 @@ export default function Mainpage() {
     // const steamId = '76561198010254569';
     console.log(steamId);
     axios
-      .get(`http://127.0.0.1:8000/games/count/${steamId}`)
+      .get(`https://j8c204.p.ssafy.io/api/games/count/${steamId}`)
       .then(function (response) {
         console.log(response.data);
         if (response.data >= 5) {
