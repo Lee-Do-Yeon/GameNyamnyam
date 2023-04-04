@@ -1,15 +1,61 @@
-import React from 'react';
-import AddGame from '../../components/AddGame';
+import React, {useState, useEffect} from 'react';
+import Slider from 'react-slick';
 
+import { useRecoilValue } from 'recoil';
+import { userGame, userGameCount } from '../../../recoil/user/atoms';
+import AddGame from '../../components/AddGame';
+import Plate from '../../components/Plate';
+
+import axios from 'axios';
 
 export default function Resultpage() {
+  // const [gameid, setgameid] = useState();
+  const myValue = useRecoilValue(userGame);
+  const myCount = useRecoilValue(userGameCount);
+  const [similar, setSimilar] = useState([]);
+  
+  const appidList = [
+    for (let i = 0; i < res.data.length; i++) {
+      appidList.push(res.data[i].appid);
+    }
+  ]
+  
+  
+  console.log(appidList);
+
+  useEffect(() => {
+    axios
+    .post(`http://127.0.0.1:8000/games/similar`, {
+
+    })
+    .then(res => {
+      setSimilar(res.data);
+      // console.log(res.data);
+    }
+    )
+    .catch(err => {
+      console.log(err,'nn');
+    });
+  },[]);
+  
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   return (
-    <div className="h-screen bg-yellow-200 font-semibold">
+    <div className="h-screen bg-yellow-600 font-semibold">
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
-          <div className="text-center text-2xl">내취향? 열.받.으.시.나.요.?/</div>
+          <div className="text-center text-2xl">
+            {myCount ? <h1> 5 이상입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>}
+          </div>
         </div>
       </div>
+
       <div className="flex h-4/6">
         <div className="flex justify-center w-3/4 px-24">
           <div
@@ -21,27 +67,20 @@ export default function Resultpage() {
             }}
           >
             <div className="relative h-full">
-              <div className='text-center pt-8 '>
-                <div className='pl-9 text-4xl text-white w-4/5 truncate'>
-                {/* 이름을 길게 하려고 하는데 이건 어떻게 생각하시나요? 눼? */}
-                짧은 이름일때 
-                </div>
+              <div className="w-4/5 h-5/6 p-4 ml-5 mt-5">
+                <Slider {...settings}>
+                  {myValue.map((item) => (
+                  <Plate key={item.id} myValue={item} />
+                  ))}
+                </Slider>
               </div>
-              <div className='flex justify-center w-4/5 h-4/6 p-4 ml-5 border-2'>
-                <div >
-
-                </div>
-              </div>
-              <div className='text-center'>
-                <div className='pl-9 absolute bottom-10 text-4xl text-white w-4/5 truncate'>가격</div>
-              </div>
-                <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-8 right-20">
-                  Go to Eat
-                </button>
+              
+        <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
+          Go to Eat
+        </button>
             </div>
           </div>
         </div>
-
         <div
           className="w-1/4"
           style={{
@@ -50,19 +89,26 @@ export default function Resultpage() {
             backgroundRepeat: 'no-repeat',
           }}
         >
-          <div className="mt-36 mx-8">
-            <ul>
-              <li>일병</li>
-              <li>이병</li>
-              <li>상병</li>
-              <li>병장</li>
-            </ul>
+          <div className="mt-36 mx-10">
+            <div>
+              <div>
+                {myValue.map((item, index) => (
+                  <div key={item.id} className="grid grid-cols-12">
+                    <div className="col-span-2">{index + 1} </div>
+                    <div className="col-span-6 truncate">{item.name}</div>
+                    <div className="col-span-3">₩ {item.price}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div className="p-4 h-1/6">
         <div className="p-4 text-center">
-          <div className="text-white text-xl">이런 게임도 좋아하실거 같아요</div>
+          <div className="text-white text-xl">
+            이런 게임도 좋아하실거 같아요
+          </div>
           <AddGame className="p-3" />
         </div>
       </div>
