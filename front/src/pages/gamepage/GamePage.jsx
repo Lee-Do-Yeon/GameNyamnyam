@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
 import Receipt from '../../components/Receipt';
@@ -8,8 +8,10 @@ import { userGame } from '../../../recoil/user/atoms';
 import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
 import PickedDish from '../../components/PickedDish';
-import Spiner from '../../components/Spiner';
+import bellSound from '../../assets/bellSound.wav';
+
 export default function Gamepage() {
+  const audioRef = useRef(null);
   const [gameData, setGameData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [Info, setInfo] = useState(false);
@@ -240,6 +242,7 @@ export default function Gamepage() {
     if (plates.length === 0) {
       window.alert('게임을 한 개 이상 선택해주세요');
     } else {
+      audioRef.current.play();
       navigate('/result');
     }
   };
@@ -379,6 +382,9 @@ export default function Gamepage() {
           secondIdDict={secondIdDict}
         />
       )}
-      </div>
+      <audio ref={audioRef}>
+        <source src={bellSound} type="audio/wav" />
+      </audio>
+    </div>
   );
 }

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import doorSound from '../../assets/doorSound.wav';
+import bellSound from '../../assets/bellSound.wav';
 export default function Mainpage() {
   const audioRef = useRef(null);
   const [gameCount, setGameCount] = useRecoilState(userGameCount);
@@ -74,16 +75,18 @@ export default function Mainpage() {
           <div className="insideDoor"></div>
         </div>
         <audio ref={audioRef}>
-          <source src={doorSound} type="audio/wav" />
+          <source src={bellSound} type="audio/wav" />
         </audio>
       </div>
       {isLogin ? (
         <div>로그인 됨</div>
       ) : (
-        <div className="steamLoginBtn" onClick={doorOpen}>
-          <div className="steamTxt">continue with steam login</div>
-          <div className="steamImg"></div>
-        </div>
+        <a href="https://steamcommunity.com/openid/login?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.mode=checkid_setup&openid.return_to=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.realm=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select">
+          <div className="steamLoginBtn" onClick={doorOpen}>
+            <div className="steamTxt">continue with steam login</div>
+            <div className="steamImg"></div>
+          </div>
+        </a>
       )}
     </div>
   );
