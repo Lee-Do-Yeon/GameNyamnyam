@@ -134,7 +134,7 @@ def get_similar_game(table_list: list):
 
     result = []
 
-    for game in similar_game_list:
+    for game in similar_game_list[:10]:
         result.append(game)
 
     return result
@@ -143,25 +143,6 @@ def get_similar_game(table_list: list):
 ####################
 # 게임 관련
 ####################
-
-
-@router.post("/test")
-def get_test():
-    result = []
-    already_play = []
-    # 무작위 30개 가져오기
-    random_game = games.aggregate([
-        {"$match": {"appid": {"$nin": already_play}}},
-        {"$sample": {"size": 60}},
-        {"$project": {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}}
-    ])
-
-    for game in random_game:
-        result.append(game)
-
-    return result
-
-
 
 @router.post("/all/yes", response_description="구매 기록이 5개 이상인 유저의 게임 목록", response_model=list[game.GameBase])
 def get_games_yes_data(steamId: str):
@@ -194,7 +175,7 @@ def get_games_yes_data(steamId: str):
     appList = recommend_game_final.get_recommended_games(owned_games)
 
     recommend_game_list = games.find(
-        { "appid": { "$in": appList } },
+        { "appid": { "$in": appList, "$nin": already_selected } },
         {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}
     )
 
