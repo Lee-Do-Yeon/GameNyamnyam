@@ -17,7 +17,7 @@ export default function Resultpage() {
 
   useEffect(() => {
     axios
-    .post(`http://127.0.0.1:8000/games/similar`, {
+    .post(`https://j8c204.p.ssafy.io/api/games/similar`, {
 
     })
     .then(res => {
