@@ -23,6 +23,7 @@
   height: 8vh;
   width: 26vw;
   bottom: 6px;
+  margin:auto;
 }
 
 .steamTxt {
@@ -57,7 +58,7 @@
   width: 33.4vw;
   height: 63vh;
   background-image: url(assets/sushiEnter.png);
-  bottom: 11vh;
+  bottom: 9.5vh;
   display: block;
   justify-content: space-between;
   z-index: 1;
