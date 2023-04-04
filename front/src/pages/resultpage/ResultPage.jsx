@@ -1,14 +1,43 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Slider from 'react-slick';
 
 import { useRecoilValue } from 'recoil';
-import { userGame } from '../../../recoil/user/atoms';
+import { userGame, userGameCount } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
+
+import axios from 'axios';
 
 export default function Resultpage() {
   // const [gameid, setgameid] = useState();
   const myValue = useRecoilValue(userGame);
+  const myCount = useRecoilValue(userGameCount);
+  const [similar, setSimilar] = useState([]);
+  
+  const appidList = [
+    for (let i = 0; i < res.data.length; i++) {
+      appidList.push(res.data[i].appid);
+    }
+  ]
+  
+  
+  console.log(appidList);
+
+  useEffect(() => {
+    axios
+    .post(`http://127.0.0.1:8000/games/similar`, {
+
+    })
+    .then(res => {
+      setSimilar(res.data);
+      // console.log(res.data);
+    }
+    )
+    .catch(err => {
+      console.log(err,'nn');
+    });
+  },[]);
+  
   const settings = {
     dots: true,
     infinite: true,
@@ -22,9 +51,7 @@ export default function Resultpage() {
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
           <div className="text-center text-2xl">
-            
-             {/* 조건하고  */}
-            {myValue[0].price > 10000 ? <h1>사실입니다.</h1> : <h1>게임을 너무 안하셔서 취향을 알수 없습니다.</h1>}
+            {myCount ? <h1> 5 이상입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>}
           </div>
         </div>
       </div>
@@ -48,17 +75,9 @@ export default function Resultpage() {
                 </Slider>
               </div>
               
-              <a
-        // href={`https://store.steampowered.com/app/${gameid}/`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20 z-30">
+        <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
           Go to Eat
         </button>
-      </a>
-
-
             </div>
           </div>
         </div>

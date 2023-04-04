@@ -1,6 +1,8 @@
-import React from 'react';
-// import axios from 'axios'
+import React, { useState, useEffect } from 'react';
 import '../index.css';
+import Tag from './Tag';
+
+import axios from 'axios';
 
 export default function Plate({ myValue }) {
   const changeColor = (price) => {
@@ -18,30 +20,33 @@ export default function Plate({ myValue }) {
   };
 
   const backgroundColor = changeColor(myValue.price);
-  console.log(myValue.price);
-  console.log(typeof(myValue.price));
-  // const [goEat, setGoEat] =useState([]);
+  const [goEat, setGoEat] = useState([]);
+  
+  useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
+      .then((res) => {
+        setGoEat(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [myValue.appid]);
 
-  // const getEat = async() => {
-  //   await axios
-  //     .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
-  //     .then((res) => {
-  //       setGoEat(res.data);
-  //       setgameid(res.data.appid);
-  //       console.log(goEat);
-  //     })
-  // };
+  console.log(goEat)
 
   // useEffect(() => {
   //   axios
-  //   .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
-  //   .then((res) => {
-  //     setGoEat(res.data);
-  //     // setgameid(res.data.appid);
-  //     console.log(goEat);
-  //   })
-  // }, [])
-  // console.log(goEat.genres)
+  //     .get(`http://127.0.0.1:8000/games/detail/${myValue.id}`)
+  //     .then(function (response) {
+  //       console.log('???', response.data);
+  //       setGoEat(response.data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, [myValue.id]);
+  // console
 
   return (
     <>
@@ -49,11 +54,11 @@ export default function Plate({ myValue }) {
         <div className="w-full h-full flex items-center justify-center pb-5">
           <div
             className={`ellipse w-[600px] h-[400px] shadow-2xl absolute`}
-            style={{ backgroundColor: backgroundColor}}
+            style={{ backgroundColor: backgroundColor }}
           ></div>
 
           <div
-            className={`ellipse w-[550px] h-[350px] bg-[${backgroundColor}] border-4 absolute`}
+            className={`ellipse w-[550px] h-[350px] border-4 absolute`}
           ></div>
           <div className="ellipse bg-white w-[480px] h-[300px] absolute"></div>
           <div className="w-[430px] h-[250px] rounded-lg absolute"></div>
@@ -63,10 +68,15 @@ export default function Plate({ myValue }) {
                 src={myValue.image}
                 className="shadow-2xl rounded-lg card-front"
               />
-              <div className="card-back">
-                <div>
-                  {/* <div>{goEat.genres}</div> */}
-                  {/* <div>{goEat.categories}</div> */}
+              <div className="card-back bg-black opacity-70">
+                <div className="w-4/5 text-white">
+                  <div className="text-2xl pb-5 ">{goEat.name}</div>
+                  <div>{ goEat.categories && goEat.categories[0] }</div>
+                  <div className="py-3 ">
+                    {goEat && goEat.genres && goEat.genres.map((genre, index) => (
+                      <Tag  props={genre} key={index}/>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
