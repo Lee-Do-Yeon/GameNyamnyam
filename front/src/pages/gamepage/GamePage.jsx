@@ -243,7 +243,7 @@ export default function Gamepage() {
       window.alert('게임을 한 개 이상 선택해주세요');
     } else {
       audioRef.current.play();
-      navigate('/result');
+      setTimeout(() => navigate('/result'), 3000);
     }
   };
   return (

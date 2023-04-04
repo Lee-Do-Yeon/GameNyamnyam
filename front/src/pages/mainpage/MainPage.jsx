@@ -2,11 +2,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { userGameCount } from '../../../recoil/user/atoms';
 import gsap from 'gsap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import doorSound from '../../assets/doorSound.wav';
 import bellSound from '../../assets/bellSound.wav';
 export default function Mainpage() {
+  const location = useLocation();
+  console.log(location)
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const steamId = searchParams.get('steam_id');
+    console.log(steamId);
+  }, [location]);
   const audioRef = useRef(null);
   const [gameCount, setGameCount] = useRecoilState(userGameCount);
   // useEffect(() => {
@@ -66,7 +73,6 @@ export default function Mainpage() {
   return (
     <div className="mainPageImg">
       <div className="kanban"></div>
-
       <div className="door" onClick={navigateToGame}>
         <div className="leftDoor" ref={leftDoorRef}>
           <div className="insideDoor"></div>
