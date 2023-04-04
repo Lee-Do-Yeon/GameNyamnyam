@@ -190,6 +190,7 @@ def get_games_yes_data(steamId: str):
     owned_games = []
     for i in range(game_cnt):
         owned_games.append(str(user_games[i]["appid"]))
+        already_selected.append(str(user_games[i]["appid"]))
 
     appList = recommend_game_final.get_recommended_games(owned_games)
 
