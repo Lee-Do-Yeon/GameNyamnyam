@@ -7,7 +7,17 @@ export const DEFAULT_USERGAME = {
   name: null,
 };
 
+export const DEFAULT_USER = {
+  userid: null,
+  isFive: null,
+};
+
 export const userGame = atom({
   key: 'userGame',
+  default: [],
+});
+
+export const userDetail = atom({
+  key: 'userDetail',
   default: [],
 });
