@@ -49,6 +49,14 @@ export default function Mainpage() {
       .to(leftDoorRef.current, { duration: 1, x: -250 })
       .to(rightDoorRef.current, { duration: 1, x: 250 }, '-=1');
     setLogin(true);
+    axios
+      .get('https://j8c204.p.ssafy.io/api/login')
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   function goToSteam() {

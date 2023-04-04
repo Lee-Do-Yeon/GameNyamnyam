@@ -16,7 +16,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
   console.log(totalIdDict);
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/games/detail/${id}`)
+      .get(`https://j8c204.p.ssafy.io/api/games/detail/${id}`)
       .then(function (response) {
         console.log('???', response.data);
         setGameDetail(response.data);
