@@ -29,6 +29,7 @@ export default function Mainpage() {
         } else {
           setDetail([steamId, false]);
         }
+        audioRef.current.play();
         doorOpen();
       })
       .catch(function (err) {
@@ -43,20 +44,12 @@ export default function Mainpage() {
   };
 
   function doorOpen() {
-    audioRef.current.play();
+    
     gsap
       .timeline()
       .to(leftDoorRef.current, { duration: 1, x: -250 })
       .to(rightDoorRef.current, { duration: 1, x: 250 }, '-=1');
     setLogin(true);
-    axios
-      .get('https://j8c204.p.ssafy.io/api/login')
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   function goToSteam() {
@@ -78,8 +71,7 @@ export default function Mainpage() {
         </audio>
       </div>
       {isLogin ? (
-        <div>
-        </div>
+        <div></div>
       ) : (
         <div className="steamLoginBtn" onClick={goToSteam}>
           <div className="steamTxt">continue with steam login</div>
