@@ -11,4 +11,4 @@ client = MongoClient(mongodb_URI)
 # DB 접속
 db = client['nyamnyam']
 # Collection 연결
-games = db['game']
+games = db['app']
