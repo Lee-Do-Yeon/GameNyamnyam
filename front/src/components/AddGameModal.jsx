@@ -15,19 +15,6 @@ export default function gamemodal({setaddgame}) {
       <a href={`https://store.steampowered.com/app/${appid}/EA_SPORTS_FIFA_23/`} target="_blank" rel="noopener noreferrer">
         <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1811260/header.jpg?t=1679504733" alt="" className='rounded-lg'/>
       </a>
-      <a href={`https://store.steampowered.com/app/${appid}/EA_SPORTS_FIFA_23/`} target="_blank" rel="noopener noreferrer">
-        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1811260/header.jpg?t=1679504733" alt="" className='rounded-lg'/>
-      </a>
-      <a href={`https://store.steampowered.com/app/${appid}/EA_SPORTS_FIFA_23/`} target="_blank" rel="noopener noreferrer">
-        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1811260/header.jpg?t=1679504733" alt="" className='rounded-lg'/>
-      </a>
-      <a href={`https://store.steampowered.com/app/${appid}/EA_SPORTS_FIFA_23/`} target="_blank" rel="noopener noreferrer">
-        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1811260/header.jpg?t=1679504733" alt="" className='rounded-lg'/>
-      </a>
-      
-      
-      
-      
     </div>
       </div>
   );
