@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from gensim.models import Word2Vec # word2vec의 알고리즘 호출
 from gensim.models.word2vec import Word2Vec
@@ -6,19 +7,11 @@ from gensim.models.word2vec import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 
 from db.Database import games
-# ----------------------- 추후 삭제
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import RegexpTokenizer
-import numpy as np
-# -----------------------
-
-
 
 # 각 문서의 벡터를 추출, 이를 이용하여 유사도 행렬 계산
 # Get document vectors
 index_list_result = []
-def get_document_vectors(index_list, document_list, model):
+def get_document_vectors(document_list, model):
     document_embedding_list = []
     for index, line in document_list.iteritems():
         doc2vec = None
@@ -37,8 +30,6 @@ def get_document_vectors(index_list, document_list, model):
 
     
     return document_embedding_list
-
-
 
 # 선택한 게임에 대해 1개당 추천 20개씩 추출
 
@@ -76,7 +67,7 @@ def get_top_200():
             { "$sort": { "recommendations": -1 } },
             { "$match": { "metacritic": { "$ne": 0 } } },
             { "$limit": 200 },
-            { "$project": { "_id": 0, "recommendations": 1, "metacritic": 1, "short_description": 1, "appid": 1, "name": 1  } }
+            { "$project": { "_id": 0, "recommendations": 1, "metacritic": 1, "short_description": 1, "appid": 1, "name": 1, "clean_description": 1  } }
         ])
     game_list = pd.DataFrame(list(game_list))
 
@@ -84,49 +75,14 @@ def get_top_200():
 
 
 def get_cosine_similarities(game_df):
-    #-----------------------------------------------------------------------------------
-    # 데이터 정제 (TO DO : 이 부분은 영어 데이터를 직접 정제 후 DB에 삽입하기)
-
-    # Data cleaning functions
-    def _removeNonAscii(s):
-        return "".join(i for i in str(s) if  ord(i) < 128)
-
-    def make_lower_case(text):
-        return text.lower()
-
-    def remove_stop_words(text):
-        text = text.split()
-        stops = set(stopwords.words("english"))
-        text = [w for w in text if not w in stops]
-        text = " ".join(text)
-        return text
-
-    def remove_punctuation(text):
-        tokenizer = RegexpTokenizer(r'[a-zA-Z]+')
-        text = tokenizer.tokenize(text)
-        text = " ".join(text)
-        return text
-
-    # Data cleaning
-    game_df['cleaned'] = game_df['short_description'].apply(_removeNonAscii)
-    game_df['cleaned'] = game_df['cleaned'].apply(make_lower_case)
-    game_df['cleaned'] = game_df['cleaned'].apply(remove_stop_words)
-    game_df['cleaned'] = game_df['cleaned'].apply(remove_punctuation)
-
-
     # 빈 행 제거
-    game_df['cleaned'].replace('', np.nan, inplace=True)
-    game_df = game_df[game_df['cleaned'].notna()]
+    game_df['clean_description'].replace('', np.nan, inplace=True)
+    game_df = game_df[game_df['clean_description'].notna()]
     print('Total number of documents after cleaning:', len(game_df))
-
-    #------------추후 삭제-----------------------------------------------------------------------
-
-
-
 
     word2vec_model = Word2Vec.load("word2vec.model")
 
-    document_embedding_list = get_document_vectors(game_df.index.to_list(), game_df['cleaned'], word2vec_model)
+    document_embedding_list = get_document_vectors(game_df['clean_description'], word2vec_model)
     print('Number of document vectors:', len(document_embedding_list))
     # 코사인 유사도 계산
     cosine_similarities = cosine_similarity(document_embedding_list, document_embedding_list)
