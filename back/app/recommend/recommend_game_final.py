@@ -78,15 +78,16 @@ def get_cosine_similarities(game_df):
     # 빈 행 제거
     game_df['clean_description'].replace('', np.nan, inplace=True)
     game_df = game_df[game_df['clean_description'].notna()]
-    print('Total number of documents after cleaning:', len(game_df))
+    # print('Total number of documents after cleaning:', len(game_df))
 
     word2vec_model = Word2Vec.load("word2vec.model")
 
     document_embedding_list = get_document_vectors(game_df['clean_description'], word2vec_model)
-    print('Number of document vectors:', len(document_embedding_list))
+    # print('Number of document vectors:', len(document_embedding_list))
+
     # 코사인 유사도 계산
     cosine_similarities = cosine_similarity(document_embedding_list, document_embedding_list)
-    print('Size of cosine similarity matrix:', cosine_similarities.shape)
+    # print('Size of cosine similarity matrix:', cosine_similarities.shape)
 
 
     return cosine_similarities
@@ -112,11 +113,7 @@ def get_recommended_games(owned_games):
             continue
         else:
             appid_list.append(temp['appid'].values[0])
-    
-    print("------------------------------")
-    print("DB와 일치하는 유저의 게임 리스트")
-    print(appid_list)
-    print("------------------------------")
+
 
     # 추천해준 게임에 대한 정보 반환
     for game_id in appid_list:
