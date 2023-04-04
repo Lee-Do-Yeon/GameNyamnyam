@@ -1,14 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import AddGameModal from './AddGameModal'
+import axios from 'axios';
 
 
 
 export default function AddGame() {
     const [addgame, setaddgame] = useState(false);
+    // const [similar, setSimilar] = useState([]);
 
     const showaddgame = () => {
         setaddgame(true);
     };
+    
+    // useEffect(() => {
+    //   axios
+    //   .post(`http://127.0.0.1:8000/games/similar/`)
+    //   .then(res => {
+    //     setSimilar(res.data);
+    //     console.log(res.data);
+    //   }
+    //   )
+    //   .catch(err => {
+    //     console.log(err,'nn');
+    //   });
+    // },[]);
+    
+
 
   return (
     <div>
