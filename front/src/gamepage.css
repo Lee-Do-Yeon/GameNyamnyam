@@ -58,8 +58,17 @@
 
   .searchIcon {
     position: absolute;
-    top: 25%
-    ;
+    top: 25%;
+  }
+  .searchIcon1 {
+    position: absolute;
+    top: 25%;
+    left: 12%;
+  }
+  .trashIcon {
+    position: absolute;
+    top: 25%;
+    right: 12%
   }
   .plateBottom {
     position: relative;
@@ -140,7 +149,8 @@
 }
 .myPlate {
   position: relative;
-  margin-right: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .clientTable {
   height: 22vh;
@@ -149,7 +159,6 @@
   display: flex;
   position: absolute; 
   bottom: 10px;
- 
 }
 .bell {
   background-image: url('assets/bell.png');
@@ -169,4 +178,20 @@
 .zindex {
   z-index:3;
 }
+.titleP {
+  width: 220px;
+}
+
+/* 스크롤바 설정*/
+.box1::-webkit-scrollbar{
+  height: 8px;
+}
+
+/* 스크롤바 막대 설정*/
+.box1::-webkit-scrollbar-thumb{
+  background-color: rgb(155, 141, 141);
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;    
+}
+
 

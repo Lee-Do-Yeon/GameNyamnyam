@@ -1,12 +1,6 @@
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-'''
-(1) preference: ['액션', '인디']
-
-(2) games: [{'appid':1234, 'genres':'인디, 액션'}, ...]
-'''
-
 
 '''
 Input: 예전에 구매한 게임
@@ -70,45 +64,4 @@ def get_result(preference, games):
     result = result_df.to_dict()[0]
     del result[0]
 
-    return result
-
-
-'''
-Input: 게임들.
-Output: 비슷한 게임 appid 리스트.
-
-TO DO : 
-비슷한 게임 구하기.
-
-1번 - 카테고리를 사용한 알고리즘
-(1) 해당 게임들(장바구니)로부터 성향 분석
-(2) 도출된 성향과 일치하는 게임 추천(전체에서)
-
-=> 이러면 그냥 get_preference(장바구니) + get_result(preference, 전체게임)
-
-2번 - desc를 사용한 알고리즘
-(1) 해당 게임들의 about_game 분석
-(2) 일치하는 게임 추천 (전체에서)
-
-'''
-
-
-def get_similar(games):
-    result = []
-    return result
-
-
-'''
-Input: 분석 성향
-Output: 추천된 게임 appid 리스트.
-
-TO DO : 
-전체 게임에 대해서 초밥 레일에 올리기위한 게임 상위 30개 구하기.
-
-about game에 대한 TF-IDF 유사도. (승빈님 알고리즘)
-'''
-
-
-def get_초밥레일():
-    result = []
     return result
