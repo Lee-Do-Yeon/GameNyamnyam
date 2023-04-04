@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Tag from './Tag';
+import CategoryTag from './CategoryTag';
 import axios from 'axios';
 import GenreTag from '../components/GenreTag';
 import Carousel from './Carousel';
@@ -34,7 +34,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
       }
     });
   }, [plates]);
-  
+
   console.log('랜더링 후', gameDetail);
   const closeInfo = () => {
     setInfo(!Info);
@@ -78,35 +78,37 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
               <Carousel images={gameDetail.screenshots} />
             </div>
 
-            <div className="col-span-5 text-left bg-neutral-700 rounded-lg pt-2 relative">
-              <div className="ml-4 p-2 flex flex-wrap space-x-2">
-                <div className="p-1">장르 :</div>
-                {gameDetail.genres.map((genre, index) => (
-                  <GenreTag props={genre} key={index} />
-                ))}
-              </div>
-              <div className="ml-4 p-2 flex flex-wrap space-x-2 parent">
-                <div className="p-1">태그 :</div>
-                {gameDetail.categories.map((category, index) => (
-                  <Tag props={category} key={index} />
-                ))}
-              </div>
-              <div className="absolute bottom-4 flex flex-row">
-                <div className="bg-yellow-300 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-6">
-                  ₩ {gameDetail.price.toLocaleString('ko-KR')}
+            <div className="col-span-5 text-left bg-neutral-700 rounded-lg pt-2 relative ">
+              <div className='sushiBackgrounds'>
+                <div className="ml-4 p-2 flex flex-wrap space-x-2 ">
+                  <div className="p-1">장르 :</div>
+                  {gameDetail.genres.map((genre, index) => (
+                    <GenreTag props={genre} key={index} />
+                  ))}
                 </div>
-                {!isPicked ? (
-                  <button
-                    className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
-                    onClick={getGame}
-                  >
-                    접시 가져오기
-                  </button>
-                ) : (
-                  <button className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20">
-                    가져와짐
-                  </button>
-                )}
+                <div className="h-[12vh] overflow-hidden">
+                  <div className="ml-4 p-2 flex flex-wrap space-x-2 ">
+                    <div className="p-1 ">태그 :</div>
+                    {gameDetail.categories.map((category, index) => (
+                      <CategoryTag props={category} key={index} />
+                    ))}
+                  </div>
+                </div>
+                <div className="absolute bottom-4 flex justify-between">
+                  <div className=" font-bold rounded-lg text-white py-2.5 text-center col-start-12 mx-5 mt-4 ml-6 text-3xl">
+                    ₩ {gameDetail.price.toLocaleString('ko-KR')}
+                  </div>
+                  {!isPicked ? (
+                    <button
+                      className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
+                      onClick={getGame}
+                    >
+                      접시 가져오기
+                    </button>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
               </div>
             </div>
 
