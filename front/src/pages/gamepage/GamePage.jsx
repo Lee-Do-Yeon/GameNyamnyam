@@ -3,8 +3,8 @@ import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
 import Receipt from '../../components/Receipt';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { userGame } from '../../../recoil/user/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userGame, userDetail } from '../../../recoil/user/atoms';
 import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
 import PickedDish from '../../components/PickedDish';
@@ -18,27 +18,43 @@ export default function Gamepage() {
   const [gameDetail, setGameDetail] = useState('');
   const [firstIdDict, setFirstIdDict] = useState({});
   const [secondIdDict, setSecondIdDict] = useState({});
+  const userDetails = useRecoilValue(userDetail);
   const showInfo = (id) => {
     setInfo(!Info);
     setGameDetail(id);
   };
 
   useEffect(() => {
-    axios
-      .post('http://127.0.0.1:8000/games/test')
-      .then(function (response) {
-        console.log(response.data);
-        setGameData(response.data);
-        setDataLoaded(true);
-        console.log(dataLoaded);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    console.log('id', userDetails[0]);
+    console.log(userDetails[1]);
+    if (userDetails[1]) {
+      axios
+        .post('http://127.0.0.1:8000/games/all/yes?steamId=' + userDetails[0])
+        .then(function (response) {
+          console.log(response.data);
+          setGameData(response.data);
+          setDataLoaded(true);
+          console.log(dataLoaded);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      axios
+        .post('http://127.0.0.1:8000/games/all/no')
+        .then(function (response) {
+          console.log(response.data);
+          setGameData(response.data);
+          setDataLoaded(true);
+          console.log(dataLoaded);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }, []);
   // 첫번 째 스시 바
   useEffect(() => {
-    console.log(dataLoaded);
     if (dataLoaded) {
       let bannerLeft = 0;
       let first = 1;
