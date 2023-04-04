@@ -21,7 +21,7 @@ export default function Dish({ price, image }) {
   return (
     <div className="gamePlate">
       <div className="plate1" style={{ backgroundColor: backgroundColor }}>
-        <div className="plate2" style={{ backgroundColor: backgroundColor }}>
+        <div className="plate2 z" style={{ backgroundColor: backgroundColor }}>
           <div className="plate3">
             <div
               className="gamePic"

@@ -1,54 +1,77 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Dish from '../../components/Dish';
 import { Droppable, DragDropContext, Draggable } from 'react-beautiful-dnd';
 import Receipt from '../../components/Receipt';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { userGame } from '../../../recoil/user/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userGame, userDetail } from '../../../recoil/user/atoms';
 import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
+import PickedDish from '../../components/PickedDish';
+import bellSound from '../../assets/bellSound.wav';
+
 export default function Gamepage() {
+  const audioRef = useRef(null);
   const [gameData, setGameData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [Info, setInfo] = useState(false);
   const [gameDetail, setGameDetail] = useState('');
+  const [firstIdDict, setFirstIdDict] = useState({});
+  const [secondIdDict, setSecondIdDict] = useState({});
+  const userDetails = useRecoilValue(userDetail);
   const showInfo = (id) => {
     setInfo(!Info);
     setGameDetail(id);
   };
 
   useEffect(() => {
-    axios
-      .post('http://127.0.0.1:8000/games/test')
-      .then(function (response) {
-        console.log(response.data);
-        setGameData(response.data);
-        setDataLoaded(true);
-        console.log(dataLoaded);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    console.log('id', userDetails[0]);
+    console.log(userDetails[1]);
+    if (userDetails[1]) {
+      axios
+        .post('http://127.0.0.1:8000/games/all/yes?steamId=' + userDetails[0])
+        .then(function (response) {
+          console.log(response.data);
+          setGameData(response.data);
+          setDataLoaded(true);
+          console.log(dataLoaded);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      axios
+        .post('http://127.0.0.1:8000/games/all/no')
+        .then(function (response) {
+          console.log(response.data);
+          setGameData(response.data);
+          setDataLoaded(true);
+          console.log(dataLoaded);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }, []);
   // 첫번 째 스시 바
   useEffect(() => {
-    console.log(dataLoaded);
     if (dataLoaded) {
       let bannerLeft = 0;
       let first = 1;
       let last;
       let imgCnt = 0;
+      let data = {};
       const $plates = document.querySelectorAll('.leftMovingPlate');
-      console.log($plates);
       let $first;
       let $last;
-
       $plates.forEach((plate) => {
         plate.style.left = `${bannerLeft}px`;
         bannerLeft += 100 + 200;
         plate.setAttribute('id', `firstPlate${++imgCnt}`);
+
+        data[gameData[imgCnt - 1].appid] = `firstPlate${imgCnt}`;
       });
-      console.log($first, $last);
+      setFirstIdDict({ ...firstIdDict, ...data });
 
       if (imgCnt > 9) {
         last = imgCnt;
@@ -56,12 +79,8 @@ export default function Gamepage() {
           $plates.forEach((plate) => {
             plate.style.left = `${plate.offsetLeft - 1}px`;
           });
-          // console.log('first', first);
-          // console.log('last', last);
           $first = document.querySelector(`#firstPlate${first}`);
           $last = document.querySelector(`#firstPlate${last}`);
-          // console.log('$first', $first);
-          // console.log('$last', $last);
           if ($first.offsetLeft < -200) {
             $first.style.left = `${$last.offsetLeft + 100 + 200}px`;
             first++;
@@ -74,6 +93,7 @@ export default function Gamepage() {
             }
           }
         }, 15);
+
         return () => {
           clearInterval(intervalId);
         };
@@ -87,6 +107,7 @@ export default function Gamepage() {
       let first = 1;
       let last;
       let imgCnt = 0;
+      let data = {};
       const $plates = document.querySelectorAll('.rightMovingPlate');
       let $first;
       let $last;
@@ -95,8 +116,10 @@ export default function Gamepage() {
         plate.style.left = `${bannerLeft}px`;
         bannerLeft += 100 + 200;
         plate.setAttribute('id', `secondPlate${++imgCnt}`);
+        data[gameData[30 + imgCnt - 1].appid] = `secondPlate${imgCnt}`;
       });
-      console.log('imgCnt', imgCnt);
+      setSecondIdDict({ ...secondIdDict, ...data });
+      // setIdDict((prevState) => [...prevState, ...arr]);
       if (imgCnt > 9) {
         last = imgCnt;
         const intervalId = setInterval(() => {
@@ -155,7 +178,6 @@ export default function Gamepage() {
       }, 15);
     }
   };
-
   const onDragEnd = (result) => {
     const { source, destination } = result;
     const banneridnum = source.index + 1;
@@ -171,8 +193,6 @@ export default function Gamepage() {
         getSushi.style.left = `${getSushi.offsetLeft + 1}px`;
       }, 15);
     }
-    console.log('source', source);
-    console.log('destination', destination);
     //목적지가 없는 경우
     if (!destination) {
       console.log('목적지 없음');
@@ -235,7 +255,12 @@ export default function Gamepage() {
   };
 
   const navigateToResult = () => {
-    navigate('/result');
+    if (plates.length === 0) {
+      window.alert('게임을 한 개 이상 선택해주세요');
+    } else {
+      audioRef.current.play();
+      setTimeout(() => navigate('/result'), 3000);
+    }
   };
   return (
     <div className="gamepage">
@@ -266,11 +291,13 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="leftMovingPlate"
-                          onClick={()=>showInfo(sushi.appid)}
+                          onClick={() => showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate">{sushi.name}</p>
+                          <p className="truncate w-5/6 titleP text-center">
+                            {sushi.name}
+                          </p>
                         </div>
                       )}
                     </Draggable>
@@ -300,11 +327,13 @@ export default function Gamepage() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="rightMovingPlate"
-                          onClick={()=>showInfo(sushi.appid)}
+                          onClick={() => showInfo(sushi.appid)}
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate">{sushi.name}</p>
+                          <p className="truncate w-5/6 titleP text-center">
+                            {sushi.name}
+                          </p>
                         </div>
                       )}
                     </Draggable>
@@ -321,7 +350,7 @@ export default function Gamepage() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="setDish overflow-x-auto"
+                className="setDish overflow-x-auto scroll box1 border-dashed  border-4 border-red-500 pt-1 "
               >
                 {plates.map((plate, index) => (
                   <Draggable
@@ -336,10 +365,18 @@ export default function Gamepage() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         className="myPlate"
-                        onClick={()=>showInfo(plate.appid)}
                       >
-                        <Dish price={plate.price} image={plate.image} />
-                        <p className="truncate">{plate.name}</p>
+                        <PickedDish
+                          showInfo={showInfo}
+                          id={plate.appid}
+                          price={plate.price}
+                          image={plate.image}
+                          firstIdDict={firstIdDict}
+                          secondIdDict={secondIdDict}
+                        />
+                        <p className="truncate w-5/6 titleP text-center">
+                          {plate.name}
+                        </p>
                       </div>
                     )}
                   </Draggable>
@@ -351,7 +388,19 @@ export default function Gamepage() {
           <div className="bell" onClick={navigateToResult}></div>
         </div>
       </DragDropContext>
-      {Info && <DetailModal Info={Info} setInfo={setInfo} id={gameDetail} plate={setPlates}/>}
+      {Info && (
+        <DetailModal
+          Info={Info}
+          setInfo={setInfo}
+          id={gameDetail}
+          plate={setPlates}
+          firstIdDict={firstIdDict}
+          secondIdDict={secondIdDict}
+        />
+      )}
+      <audio ref={audioRef}>
+        <source src={bellSound} type="audio/wav" />
+      </audio>
     </div>
   );
 }
