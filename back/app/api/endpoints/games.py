@@ -1,19 +1,20 @@
 import requests
 from recommend import recommend_game
+from recommend import recommend_game_final
 from typing import List
 from dotenv import load_dotenv
 import os
-# ---------
 from fastapi import APIRouter
 from db.Database import games
 from schemas import game
-# ---------
+
 
 router = APIRouter()
 
 # env
 load_dotenv()
 steam_key = os.getenv('steam_key')
+
 
 @router.get("/count/{steamId}")
 async def get_game_count(steamId: str):
@@ -33,7 +34,7 @@ async def get_game_count(steamId: str):
 
 
 
-@router.get("/result/{steamId}")
+@router.get("/preference/{steamId}")
 def get_game_by_tag(steamId: str):
     """ 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 태그 분석
 
@@ -69,7 +70,7 @@ def get_game_by_tag(steamId: str):
 
     return result
 
-@router.post("/result")
+@router.post("/preference")
 def get_game_by_table(table_list: list):
     """ 5개 미만 플레이한 사용자의 장바구니 기반으로 (태그) 분석
 
@@ -93,7 +94,7 @@ def get_game_by_table(table_list: list):
 
     return result
 
-@router.post("/rate")
+@router.post("/result")
 def get_rate(preference: list,
              table_list: list):
     """뽑은 게임 리스트에 대한 매치율 저장
@@ -114,7 +115,7 @@ def get_rate(preference: list,
     return result
 
 
-@router.post("/similar")
+@router.post("/similar", response_model=list[game.GameBase])
 def get_similar_game(table_list: list):
     """비슷한 게임 추천.
 
@@ -124,10 +125,16 @@ def get_similar_game(table_list: list):
     Returns:
         비슷한 게임들의 앱아이디, 제목, 이미지
     """
-    result = {}
-    result["data"] = []
+    appList = recommend_game_final.get_recommended_games(table_list)
+    similar_game_list = games.find(
+        { "appid": { "$in": appList } },
+        {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}
+    )
 
-    # ★★★★추가하기★★★★
+    result = []
+
+    for game in similar_game_list:
+        result.append(game)
 
     return result
 
@@ -156,15 +163,92 @@ def get_test():
     return result
 
 
-@router.post("/all", response_description="Get a game list", response_model=list[game.GameBase])
-def get_all_game(steamId: str, preference: list):
+
+@router.post("/all/yes", response_description="구매 기록이 5개 이상인 유저의 게임 목록", response_model=list[game.GameBase])
+def get_games_yes_data(steamId: str):
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
 
-    2) 게임 기록이 5개 미만 사용자 = preference 리스트 길이가 0
+    2) 게임 기록이 5개 이상 사용자
     → 총 60개 (사용자 정보 기반 추천 게임 30개, 무작위 15개, 인기순위 10개, 신규게임 5개)
 
-    3) 게임 기록이 5개 이상 사용자 = preference 리스트 길이가 0보다 큼
+    Args:
+        steamId : 사용자 고유 식별 아이디
+
+    Returns:
+        60개의 게임 리스트 (appid, image, name)
+    """
+
+    result = []
+    already_selected = [] # 이미 플레이한 게임 담기
+
+    # (1) 추천 게임 30개 가져오기
+
+    res = requests.get(f'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={steamId}').json()
+    game_cnt=res['response']['game_count']
+    user_games = res['response']['games']
+    owned_games = []
+    for i in range(game_cnt):
+        owned_games.append(str(user_games[i]["appid"]))
+
+    appList = recommend_game_final.get_recommended_games(owned_games)
+
+    recommend_game_list = games.find(
+        { "appid": { "$in": appList } },
+        {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}
+    )
+
+    for game in recommend_game_list:
+        result.append(game)   
+        already_selected.append(game["appid"]) 
+
+    # (2) 신규 게임 5개 가져오기
+    latest_game = games.aggregate([
+        { "$sort": { "release_date": -1 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$limit": 30 },
+        { "$sample": { "size": 5 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+
+    for game in latest_game:
+        result.append(game)
+        already_selected.append(game["appid"])
+    
+
+    # (3) 무작위 15개 가져오기
+    random_game_cur = games.aggregate([
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$sample": { "size": 15 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+
+    for game in random_game_cur:
+        result.append(game)
+        already_selected.append(game["appid"])
+
+    # (4) 인기순위 10개 가져오기
+    popular_game_cur = games.aggregate([
+        { "$sort": { "recommendations": -1 } },
+        { "$match": { "appid": { "$nin": already_selected } } },
+        { "$limit": 100 },
+        { "$sample": { "size": 10 } },
+        { "$project": { "_id": 0, "appid":1, "name": 1, "price": 1, "image": 1  } }
+    ])
+  
+    for game in popular_game_cur:
+        result.append(game)
+        already_selected.append(game["appid"])
+
+    # print(len(result))
+    return result
+
+@router.post("/all/no", response_description="구매 기록이 5개 미만인 유저의 게임 목록", response_model=list[game.GameBase])
+def get_games_no_data():
+    """선호도에 게임 리스트 출력
+    1) 이미 플레이한 게임은 나오지 않음.
+
+    2) 게임 기록이 5개 미만 사용자
     → 총 60개 (무작위 30개, 인기순위 25개, 신규게임 5개)
 
     Args:
@@ -175,8 +259,6 @@ def get_all_game(steamId: str, preference: list):
     """
 
     result = []
-    random_game = []
-    popular_game = []
     already_selected = [] # 이미 플레이한 게임 담기
 
     # 신규 게임 5개 가져오기
@@ -201,7 +283,7 @@ def get_all_game(steamId: str, preference: list):
     ])
 
     for game in random_game_cur:
-        random_game.append(game)
+        result.append(game)
         already_selected.append(game["appid"])
 
     # 인기순위 25개 가져오기
@@ -214,29 +296,9 @@ def get_all_game(steamId: str, preference: list):
     ])
   
     for game in popular_game_cur:
-        popular_game.append(game)
+        result.append(game)
         already_selected.append(game["appid"])
 
-    if(len(preference) != 0): # 게임 기록이 5개 이상인 사용자
-        # 추천 게임 30개 가져오기 (★★★★추가하기★★★★)
-        print("Yes Data")
-
-        # steamId를 통해서 Owngames의 id 리스트를 구하기.
-
-        # 무작위 15개 컷
-        #result.extend(random_game[:16])
-
-        # 인기순위 10개 컷
-        #result.extend(popular_game[:11])
-
-        result.extend(random_game)
-        result.extend(popular_game)
-
-    else: # 게임 기록이 5개 미만인 사용자
-        print("No Data")
-
-        result.extend(random_game)
-        result.extend(popular_game)
     
     #print(len(result))
     return result
