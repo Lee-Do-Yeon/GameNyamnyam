@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Slider from 'react-slick';
 
 import { useRecoilValue } from 'recoil';
@@ -6,10 +6,37 @@ import { userGame, userGameCount } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
 
+import axios from 'axios';
+
 export default function Resultpage() {
   // const [gameid, setgameid] = useState();
   const myValue = useRecoilValue(userGame);
   const myCount = useRecoilValue(userGameCount);
+  const [similar, setSimilar] = useState([]);
+  
+  const appidList = [
+    for (let i = 0; i < res.data.length; i++) {
+      appidList.push(res.data[i].appid);
+    }
+  ]
+  
+  
+  console.log(appidList);
+
+  useEffect(() => {
+    axios
+    .post(`http://127.0.0.1:8000/games/similar`, {
+
+    })
+    .then(res => {
+      setSimilar(res.data);
+      // console.log(res.data);
+    }
+    )
+    .catch(err => {
+      console.log(err,'nn');
+    });
+  },[]);
   
   const settings = {
     dots: true,

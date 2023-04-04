@@ -34,6 +34,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
       }
     });
   }, [plates]);
+  
   console.log('랜더링 후', gameDetail);
   const closeInfo = () => {
     setInfo(!Info);
