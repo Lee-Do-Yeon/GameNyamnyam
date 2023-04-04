@@ -1,19 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import  axios  from 'axios';
 export default function Mainpage() {
-  // useEffect(() => {
-  //   axios
-  //     .get('http://127.0.0.1:8000/login')
-  //     .then(function (response) {
-  //       console.log(response);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, []);
 
+  const location = useLocation();
+  console.log(location)
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const steamId = searchParams.get('steam_id');
+    console.log(steamId);
+  }, [location]);
   const leftDoorRef = useRef(null);
   const rightDoorRef = useRef(null);
   const [isLogin, setLogin] = useState(false);
