@@ -9,10 +9,8 @@ import Plate from '../../components/Plate';
 import axios from 'axios';
 
 export default function Resultpage() {
-  const searchParams = new URLSearchParams(location.search);
-  const steamId = searchParams.get('steam_id');
   // const steamId = '76561198797386305';
-
+  
   const myValue = useRecoilValue(userGame);
   const myCount = useRecoilValue(userDetail);
 
@@ -114,12 +112,12 @@ export default function Resultpage() {
         >
           <div className="mt-36 mx-10">
             <div>
-              <div>
+              <div className='font-detail'>
                 {myValue.map((item, index) => (
                   <div key={item.id} className="grid grid-cols-12">
-                    <div className="col-span-2">{index + 1} </div>
-                    <div className="col-span-6 truncate">{item.name}</div>
-                    <div className="col-span-3">₩ {item.price}</div>
+                    <div className="col-span-1 pl-1">{index + 1} </div>
+                    <div className="col-start-2 col-end-8 truncate pl-2">{item.name}</div>
+                    <div className="col-start-8 col-end-12 pl-3">₩ {item.price}</div>
                   </div>
                 ))}
               </div>
