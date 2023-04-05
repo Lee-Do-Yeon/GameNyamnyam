@@ -173,7 +173,7 @@ def get_similar_game(table_list: list):
     """
     appList = recommend_game_final.get_recommended_games(table_list)
     similar_game_list = games.find(
-        { "appid": { "$in": appList } },
+        { "appid": { "$in": appList, "$nin": table_list } },
         {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}
     )
 
