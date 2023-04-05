@@ -158,3 +158,31 @@ border-radius: 20px;
   transform: rotateY(180deg);
 }
 
+.alertimage {
+  background-image: url(../src/assets/alert.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.steamprofile {
+  background-image: url(../src/assets/steamprofile.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.steamprofile2 {
+  background-image: url(../src/assets/steamprofile2.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.box2::-webkit-scrollbar{
+  width: 8px;
+}
+
+/* 스크롤바 막대 설정*/
+.box2::-webkit-scrollbar-thumb{
+  background-color: rgb(155, 141, 141);
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;    
+}

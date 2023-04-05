@@ -18,7 +18,6 @@ export default function Resultpage() {
   useEffect(() => {
     axios
     .post(`https://j8c204.p.ssafy.io/api/games/similar`, {
-
     })
     .then(res => {
       setSimilar(res.data);
