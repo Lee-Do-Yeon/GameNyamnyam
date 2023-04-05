@@ -24,7 +24,7 @@ export default function Plate({ myValue }) {
   
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
+      .get(`https://j8c204.p.ssafy.io/api/games/detail/${myValue.appid}`)
       .then((res) => {
         setGoEat(res.data);
       })
