@@ -29,7 +29,10 @@ export default function Gamepage() {
     console.log(userDetails[1]);
     if (userDetails[1]) {
       axios
-        .post('https://j8c204.p.ssafy.io/api/games/all/yes?steamId=' + userDetails[0])
+        .post(
+          'https://j8c204.p.ssafy.io/api/games/all/yes?steamId=' +
+            userDetails[0],
+        )
         .then(function (response) {
           console.log(response.data);
           setGameData(response.data);
@@ -231,7 +234,7 @@ export default function Gamepage() {
             console.log(getSushi);
           }
         });
-        const newPlates = [...plates, sushi];
+        const newPlates = [sushi, ...plates];
         setPlates(newPlates);
       } else if (source.droppableId === 'second-sushi-bar') {
         const sushi = SecondSushis.find(
@@ -248,7 +251,7 @@ export default function Gamepage() {
             console.log(getSushi);
           }
         });
-        const newPlates = [...plates, sushi];
+        const newPlates = [sushi, ...plates];
         setPlates(newPlates);
       }
     }
@@ -350,7 +353,7 @@ export default function Gamepage() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="setDish overflow-x-auto scroll box1 border-dashed  border-4 border-red-500 pt-1 "
+                className="setDish overflow-x-auto scroll box1 pt-1 "
               >
                 {plates.map((plate, index) => (
                   <Draggable
