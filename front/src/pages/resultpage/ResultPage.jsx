@@ -12,7 +12,9 @@ export default function Resultpage() {
   // const steamId = '76561198797386305';
   
   const myValue = useRecoilValue(userGame);
-  const myCount = useRecoilValue(userDetail);
+  const UserInfo = useRecoilValue(userDetail);
+  const steamId = UserInfo[0];
+  const myCount = UserInfo[1];
 
   const [similar, setSimilar] = useState([]);
   const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid 
