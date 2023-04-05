@@ -2,8 +2,13 @@
 module.exports = {
   content: ["./src/**/*.{html, js, jsx}", 
     "./src/**/*"],
-  theme: {
-    extend: {},
-  },
+    theme: {
+      extend: {
+        fontFamily: {
+          jamsil: ['TheJamsil5Bold', 'sans-serif'],
+          detail: ['SUIT-Regular'],
+        },
+      }
+    },
   plugins: [],
 }

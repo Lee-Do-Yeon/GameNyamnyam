@@ -19,33 +19,6 @@ export default function Plate({ myValue }) {
     }
   }, []);
 
-  // const backgroundColor = changeColor(myValue.price);
-
-  // console.log(backgroundColor);
-
-  // const [goEat, setGoEat] =useState([]);
-
-  // const getEat = async() => {
-  //   await axios
-  //     .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
-  //     .then((res) => {
-  //       setGoEat(res.data);
-  //       setgameid(res.data.appid);
-  //       console.log(goEat);
-  //     })
-  // };
-
-  // useEffect(() => {
-  //   axios
-  //   .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
-  //   .then((res) => {
-  //     setGoEat(res.data);
-  //     // setgameid(res.data.appid);
-  //     console.log(goEat);
-  //   })
-  // }, [])
-  // console.log(goEat.genres)
-
   return (
     <>
       <div className="h-[420px]">
