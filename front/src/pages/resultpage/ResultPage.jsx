@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 
 import { useRecoilValue } from 'recoil';
@@ -11,25 +11,23 @@ import axios from 'axios';
 export default function Resultpage() {
   // const [gameid, setgameid] = useState();
   const myValue = useRecoilValue(userGame);
+  const [myCount, setMycount] = useState();
   const [similar, setSimilar] = useState([]);
 
-
-
   useEffect(() => {
+    const data = ['892970'];
     axios
-    .post(`http://127.0.0.1:8000/games/similar`, {
+    .post('https://j8c204.p.ssafy.io/api/games/similar', data)
+    // .post('http://127.0.0.1:8000/api/games/similar', data)
+      .then((res) => {
+        setSimilar(res.data);
+        console.log('!!', res.data);
+      })
+      .catch((err) => {
+        console.log(err, 'nn');
+      });
+  }, []);
 
-    })
-    .then(res => {
-      setSimilar(res.data);
-      // console.log(res.data);
-    }
-    )
-    .catch(err => {
-      console.log(err,'nn');
-    });
-  },[]);
-  
   const settings = {
     dots: true,
     infinite: true,
@@ -62,14 +60,14 @@ export default function Resultpage() {
               <div className="w-4/5 h-5/6 p-4 ml-5 mt-5">
                 <Slider {...settings}>
                   {myValue.map((item) => (
-                  <Plate key={item.id} myValue={item} />
+                    <Plate key={item.id} myValue={item} />
                   ))}
                 </Slider>
               </div>
-              
-        <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
-          Go to Eat
-        </button>
+
+              <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
+                Go to Eat
+              </button>
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ export default function Plate({ myValue }) {
       });
   }, [myValue.appid]);
 
-  console.log(goEat)
+  // console.log(goEat)
 
   // useEffect(() => {
   //   axios
