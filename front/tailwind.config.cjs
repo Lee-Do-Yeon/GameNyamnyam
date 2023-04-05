@@ -2,8 +2,12 @@
 module.exports = {
   content: ["./src/**/*.{html, js, jsx}", 
     "./src/**/*"],
-  theme: {
-    extend: {},
+   theme: {
+    extend: {
+      fontFamily: {
+        dishfont: ['OTWelcomeRA', 'sans-serif'],
+      },
+    }
   },
   plugins: [],
 }

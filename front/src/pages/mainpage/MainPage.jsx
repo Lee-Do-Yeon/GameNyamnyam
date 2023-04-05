@@ -21,7 +21,7 @@ export default function Mainpage() {
     // const steamId = '76561198010254569';
     console.log(steamId);
     axios
-      .get(`http://127.0.0.1:8000/games/count/${steamId}`)
+      .get(`https://j8c204.p.ssafy.io/api/games/count/${steamId}`)
       .then(function (response) {
         console.log(response.data);
         if (response.data >= 5) {
@@ -29,6 +29,7 @@ export default function Mainpage() {
         } else {
           setDetail([steamId, false]);
         }
+        audioRef.current.play();
         doorOpen();
       })
       .catch(function (err) {
@@ -43,20 +44,12 @@ export default function Mainpage() {
   };
 
   function doorOpen() {
-    audioRef.current.play();
+    
     gsap
       .timeline()
       .to(leftDoorRef.current, { duration: 1, x: -250 })
       .to(rightDoorRef.current, { duration: 1, x: 250 }, '-=1');
     setLogin(true);
-    axios
-      .get('https://j8c204.p.ssafy.io/api/login')
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   function goToSteam() {
