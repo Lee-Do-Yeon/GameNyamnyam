@@ -180,3 +180,17 @@ border-radius: 20px;
   /* 스크롤바 둥글게 설정    */
   border-radius: 10px;    
 }
+
+.tutorialpic {
+  background-image: url(assets/tutorial.png);
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: fixed;
+}
+
+.pointingCircle {
+    width:250px;
+    height:160px;
+    border-radius:50% / 50%;
+}
