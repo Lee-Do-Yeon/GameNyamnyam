@@ -19,10 +19,10 @@ export default function TutorialCount({ count, setCount }) {
       <div>
         <div className="h-[36vh]"></div>
         <div className="ml-[13vw]">
-          <div className="pointingCircle border-white border-2 border-dashed"></div>
-          <div className="ml-[140px]">
+          <div className="pointingCircle border-white border-2 border-dashed "></div>
+          <div className="ml-[140px] font-jamsil">
             <div className="bg-white  w-[400px] h-[80px]  mt-3 pt-1 px-4 balloon">
-              <p className="mt-2 font-jamsil">
+              <p className="mt-2 ">
                 1. 초밥을 누르시면 게임의 상세 정보를 알 수 있어요!
               </p>
             </div>
@@ -42,9 +42,9 @@ export default function TutorialCount({ count, setCount }) {
         <div className="h-[36vh]"></div>
         <div className="ml-[13vw]">
           <div className="pointingCircle border-white border-2 border-dashed"></div>
-          <div className="ml-[140px]">
+          <div className="ml-[140px] font-jamsil">
             <div className="bg-white w-[400px] h-[80px]  mt-3 pt-1 px-4 balloon">
-              <p className="mt-2 font-jamsil">
+              <p className="mt-2 ">
                 2. 하고 싶은 게임이 보이면 아래 테이블로 드래그 해주세요!
               </p>
             </div>
@@ -63,8 +63,8 @@ export default function TutorialCount({ count, setCount }) {
       <div className=''>
 
         <div className="flex justify-end">
-          <div className="mr-[13.5vw] mt-[9vh]">
-            <div className="bg-white w-[400px] h-[80px]  mt-3 pt-1 px-4 rounded-md balloon2 font-jamsil">
+          <div className="mr-[13.5vw] mt-[9vh] font-jamsil">
+            <div className="bg-white w-[400px] h-[80px]  mt-3 pt-1 px-4 rounded-md balloon2 ">
               <p className="mt-2">
               3. 메뉴판을 클릭하면
 대략적인 접시 가격을
@@ -86,8 +86,8 @@ export default function TutorialCount({ count, setCount }) {
       <div>
         <div className='h-[25vh]'></div>
         <div className="h-[36vh]"></div>
-        <div className="float-right mr-[10vw]" >
-          <div className="bg-white w-[400px] h-[80px]  mt-3 pt-1 px-4 rounded-md balloon3 font-jamsil ">
+        <div className="float-right mr-[10vw] font-jamsil" >
+          <div className="bg-white w-[400px] h-[80px]  mt-3 pt-1 px-4 rounded-md balloon3  ">
               <p className="mt-2">
               4. 주문벨을 클릭하면
 담았던 접시에 대한 결과   페이지로 이동할 수 있어요!
@@ -97,7 +97,7 @@ export default function TutorialCount({ count, setCount }) {
               className="mt-2  bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg px-2 py-1"
               onClick={plusCount}
             >
-              완료
+              완료!
             </button>
         </div>
       </div>
