@@ -19,17 +19,17 @@ export default function Mainpage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loading) {
-      console.log('effect시작');
-      const searchParams = new URLSearchParams(location.search);
-      const steamId = searchParams.get('steam_id');
-      // const steamId = '76561198099903362';
-      setSteamId(steamId);
-    }
-  }, [loading]);
+    console.log('effect시작');
+    const searchParams = new URLSearchParams(location.search);
+    const steamId = searchParams.get('steam_id');
+    // const steamId = '76561198099903362';
+    setSteamId(steamId);
+    console.log(steamId);
+  }, [location]);
 
   useEffect(() => {
-    if (getSteamId !== '') {
+    console.log(getSteamId);
+    if (getSteamId) {
       axios
         .get(`https://j8c204.p.ssafy.io/api/games/count/${getSteamId}`)
         .then(function (response) {
@@ -65,9 +65,6 @@ export default function Mainpage() {
   function goToSteam() {
     window.location.href =
       'https://steamcommunity.com/openid/login?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.mode=checkid_setup&openid.return_to=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.realm=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select';
-    setTimeout(() => {
-      setLoading(true);
-    }, 500);
   }
   return (
     <div className="mainPageImg">
