@@ -1,35 +1,67 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 
 import { useRecoilValue } from 'recoil';
-import { userGame } from '../../../recoil/user/atoms';
+import { userGame, userDetail } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
 
 import axios from 'axios';
 
 export default function Resultpage() {
-  // const [gameid, setgameid] = useState();
+  const searchParams = new URLSearchParams(location.search);
+  const steamId = searchParams.get('steam_id');
+  // const steamId = '76561198797386305';
+
   const myValue = useRecoilValue(userGame);
+  const myCount = useRecoilValue(userDetail);
+
   const [similar, setSimilar] = useState([]);
+  const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid 
+  const [gameresult, setGameresult ] = useState([]); // [매치율]
 
+  const data = [];
+  for (let i = 0; i < myValue.length; i++) {
+    data.push(myValue[i].appid);
+  }
+  const data3 = {
+    "preference": preference,
+    "table_list":{data}.data
+  }; // 매치율 나오게하는 데이터
 
+  useEffect(() => {
+    axios.all([
+      axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
+      // axios.post('http://127.0.0.1:8000/api/games/similar', data),
+      axios.post(`https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`, data), // 선호도 나오게함
+    ])
+
+      .then((res) => {
+        setSimilar(res[0].data);
+        setPreference(res[1].data);
+        // setGameresult(res[2].data);
+        console.log(res);
+
+      })
+      .catch((err) => {
+        console.log(err, '첫번째 오류');
+      });
+  }, []);
 
   useEffect(() => {
     axios
-    .post(`http://127.0.0.1:8000/games/similar`, {
-
-    })
-    .then(res => {
-      setSimilar(res.data);
-      // console.log(res.data);
-    }
-    )
-    .catch(err => {
-      console.log(err,'nn');
-    });
-  },[]);
+      .post('https://j8c204.p.ssafy.io/api/games/result', data3)
+      .then((res) => {
+        setGameresult(res.data);
+        console.log('후후.. 두번째닷');
+      })
+      .catch((err) => {
+        console.log(err, '두번째 오류');
+      });
+  }, [data3.preference])
   
+  console.log(gameresult);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -37,13 +69,12 @@ export default function Resultpage() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
   return (
     <div className="h-screen bg-yellow-600 font-semibold">
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
           <div className="text-center text-2xl">
-            {/* {myCount ? <h1> 5 이상입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>} */}
+            {myCount ? <h1> {preference} 입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>}
           </div>
         </div>
       </div>
@@ -61,15 +92,15 @@ export default function Resultpage() {
             <div className="relative h-full">
               <div className="w-4/5 h-5/6 p-4 ml-5 mt-5">
                 <Slider {...settings}>
-                  {myValue.map((item) => (
-                  <Plate key={item.id} myValue={item} />
+                  {myValue.map((item, index) => (
+                    <Plate key={index} myValue={item} gameresult={gameresult[item.appid]}/>
                   ))}
                 </Slider>
               </div>
-              
-        <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
-          Go to Eat
-        </button>
+
+              <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
+                Go to Eat
+              </button>
             </div>
           </div>
         </div>
@@ -101,7 +132,7 @@ export default function Resultpage() {
           <div className="text-white text-xl">
             이런 게임도 좋아하실거 같아요
           </div>
-          <AddGame className="p-3" />
+          <AddGame className="p-3" similar={similar}/>
         </div>
       </div>
     </div>
