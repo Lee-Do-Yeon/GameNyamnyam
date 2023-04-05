@@ -78,8 +78,7 @@ export default function Mainpage() {
         </audio>
       </div>
       {isLogin ? (
-        <div>
-        </div>
+        <div></div>
       ) : (
         <div className="steamLoginBtn" onClick={goToSteam}>
           <div className="steamTxt">continue with steam login</div>
