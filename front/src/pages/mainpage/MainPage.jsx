@@ -40,7 +40,7 @@ export default function Mainpage() {
           setCanLogin(true);
         });
     }
-  }, []);
+  }, [loading]);
 
   const navigateToGame = () => {
     if (isLogin) {
