@@ -26,7 +26,7 @@ export default function Mainpage() {
       // const steamId = '76561198099903362';
       setSteamId(steamId);
     }
-  }, [loading]);
+  }, [location]);
 
   useEffect(() => {
     if (getSteamId !== '') {
