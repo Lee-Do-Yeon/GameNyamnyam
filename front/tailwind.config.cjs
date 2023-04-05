@@ -5,9 +5,8 @@ module.exports = {
     theme: {
       extend: {
         fontFamily: {
-          dish: ['OTWelcomeRA', 'sans-serif'],
-          dish2: ['establishRoomNo703OTF', 'sans-serif'],
           jamsil: ['TheJamsil5Bold', 'sans-serif'],
+          detail: ['SUIT-Regular'],
         },
       }
     },
