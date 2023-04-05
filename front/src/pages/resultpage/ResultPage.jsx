@@ -11,7 +11,7 @@ import axios from 'axios';
 export default function Resultpage() {
   // const [gameid, setgameid] = useState();
   const myValue = useRecoilValue(userGame);
-  const [myCount, setMycount] = useState();
+  // const [myCount, setMycount] = useState();
   const [similar, setSimilar] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Resultpage() {
     // .post('http://127.0.0.1:8000/api/games/similar', data)
       .then((res) => {
         setSimilar(res.data);
-        console.log('!!', res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err, 'nn');
