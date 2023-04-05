@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends
 router = APIRouter()
 
 api_url = "https://j8c204.p.ssafy.io/api/login"
+# api_url = "http://localhost:8000/login"
 
 
 # @router.get('/')

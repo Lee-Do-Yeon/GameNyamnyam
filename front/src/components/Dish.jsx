@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default function Dish({ price, image }) {
 
   const changeColor = (price) => {
@@ -19,7 +18,7 @@ export default function Dish({ price, image }) {
 
   const backgroundColor = changeColor(price);
   return (
-    <div className="gamePlate">
+    <div className="gamePlate font-dishfont">
       <div className="plate1" style={{ backgroundColor: backgroundColor }}>
         <div className="plate2 z" style={{ backgroundColor: backgroundColor }}>
           <div className="plate3">
