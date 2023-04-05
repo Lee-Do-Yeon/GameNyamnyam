@@ -234,7 +234,7 @@ export default function Gamepage() {
             console.log(getSushi);
           }
         });
-        const newPlates = [sushi, ...plates];
+        const newPlates = [...plates, sushi];
         setPlates(newPlates);
       } else if (source.droppableId === 'second-sushi-bar') {
         const sushi = SecondSushis.find(
@@ -251,7 +251,7 @@ export default function Gamepage() {
             console.log(getSushi);
           }
         });
-        const newPlates = [sushi, ...plates];
+        const newPlates = [...plates, sushi];
         setPlates(newPlates);
       }
     }
@@ -298,7 +298,7 @@ export default function Gamepage() {
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate w-5/6 titleP text-center">
+                          <p className="truncate w-5/6 titleP text-center font-jamsil">
                             {sushi.name}
                           </p>
                         </div>
@@ -334,7 +334,7 @@ export default function Gamepage() {
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate w-5/6 titleP text-center">
+                          <p className="truncate w-5/6 titleP text-center font-jamsil">
                             {sushi.name}
                           </p>
                         </div>
@@ -377,7 +377,7 @@ export default function Gamepage() {
                           firstIdDict={firstIdDict}
                           secondIdDict={secondIdDict}
                         />
-                        <p className="truncate w-5/6 titleP text-center">
+                        <p className="truncate w-5/6 titleP text-center font-jamsil">
                           {plate.name}
                         </p>
                       </div>
