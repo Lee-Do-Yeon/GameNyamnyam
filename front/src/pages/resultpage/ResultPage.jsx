@@ -2,26 +2,43 @@ import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 
 import { useRecoilValue } from 'recoil';
-import { userGame } from '../../../recoil/user/atoms';
+import { userGame, userDetail } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
 
 import axios from 'axios';
 
 export default function Resultpage() {
-  // const [gameid, setgameid] = useState();
+  const searchParams = new URLSearchParams(location.search);
+  const steamId = searchParams.get('steam_id');
+
   const myValue = useRecoilValue(userGame);
-  // const [myCount, setMycount] = useState();
+  const myCount = useRecoilValue(userDetail);
+
   const [similar, setSimilar] = useState([]);
+  const [preference, setPreference] = useState([]); // [선호도] 장바구니리스트, 5개 t or f, steamid 
+  const [gameresult,setGameresult ] = useState([]); // [매치율]
+
+  const data = [];
+  for (let i = 0; i < myValue.length; i++) {
+    data.push(myValue[i].appid);
+  }
+  const data2 = []; // 선호도 나오게 하는 데이터
+  const data3 = []; // 매치율 나오게하는 데이터
 
   useEffect(() => {
-    const data = ['892970'];
-    axios
-    .post('https://j8c204.p.ssafy.io/api/games/similar', data)
-    // .post('http://127.0.0.1:8000/api/games/similar', data)
-      .then((res) => {
-        setSimilar(res.data);
-        console.log(res.data);
+    axios.all([
+      axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
+      // .post('http://127.0.0.1:8000/api/games/similar', data)
+      axios.post({`https://j8c204.p.ssafy.io/api/games/preference/${steamId}`}, data2)}, // 선호도 나오게함
+      // data2는 매치율 나오게 함.
+      axios.post('https://j8c204.p.ssafy.io/api/games/result', data3) // 매치율 나오게 하기
+    ])
+
+      .then((res1,res2, res3) => {
+        setSimilar(res1.data);
+        setPreference(res2.data);
+        setGameresult(res3.data);
       })
       .catch((err) => {
         console.log(err, 'nn');
@@ -41,7 +58,7 @@ export default function Resultpage() {
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
           <div className="text-center text-2xl">
-            {/* {myCount ? <h1> 5 이상입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>} */}
+            {myCount ? <h1> 5 이상입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>}
           </div>
         </div>
       </div>
@@ -99,7 +116,7 @@ export default function Resultpage() {
           <div className="text-white text-xl">
             이런 게임도 좋아하실거 같아요
           </div>
-          <AddGame className="p-3" />
+          <AddGame className="p-3" similar={similar}/>
         </div>
       </div>
     </div>
