@@ -6,6 +6,8 @@ module.exports = {
       extend: {
         fontFamily: {
           dish: ['OTWelcomeRA', 'sans-serif'],
+          dish2: ['establishRoomNo703OTF', 'sans-serif'],
+          jamsil: ['TheJamsil5Bold', 'sans-serif'],
         },
       }
     },
