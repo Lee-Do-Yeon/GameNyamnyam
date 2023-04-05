@@ -278,8 +278,8 @@ export default function Gamepage() {
       </div>
       {!totalLoading ? (
         <div className="block text-center">
-          <img src="src/assets/sushiload.gif" alt="" className="m-auto" />
-          <p className="font-bold text-white">l o a d i n g . . . </p>
+          <img src="src/assets/sushiload2.gif" alt="" className="m-auto w-[30vw]" />
+          <p className="font-bold text-white text-2xl">l o a d i n g . . . </p>
           {/* <FadeLoader color="#d6bd36" /> */}
         </div>
       ) : (
