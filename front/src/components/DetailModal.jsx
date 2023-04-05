@@ -94,13 +94,13 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
                     ))}
                   </div>
                 </div>
-                <div className="absolute bottom-4 flex justify-between">
-                  <div className=" font-bold rounded-lg text-white py-2.5 text-center col-start-12 mx-5 mt-4 ml-6 text-3xl">
+                <div className="absolute bottom-4 flex justify-around w-[100%]">
+                  <div className=" font-bold rounded-lg font-jamsil text-white text-center col-start-12 mx-5 mt-4 ml-6 text-3xl">
                     ₩ {gameDetail.price.toLocaleString('ko-KR')}
                   </div>
                   {!isPicked ? (
                     <button
-                      className="bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20"
+                      className="bg-yellow-300 hover:bg-yellow-500 font-bold  rounded-lg text-sm text-black px-5 py-2.5 text-center col-start-12 mx-5 mt-4 ml-20 font-jamsil"
                       onClick={getGame}
                     >
                       접시 가져오기
