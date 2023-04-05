@@ -194,3 +194,49 @@ border-radius: 20px;
     height:160px;
     border-radius:50% / 50%;
 }
+
+.balloon {
+  position: relative;
+  border-radius: 10px;
+}
+
+.balloon::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 0px;
+  border-top: 20px solid transparent;
+  border-left: 20px solid #ffffff;
+  border-bottom: 20px solid transparent;
+  transform: rotate(-15deg);
+}
+.balloon2 {
+  position: relative;
+  border-radius: 10px;
+}
+
+.balloon2::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  right: 0px;
+  border-top: 20px solid transparent;
+  border-right: 20px solid #ffffff;
+  border-bottom: 20px solid transparent;
+  transform: rotate(25deg);
+}
+.balloon3 {
+  position: relative;
+  border-radius: 10px;
+}
+
+.balloon3::before {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  right: 0px;
+  border-top: 20px solid transparent;
+  border-right: 20px solid #ffffff;
+  border-bottom: 20px solid transparent;
+  transform: rotate(-25deg);
+}
