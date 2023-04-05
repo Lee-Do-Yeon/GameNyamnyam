@@ -142,10 +142,10 @@
 }
 .setDish {
   height: 22vh;
-  width: 70vw; 
+  width: 67vw; 
   position: absolute; 
   display: flex;
-  bottom: 10px;
+  bottom: 1px;
 }
 .myPlate {
   position: relative;
@@ -193,5 +193,7 @@
   /* 스크롤바 둥글게 설정    */
   border-radius: 10px;    
 }
+
+
 
 
