@@ -50,7 +50,7 @@ export default function Mainpage() {
   }, [getSteamId]);
   const navigateToGame = () => {
     if (isLogin) {
-      navigate('/game');
+      navigate('/tutorial');
     }
   };
 
