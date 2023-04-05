@@ -15,22 +15,29 @@ export default function Mainpage() {
   const [CanLogin, setCanLogin] = useState(false);
   const [isLogin, setLogin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [getSteamId, setSteamId] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     if (loading) {
+      console.log('effect시작');
       const searchParams = new URLSearchParams(location.search);
       const steamId = searchParams.get('steam_id');
-      // const steamId = '76561198010254569';
-      console.log(steamId);
+      // const steamId = '76561198099903362';
+      setSteamId(steamId);
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (getSteamId !== '') {
       axios
-        .get(`https://j8c204.p.ssafy.io/api/games/count/${steamId}`)
+        .get(`https://j8c204.p.ssafy.io/api/games/count/${getSteamId}`)
         .then(function (response) {
           console.log(response.data);
           if (response.data >= 5) {
-            setDetail([steamId, true]);
+            setDetail([getSteamId, true]);
           } else {
-            setDetail([steamId, false]);
+            setDetail([getSteamId, false]);
           }
           audioRef.current.play();
           doorOpen();
@@ -40,8 +47,7 @@ export default function Mainpage() {
           setCanLogin(true);
         });
     }
-  }, []);
-
+  }, [getSteamId]);
   const navigateToGame = () => {
     if (isLogin) {
       navigate('/game');
@@ -59,7 +65,9 @@ export default function Mainpage() {
   function goToSteam() {
     window.location.href =
       'https://steamcommunity.com/openid/login?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.mode=checkid_setup&openid.return_to=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.realm=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select';
-    setLoading(true);
+    setTimeout(() => {
+      setLoading(true);
+    }, 500);
   }
   return (
     <div className="mainPageImg">
