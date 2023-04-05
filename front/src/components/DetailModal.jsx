@@ -51,7 +51,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
     return newPlates;
   };
   return (
-    <div className="relative font-semibold text-white zindex font-jamsil">
+    <div className="relative font-semibold text-white zindex font-detail">
       {isLoading ? (
         <p></p>
       ) : (
