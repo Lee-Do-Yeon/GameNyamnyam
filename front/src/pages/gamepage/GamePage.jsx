@@ -29,7 +29,10 @@ export default function Gamepage() {
     console.log(userDetails[1]);
     if (userDetails[1]) {
       axios
-        .post('http://127.0.0.1:8000/games/all/yes?steamId=' + userDetails[0])
+        .post(
+          'https://j8c204.p.ssafy.io/api/games/all/yes?steamId=' +
+            userDetails[0],
+        )
         .then(function (response) {
           console.log(response.data);
           setGameData(response.data);
@@ -41,7 +44,7 @@ export default function Gamepage() {
         });
     } else {
       axios
-        .post('http://127.0.0.1:8000/games/all/no')
+        .post('https://j8c204.p.ssafy.io/api/games/all/no')
         .then(function (response) {
           console.log(response.data);
           setGameData(response.data);
@@ -295,7 +298,7 @@ export default function Gamepage() {
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate w-5/6 titleP text-center">
+                          <p className="truncate w-5/6 titleP text-center font-jamsil">
                             {sushi.name}
                           </p>
                         </div>
@@ -331,7 +334,7 @@ export default function Gamepage() {
                         >
                           <Dish price={sushi.price} image={sushi.image} />
 
-                          <p className="truncate w-5/6 titleP text-center">
+                          <p className="truncate w-5/6 titleP text-center font-jamsil">
                             {sushi.name}
                           </p>
                         </div>
@@ -350,7 +353,7 @@ export default function Gamepage() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="setDish overflow-x-auto scroll box1 border-dashed  border-4 border-red-500 pt-1 "
+                className="setDish overflow-x-auto scroll box1 pt-1 "
               >
                 {plates.map((plate, index) => (
                   <Draggable
@@ -374,7 +377,7 @@ export default function Gamepage() {
                           firstIdDict={firstIdDict}
                           secondIdDict={secondIdDict}
                         />
-                        <p className="truncate w-5/6 titleP text-center">
+                        <p className="truncate w-5/6 titleP text-center font-jamsil">
                           {plate.name}
                         </p>
                       </div>

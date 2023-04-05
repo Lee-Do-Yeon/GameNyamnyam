@@ -4,7 +4,7 @@ import Tag from './Tag';
 
 import axios from 'axios';
 
-export default function Plate({ myValue }) {
+export default function Plate({ myValue, gameresult}) {
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
@@ -18,13 +18,12 @@ export default function Plate({ myValue }) {
       return '#373737';
     }
   };
-
   const backgroundColor = changeColor(myValue.price);
   const [goEat, setGoEat] = useState([]);
   
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/games/detail/${myValue.appid}`)
+      .get(`https://j8c204.p.ssafy.io/api/games/detail/${myValue.appid}`)
       .then((res) => {
         setGoEat(res.data);
       })
@@ -33,7 +32,7 @@ export default function Plate({ myValue }) {
       });
   }, [myValue.appid]);
 
-  console.log(goEat)
+  // console.log(goEat)
 
   // useEffect(() => {
   //   axios
@@ -70,7 +69,7 @@ export default function Plate({ myValue }) {
               />
               <div className="card-back bg-black opacity-70">
                 <div className="w-4/5 text-white">
-                  <div className="text-2xl pb-5 ">{goEat.name}</div>
+                  <div className="text-4xl pb-5 text-center">{gameresult} % </div>
                   <div>{ goEat.categories && goEat.categories[0] }</div>
                   <div className="py-3 ">
                     {goEat && goEat.genres && goEat.genres.map((genre, index) => (
