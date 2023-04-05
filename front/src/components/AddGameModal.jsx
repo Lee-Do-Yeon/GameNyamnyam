@@ -1,7 +1,7 @@
 import React from 'react';
 // import Slider from 'react-slick';
 
-export default function gamemodal({ setaddgame, props }) {
+export default function gamemodal({ setaddgame}) {
   // console.log(props);
 
   const closeaddgame = () => {
@@ -43,28 +43,6 @@ export default function gamemodal({ setaddgame, props }) {
             </div>
           ))}
         </Slider> */}
-        
-        <img
-          src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${props[0].appid}/header.jpg?t=1679504733`}
-          alt=""
-          className="rounded-lg"
-        />
-
-        <img
-          src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${props[1].appid}/header.jpg?t=1679504733`}
-          alt=""
-          className="rounded-lg"
-        />
-        <img
-          src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${props[2].appid}/header.jpg?t=1679504733`}
-          alt=""
-          className="rounded-lg"
-        />
-        <img
-          src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${props[3].appid}/header.jpg?t=1679504733`}
-          alt=""
-          className="rounded-lg"
-        />
       </div>
       </div>
 

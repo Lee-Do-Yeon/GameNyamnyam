@@ -3,9 +3,8 @@ import AddGameModal from './AddGameModal'
 
 
 
-export default function AddGame(similar) {
+export default function AddGame() {
     const [addgame, setaddgame] = useState(false);
-    // const [similar, setSimilar] = useState([]);
     
     const showaddgame = () => {
         setaddgame(true);
@@ -31,7 +30,7 @@ export default function AddGame(similar) {
               />
             </svg>
       </button>
-      {addgame && <AddGameModal setaddgame={setaddgame} props={similar.similar}/>}
+      {addgame && <AddGameModal setaddgame={setaddgame} />}
     </div>
   );
 }
