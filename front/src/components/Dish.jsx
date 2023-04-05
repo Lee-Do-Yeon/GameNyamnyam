@@ -19,7 +19,7 @@ export default function Dish({ price, image }) {
 
   const backgroundColor = changeColor(price);
   return (
-    <div className="gamePlate">
+    <div className="gamePlate font-dish">
       <div className="plate1" style={{ backgroundColor: backgroundColor }}>
         <div className="plate2 z" style={{ backgroundColor: backgroundColor }}>
           <div className="plate3">
