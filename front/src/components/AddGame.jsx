@@ -1,31 +1,15 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AddGameModal from './AddGameModal'
-import axios from 'axios';
 
 
 
-export default function AddGame() {
+export default function AddGame(similar) {
     const [addgame, setaddgame] = useState(false);
     // const [similar, setSimilar] = useState([]);
-
+    
     const showaddgame = () => {
         setaddgame(true);
     };
-    
-    // useEffect(() => {
-    //   axios
-    //   .post(`http://127.0.0.1:8000/games/similar/`)
-    //   .then(res => {
-    //     setSimilar(res.data);
-    //     console.log(res.data);
-    //   }
-    //   )
-    //   .catch(err => {
-    //     console.log(err,'nn');
-    //   });
-    // },[]);
-    
-
 
   return (
     <div>
@@ -47,7 +31,7 @@ export default function AddGame() {
               />
             </svg>
       </button>
-      {addgame && <AddGameModal setaddgame={setaddgame}/>}
+      {addgame && <AddGameModal setaddgame={setaddgame} props={similar.similar}/>}
     </div>
   );
 }
