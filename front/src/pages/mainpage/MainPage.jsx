@@ -31,7 +31,7 @@ export default function Mainpage() {
   useEffect(() => {
     if (getSteamId !== '') {
       axios
-        .get(`http://127.0.0.1:8000/api/games/count/${getSteamId}`)
+        .get(`https://j8c204.p.ssafy.io/api/games/count/${getSteamId}`)
         .then(function (response) {
           console.log(response.data);
           if (response.data >= 5) {
