@@ -11,39 +11,56 @@ import axios from 'axios';
 export default function Resultpage() {
   const searchParams = new URLSearchParams(location.search);
   const steamId = searchParams.get('steam_id');
+  // const steamId = '76561198797386305';
 
   const myValue = useRecoilValue(userGame);
   const myCount = useRecoilValue(userDetail);
 
   const [similar, setSimilar] = useState([]);
-  const [preference, setPreference] = useState([]); // [선호도] 장바구니리스트, 5개 t or f, steamid 
-  const [gameresult,setGameresult ] = useState([]); // [매치율]
+  const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid 
+  const [gameresult, setGameresult ] = useState([]); // [매치율]
 
   const data = [];
   for (let i = 0; i < myValue.length; i++) {
     data.push(myValue[i].appid);
   }
-  const data2 = []; // 선호도 나오게 하는 데이터
-  const data3 = []; // 매치율 나오게하는 데이터
+  const data3 = {
+    "preference": preference,
+    "table_list":{data}.data
+  }; // 매치율 나오게하는 데이터
 
   useEffect(() => {
     axios.all([
       axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
-      // .post('http://127.0.0.1:8000/api/games/similar', data)
-      axios.post({`https://j8c204.p.ssafy.io/api/games/preference/${steamId}`}, data2)}, // 선호도 나오게함
-      // data2는 매치율 나오게 함.
-      axios.post('https://j8c204.p.ssafy.io/api/games/result', data3) // 매치율 나오게 하기
+      // axios.post('http://127.0.0.1:8000/api/games/similar', data),
+      axios.post(`https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`, data), // 선호도 나오게함
     ])
 
-      .then((res1,res2, res3) => {
-        setSimilar(res1.data);
-        setPreference(res2.data);
-        setGameresult(res3.data);
+      .then((res) => {
+        setSimilar(res[0].data);
+        setPreference(res[1].data);
+        // setGameresult(res[2].data);
+        console.log(res);
+
       })
       .catch((err) => {
-        console.log(err, 'nn');
+        console.log(err, '첫번째 오류');
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .post('https://j8c204.p.ssafy.io/api/games/result', data3)
+      .then((res) => {
+        setGameresult(res.data);
+        console.log('후후.. 두번째닷');
+      })
+      .catch((err) => {
+        console.log(err, '두번째 오류');
+      });
+  }, [data3.preference])
+  
+  console.log(gameresult);
 
   const settings = {
     dots: true,
@@ -52,13 +69,12 @@ export default function Resultpage() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
   return (
     <div className="h-screen bg-yellow-600 font-semibold">
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
           <div className="text-center text-2xl">
-            {myCount ? <h1> 5 이상입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>}
+            {myCount ? <h1> {preference} 입니다. </h1> : <h1> 게임을 너무 안하셔서 취향을 알수 없습니다. </h1>}
           </div>
         </div>
       </div>
@@ -76,8 +92,8 @@ export default function Resultpage() {
             <div className="relative h-full">
               <div className="w-4/5 h-5/6 p-4 ml-5 mt-5">
                 <Slider {...settings}>
-                  {myValue.map((item) => (
-                    <Plate key={item.id} myValue={item} />
+                  {myValue.map((item, index) => (
+                    <Plate key={index} myValue={item} gameresult={gameresult[item.appid]}/>
                   ))}
                 </Slider>
               </div>
