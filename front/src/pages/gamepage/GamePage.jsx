@@ -278,7 +278,8 @@ export default function Gamepage() {
         <div>
           <Receipt />
         </div>
-      </div>
+      </div> 
+      
       {!totalLoading ? (
         <div className="block text-center">
           <img
