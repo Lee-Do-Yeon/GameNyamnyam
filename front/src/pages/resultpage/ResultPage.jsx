@@ -19,7 +19,7 @@ export default function Resultpage() {
   const handleAppIdChange = (appId) => {
     setAppId(appId);
   };
-  console.log(appId, '!!!!');
+
 
   const [similar, setSimilar] = useState([]);
   const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid
@@ -69,7 +69,8 @@ export default function Resultpage() {
       });
   }, [data3.preference]);
 
-  // console.log(document.querySelector('.slick-next')); next button 위치 여기에 클릭이벤트 주면 됨.
+  console.log(document.querySelector('.slick-next'));
+  console.log(document.querySelector('.slick-prev'));
 
   const settings = {
     dots: true,
@@ -83,12 +84,11 @@ export default function Resultpage() {
       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
           <div className="text-center text-2xl flex flex-row justify-center">
-            <h1 className="pr-3"> 당신의 취향은: </h1>
+            <h1 className="pr-3"> 당신의 취향은 </h1>
             {preference &&
               preference.map((item, index) => (
-                <h1 key={index} className="font-detail">
-                  {' '}
-                  #{item}{' '}
+                <h1 key={index} className="font-detail text-orange-400 px-1">
+                  #{item}
                 </h1>
               ))}
             <h1 className="pl-2"> 입니다. </h1>
@@ -119,6 +119,7 @@ export default function Resultpage() {
                   ))}
                 </Slider>
               </div>
+
               <a
                 href={`https://store.steampowered.com/app/${appId}/EA_SPORTS_FIFA_23/`}
                 target="_blank"
@@ -141,15 +142,15 @@ export default function Resultpage() {
         >
           <div className="mt-36 mx-10">
             <div>
-              <div className="max-h-[288px] overflow-y-auto">
+              <div className="max-h-[288px] overflow-y-auto box2">
                 {myValue &&
                   myValue.map((item, index) => (
                     <div key={item.id} className="grid grid-cols-12">
                       <div className="col-span-1">{index + 1} </div>
-                      <div className="col-span-6 px-3 truncate">
+                      <div className="col-span-6 pl-2 truncate">
                         {item.name}
                       </div>
-                      <div className="col-span-3">₩ {item.price}</div>
+                      <div className="col-start-9 col-end-12">₩ {item.price}</div>
                     </div>
                   ))}
               </div>
