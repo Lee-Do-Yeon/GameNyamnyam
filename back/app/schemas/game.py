@@ -2,8 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 
 # Shared properties
-
-
 class GameBase(BaseModel):
     appid: str
     name: str
