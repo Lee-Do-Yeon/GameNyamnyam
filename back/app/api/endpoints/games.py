@@ -92,13 +92,14 @@ def get_rate(preference: list,
     Output:
         비슷한 게임들의 앱아이디, 제목, 이미지
     """
-    game_genrs = []
+    game_genres = []
+    
     # DB 조회
     for appid in table_list:
-        game_genrs.append(games.find_one({"appid": appid}, {
+        game_genres.append(games.find_one({"appid": appid}, {
                           "_id": 0, "appid": 1, "genres": 1}))
 
-    result = recommend_game.get_result(preference, game_genrs)
+    result = recommend_game.get_result(preference, game_genres)
     return result
 
 
