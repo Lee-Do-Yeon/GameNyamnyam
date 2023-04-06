@@ -1,7 +1,7 @@
 import React from 'react';
 // import Slider from 'react-slick';
 
-export default function gamemodal({ setaddgame}) {
+export default function gamemodal({ setaddgame, props }) {
   // console.log(props);
 
   const closeaddgame = () => {
@@ -18,7 +18,7 @@ export default function gamemodal({ setaddgame}) {
 
   return (
     <div
-      className="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-0"
+      className="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-0 z-10"
       onClick={closeaddgame}
     >
       <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-80 ">
