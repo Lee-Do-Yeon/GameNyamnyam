@@ -14,7 +14,6 @@ export default function Mainpage() {
   const rightDoorRef = useRef(null);
   const [CanLogin, setCanLogin] = useState(false);
   const [isLogin, setLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [getSteamId, setSteamId] = useState('');
   const navigate = useNavigate();
 
@@ -50,7 +49,7 @@ export default function Mainpage() {
   }, [getSteamId]);
   const navigateToGame = () => {
     if (isLogin) {
-      navigate('/game');
+      navigate('/tutorial');
     }
   };
 
@@ -84,10 +83,11 @@ export default function Mainpage() {
       {isLogin ? (
         <div></div>
       ) : (
-        <div className="steamLoginBtn" onClick={goToSteam}>
-          <div className="steamTxt">continue with steam login</div>
-          <div className="steamImg"></div>
-        </div>
+        <button className="steamLoginBtn" onClick={goToSteam}>
+          <div className="steamTxt font-jamsil m-auto text-yellow-50">
+            로그인 하러 가기
+          </div>
+        </button>
       )}
     </div>
   );
