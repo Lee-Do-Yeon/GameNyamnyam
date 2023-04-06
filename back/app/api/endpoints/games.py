@@ -1,12 +1,12 @@
 import requests
 from recommend import recommend_game
-from recommend import recommend_game_final
-from typing import List
+from recommend import recommend_game_w2v
 from dotenv import load_dotenv
 import os
 from fastapi import APIRouter
 from db.Database import games
 from schemas import game
+from typing import List
 
 
 router = APIRouter()
@@ -20,10 +20,10 @@ steam_key = os.getenv('steam_key')
 async def get_game_count(steamId: str):
     """소유한 게임 개수 반환 함수.
 
-    Args:
+    Input:
         steamId : 사용자 고유 식별번호.
 
-    Returns:
+    Output:
         소유한 게임 개수
     """
     url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={steam_key}&steamid={steamId}&format=json"
@@ -33,78 +33,27 @@ async def get_game_count(steamId: str):
     return game_count
 
 
-'''
-@router.get("/preference/{steamId}")
-def get_game_by_tag(steamId: str):
-    """ 5개 이상 플레이한 사용자가 전에 했던 게임 기반으로 태그 분석
-
-    Args:
-        steamId : 유저 아이디
-
-    Returns:
-        전에 플레이했던 장르 중 가장 많은 태그 5개
-
-    """
-
-    # 1. 플레이했던 게임 정보(appid) 불러오기
-    playedGames = {}
-    appids = []
-    playedGenres = []
-    result = {}
-    url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={steamId}"
-    response = requests.get(url)
-    json_response = response.json()
-    playedGames = json_response["response"]["games"]
-
-    for k in playedGames:
-        appids.append(k['appid'])
-
-    # 2. 불러온 appid를 이용해 db에서 game detail 가져오기
-    print(appids)
-    for k in appids:
-        playedGenres.append(games.find_one({"appid": str(k)}, {
-            "_id": 0, "genres": 1}))
-
-    # 3. game detail list에서 장르 뽑아서 5개 가져오기
-    result = recommend_game.get_preference(playedGenres)
-
-    return result
-
 @router.post("/preference")
-def get_game_by_table(table_list: list):
-    """ 5개 미만 플레이한 사용자의 장바구니 기반으로 (태그) 분석
+def get_preference(user_type: bool, steamId: str, table_list: List):
+    """선호 장르 분석
 
-    Args:
-        table_list : 장바구니 게임
+    Input:
+        user_type : 게임 기록이 5개 이상이면 True, 아니면 False
+        steamId : 16자리 스팀 아이디
+        table_list : 장바구니 게임 리스트
 
-    Returns:
-        전에 플레이했던 장르 중 가장 많은 태그 5개
+    Output:
+        선호 장르 5개 리스트
 
     """
-    # 1. 불러온 appid를 이용해 db에서 game detail 가져오기
     playedGenres = []
     result = {}
 
-    for k in table_list:
-        playedGenres.append(games.find_one({"appid": k}, {
-            "_id": 0, "genres": 1}))
-
-    # 3. game detail list에서 장르 뽑아서 5개 가져오기
-    result = recommend_game.get_preference(playedGenres)
-
-    return result
-'''
-
-
-@router.post("/preference")
-def get_result(user_type: bool, steamId: str, table_list: list):
-  
     if(user_type):
+
         # 1. 플레이했던 게임 정보(appid) 불러오기
-        playedGames = {}
         appids = []
-        playedGenres = []
-        result = {}
+        playedGames = {}
         url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={steamId}"
         response = requests.get(url)
         json_response = response.json()
@@ -114,25 +63,18 @@ def get_result(user_type: bool, steamId: str, table_list: list):
             appids.append(k['appid'])
 
         # 2. 불러온 appid를 이용해 db에서 game detail 가져오기
-        print(appids)
         for k in appids:
             playedGenres.append(games.find_one({"appid": str(k)}, {
                 "_id": 0, "genres": 1}))
 
-        # 3. game detail list에서 장르 뽑아서 5개 가져오기
-        result = recommend_game.get_preference(playedGenres)
-
     else:
         # 1. 불러온 appid를 이용해 db에서 game detail 가져오기
-        playedGenres = []
-        result = {}
-
         for k in table_list:
             playedGenres.append(games.find_one({"appid": k}, {
                 "_id": 0, "genres": 1}))
 
-        # 3. game detail list에서 장르 뽑아서 5개 가져오기
-        result = recommend_game.get_preference(playedGenres)
+    # 3. game detail list에서 장르 뽑아서 5개 가져오기
+    result = recommend_game.get_preference(playedGenres)
 
     return result
 
@@ -140,38 +82,39 @@ def get_result(user_type: bool, steamId: str, table_list: list):
 
 
 @router.post("/result")
-def get_rate(preference: list,
-             table_list: list):
+def get_rate(preference: List,
+             table_list: List):
     """뽑은 게임 리스트에 대한 매치율 저장
 
-    Args:
+    Input:
         games : 게임의 앱 아이디가 담긴 리스트
         preference : 선호 장르 리스트
 
-    Returns:
+    Output:
         비슷한 게임들의 앱아이디, 제목, 이미지
     """
-    game_genrs = []
+    game_genres = []
+    
     # DB 조회
     for appid in table_list:
-        game_genrs.append(games.find_one({"appid": appid}, {
+        game_genres.append(games.find_one({"appid": appid}, {
                           "_id": 0, "appid": 1, "genres": 1}))
 
-    result = recommend_game.get_result(preference, game_genrs)
+    result = recommend_game.get_rate(preference, game_genres)
     return result
 
 
-@router.post("/similar", response_model=list[game.GameBase])
-def get_similar_game(table_list: list):
+@router.post("/similar", response_model=List[game.GameBase])
+def get_similar_game(table_list: List):
     """비슷한 게임 추천.
 
-    Args:
+    Input:
         games : 게임의 앱 아이디가 담긴 리스트
 
-    Returns:
+    Output:
         비슷한 게임들의 앱아이디, 제목, 이미지
     """
-    appList = recommend_game_final.get_recommended_games(table_list)
+    appList = recommend_game_w2v.get_recommended_games(table_list)
     similar_game_list = games.find(
         { "appid": { "$in": appList, "$nin": table_list } },
         {"_id": 0, "appid": 1, "name": 1, "price": 1, "image": 1}
@@ -189,7 +132,7 @@ def get_similar_game(table_list: list):
 # 게임 관련
 ####################
 
-@router.post("/all/yes", response_description="구매 기록이 5개 이상인 유저의 게임 목록", response_model=list[game.GameBase])
+@router.post("/all/yes", response_description="구매 기록이 5개 이상인 유저의 게임 목록", response_model=List[game.GameBase])
 def get_games_yes_data(steamId: str):
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
@@ -197,10 +140,10 @@ def get_games_yes_data(steamId: str):
     2) 게임 기록이 5개 이상 사용자
     → 총 60개 (사용자 정보 기반 추천 게임 30개, 무작위 15개, 인기순위 10개, 신규게임 5개)
 
-    Args:
+    Input:
         steamId : 사용자 고유 식별 아이디
 
-    Returns:
+    Output:
         60개의 게임 리스트 (appid, image, name)
     """
 
@@ -217,7 +160,7 @@ def get_games_yes_data(steamId: str):
         owned_games.append(str(user_games[i]["appid"]))
         already_selected.append(str(user_games[i]["appid"]))
 
-    appList = recommend_game_final.get_recommended_games(owned_games)
+    appList = recommend_game_w2v.get_recommended_games(owned_games)
 
     recommend_game_list = games.find(
         { "appid": { "$in": appList, "$nin": already_selected } },
@@ -269,7 +212,7 @@ def get_games_yes_data(steamId: str):
     # print(len(result))
     return result
 
-@router.post("/all/no", response_description="구매 기록이 5개 미만인 유저의 게임 목록", response_model=list[game.GameBase])
+@router.post("/all/no", response_description="구매 기록이 5개 미만인 유저의 게임 목록", response_model=List[game.GameBase])
 def get_games_no_data():
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
