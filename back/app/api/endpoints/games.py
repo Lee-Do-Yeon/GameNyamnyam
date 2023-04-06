@@ -6,6 +6,7 @@ import os
 from fastapi import APIRouter
 from db.Database import games
 from schemas import game
+from typing import List
 
 
 router = APIRouter()
@@ -33,7 +34,7 @@ async def get_game_count(steamId: str):
 
 
 @router.post("/preference")
-def get_result(user_type: bool, steamId: str, table_list: list):
+def get_preference(user_type: bool, steamId: str, table_list: List):
     """선호 장르 분석
 
     Input:
@@ -81,8 +82,8 @@ def get_result(user_type: bool, steamId: str, table_list: list):
 
 
 @router.post("/result")
-def get_rate(preference: list,
-             table_list: list):
+def get_rate(preference: List,
+             table_list: List):
     """뽑은 게임 리스트에 대한 매치율 저장
 
     Input:
@@ -103,8 +104,8 @@ def get_rate(preference: list,
     return result
 
 
-@router.post("/similar", response_model=list[game.GameBase])
-def get_similar_game(table_list: list):
+@router.post("/similar", response_model=List[game.GameBase])
+def get_similar_game(table_list: List):
     """비슷한 게임 추천.
 
     Input:
@@ -131,7 +132,7 @@ def get_similar_game(table_list: list):
 # 게임 관련
 ####################
 
-@router.post("/all/yes", response_description="구매 기록이 5개 이상인 유저의 게임 목록", response_model=list[game.GameBase])
+@router.post("/all/yes", response_description="구매 기록이 5개 이상인 유저의 게임 목록", response_model=List[game.GameBase])
 def get_games_yes_data(steamId: str):
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
@@ -211,7 +212,7 @@ def get_games_yes_data(steamId: str):
     # print(len(result))
     return result
 
-@router.post("/all/no", response_description="구매 기록이 5개 미만인 유저의 게임 목록", response_model=list[game.GameBase])
+@router.post("/all/no", response_description="구매 기록이 5개 미만인 유저의 게임 목록", response_model=List[game.GameBase])
 def get_games_no_data():
     """선호도에 게임 리스트 출력
     1) 이미 플레이한 게임은 나오지 않음.
