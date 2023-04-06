@@ -84,7 +84,9 @@ export default function Mainpage() {
         <div></div>
       ) : (
         <button className="steamLoginBtn" onClick={goToSteam}>
-          <div className="steamTxt font-jamsil text-yellow-50">로그인 하러 가기</div>
+          <div className="steamTxt font-jamsil m-auto text-yellow-50">
+            로그인 하러 가기
+          </div>
         </button>
       )}
     </div>
