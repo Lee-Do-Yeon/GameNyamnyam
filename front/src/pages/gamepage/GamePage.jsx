@@ -269,7 +269,7 @@ export default function Gamepage() {
       window.alert('게임을 한 개 이상 선택해주세요');
     } else {
       bellAudioRef.current.play();
-      setTimeout(() => navigate('/result'), 3000);
+      setTimeout(() => navigate('/result'), 2000);
     }
   };
   return (
