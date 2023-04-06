@@ -9,8 +9,10 @@ import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
 import PickedDish from '../../components/PickedDish';
 import bellSound from '../../assets/bellSound.wav';
+import gameSound from '../../assets/gameSound.mp3';
 export default function Gamepage() {
-  const audioRef = useRef(null);
+  const bellAudioRef = useRef(null);
+  const gameAudioRef = useRef(null);
   const [gameData, setGameData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [Info, setInfo] = useState(false);
@@ -58,6 +60,7 @@ export default function Gamepage() {
     setTimeout(() => {
       setTotalLoading(true);
       setDataLoaded(true);
+      gameAudioRef.current.play();
     }, 3000);
   }, []);
   // 첫번 째 스시 바
@@ -265,7 +268,7 @@ export default function Gamepage() {
     if (plates.length === 0) {
       window.alert('게임을 한 개 이상 선택해주세요');
     } else {
-      audioRef.current.play();
+      bellAudioRef.current.play();
       setTimeout(() => navigate('/result'), 3000);
     }
   };
@@ -278,7 +281,11 @@ export default function Gamepage() {
       </div>
       {!totalLoading ? (
         <div className="block text-center">
-          <img src="src/assets/sushiload2.gif" alt="" className="m-auto w-[30vw]" />
+          <img
+            src="src/assets/sushiload2.gif"
+            alt=""
+            className="m-auto w-[30vw]"
+          />
           <p className="font-bold text-white text-2xl">l o a d i n g . . . </p>
           {/* <FadeLoader color="#d6bd36" /> */}
         </div>
@@ -414,9 +421,10 @@ export default function Gamepage() {
           secondIdDict={secondIdDict}
         />
       )}
-      <audio ref={audioRef}>
+      <audio ref={bellAudioRef}>
         <source src={bellSound} type="audio/wav" />
       </audio>
+      <audio ref={gameAudioRef} src={gameSound} type="audio/mp3"></audio>
     </div>
   );
 }
