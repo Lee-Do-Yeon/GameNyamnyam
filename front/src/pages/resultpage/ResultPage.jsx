@@ -1,9 +1,10 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useNavigate} from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { userGame, userDetail } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
@@ -11,13 +12,13 @@ import Plate from '../../components/Plate';
 import axios from 'axios';
 
 export default function Resultpage() {
-  // const steamId = '76561198797386305';
+  
+  const steamId = '76561198797386305';
 
   const myValue = useRecoilValue(userGame);
   const UserInfo = useRecoilValue(userDetail);
-  const steamId = UserInfo[0];
-  const myCount = UserInfo[1];
-
+  // const steamId = UserInfo[0];
+  // const myCount = UserInfo[1];
 
   const [similar, setSimilar] = useState([]);
   const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid
@@ -32,20 +33,28 @@ export default function Resultpage() {
     preference: preference,
     table_list: { data }.data,
   }; // 매치율 나오게하는 데이터
+  
+  // 다시 고르러 가기
+  const resetList = useResetRecoilState(userGame);
+  const navigate = useNavigate();
+  const gotoGame = () => {
+    resetList();
+    navigate('/game');
+  };
 
   useEffect(() => {
     axios
       .all([
-        axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
-        // axios.post('http://127.0.0.1:8000/api/games/similar', data),
-        axios.post(
-          `https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`,
-          data,
-        ), // 선호도 나오게함
+        // axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
+        axios.post('http://127.0.0.1:8000/api/games/similar', data),
         // axios.post(
-        //   `http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`,
+        //   `https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`,
         //   data,
         // ), // 선호도 나오게함
+        axios.post(
+          `http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`,
+          data,
+        ), // 선호도 나오게함
       ])
 
       .then((res) => {
@@ -87,10 +96,11 @@ export default function Resultpage() {
 
   return (
     <div className="h-screen bg-yellow-600 font-semibold">
-      <div className="flex items-center justify-center h-1/6">
+      
+       <div className="flex items-center justify-center h-1/6">
         <div className="p-3 border-2 rounded-lg bg-gray-200 shadow-lg w-4/5">
           <div className="text-center text-2xl flex flex-row justify-center">
-            <h1 className="pr-3"> 당신의 취향은 </h1>
+          <h1 className="pr-3"> 당신의 취향은 </h1>
             {preference &&
               preference.map((item, index) => (
                 <h1 key={index} className="font-detail text-orange-400 px-1">
@@ -170,13 +180,21 @@ export default function Resultpage() {
           </div>
         </div>
       </div>
-      <div className="p-4 h-1/6">
-        <div className="p-4 text-center">
+      <div className="p-4 h-1/6 relative">
+        
+        <div className="p-4 text-center ">
           <div className="text-white text-xl">
-            이런 게임도 좋아하실거 같아요
+            이런 게임도 좋아하실거 같아요   
           </div>
           <AddGame className="p-3" similar={similar} />
         </div>
+        
+        <div className='h-10 w-[312px] absolute right-14 top-5'>
+          <button className='h-full w-full bg-gray-200 rounded-xl' onClick={gotoGame}>
+            다시 고르러 가기
+          </button>
+        </div>
+
       </div>
     </div>
   );

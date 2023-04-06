@@ -18,7 +18,9 @@ export default function Mainpage() {
   const [CanLogin, setCanLogin] = useState(false);
   const [isLogin, setLogin] = useState(false);
   const [getSteamId, setSteamId] = useState('');
-  const navigate = useNavigate();
+  
+  /// 다시 고르러 가기
+  
 
   useEffect(() => {
     console.log('effect시작');
@@ -50,6 +52,7 @@ export default function Mainpage() {
         });
     }
   }, [getSteamId]);
+  
   const navigateToGame = () => {
     if (isLogin) {
       navigate('/tutorial');
