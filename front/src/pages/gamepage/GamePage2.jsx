@@ -9,6 +9,8 @@ import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
 import PickedDish from '../../components/PickedDish';
 import bellSound from '../../assets/bellSound.wav';
+
+
 export default function Gamepage() {
   const audioRef = useRef(null);
   const [gameData, setGameData] = useState([]);
@@ -166,7 +168,7 @@ export default function Gamepage() {
 
   const onDragStart = (result) => {
     const { source } = result;
-    console.log(source.index)
+    console.log(source.index);
     const banneridnum = source.index + 1;
     if (source.droppableId === 'first-sushi-bar') {
       const getSushi = document.querySelector(`#firstPlate${banneridnum}`);
@@ -258,14 +260,15 @@ export default function Gamepage() {
     }
   };
 
-  const navigateToResult = () => {
+
+  function navigateToResult() {
     if (plates.length === 0) {
       window.alert('게임을 한 개 이상 선택해주세요');
     } else {
       audioRef.current.play();
       setTimeout(() => navigate('/result'), 3000);
     }
-  };
+  }
   return (
     <div className="gamepage">
       <div className="kitchen">
@@ -284,6 +287,7 @@ export default function Gamepage() {
           <div className="sushiBar">
             <div className="firstTrail">
               <Droppable
+                renderClone={getRenderItem(FirstSushis)}
                 droppableId="first-sushi-bar"
                 direction="horizontal"
                 isDropDisabled={true}
@@ -306,13 +310,12 @@ export default function Gamepage() {
                             onClick={() => showInfo(sushi.appid)}
                           >
                             <div>
-                            <Dish price={sushi.price} image={sushi.image} />
+                              <Dish price={sushi.price} image={sushi.image} />
 
-                            <p className="truncate w-5/6 titleP text-center font-jamsil">
-                              {sushi.name}
-                            </p>
+                              <p className="truncate w-5/6 titleP text-center font-jamsil">
+                                {sushi.name}
+                              </p>
                             </div>
-
                           </div>
                         )}
                       </Draggable>
