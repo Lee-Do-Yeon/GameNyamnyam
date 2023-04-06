@@ -81,7 +81,7 @@ export default function Resultpage() {
     setTimeout(() => {
       setLoading(true);
       resultAudioRef.current.play();
-    }, 6000);
+    }, 7000);
   }, [data3.preference]);
 
   // console.log(document.querySelector('.card-front'));
