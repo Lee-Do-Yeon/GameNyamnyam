@@ -23,7 +23,7 @@ export default function gamemodal({ setaddgame}) {
     >
       <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-80 ">
         {/* 무조건 4개 추천해준다는 가정으로 그냥 이렇게 만들거임 */}
-        <div className="flex flex-row gap-4 py-4 px-8">
+        <div className="flex flex-row gap-4 py-4 px-8 justify-between">
           {/* <Slider {...settings}>
           {props.map((appid, index) => (
             <div key={index} className="flex flex-row">
