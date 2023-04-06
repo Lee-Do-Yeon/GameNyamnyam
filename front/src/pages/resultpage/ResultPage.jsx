@@ -17,12 +17,12 @@ export default function Resultpage() {
   const resultAudioRef = useRef(null);
   const clickAudioRef = useRef(null);
   
-  const steamId = '76561198797386305';
+  // const steamId = '76561198797386305';
 
   const [loading, setLoading] = useState(false);
   const myValue = useRecoilValue(userGame);
   const UserInfo = useRecoilValue(userDetail);
-  // const steamId = UserInfo[0];
+  const steamId = UserInfo[0];
   const myCount = UserInfo[1];
 
   const [similar, setSimilar] = useState([]);
@@ -47,16 +47,16 @@ export default function Resultpage() {
   useEffect(() => {
     axios
       .all([
-        // axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
-        axios.post('http://127.0.0.1:8000/api/games/similar', data),
-        // axios.post(
-        //   `https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`,
-        //   data,
-        // ), // 선호도 나오게함
+        axios.post('https://j8c204.p.ssafy.io/api/games/similar', data),
+        // axios.post('http://127.0.0.1:8000/api/games/similar', data),
         axios.post(
-          `http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`,
+          `https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`,
           data,
         ), // 선호도 나오게함
+        // axios.post(
+        //   `http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`,
+        //   data,
+        // ), // 선호도 나오게함
       ])
       .then((res) => {
         setSimilar(res[0].data);
