@@ -99,7 +99,7 @@ def get_rate(preference: list,
         game_genres.append(games.find_one({"appid": appid}, {
                           "_id": 0, "appid": 1, "genres": 1}))
 
-    result = recommend_game.get_result(preference, game_genres)
+    result = recommend_game.get_rate(preference, game_genres)
     return result
 
 
