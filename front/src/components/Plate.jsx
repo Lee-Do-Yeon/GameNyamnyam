@@ -4,7 +4,15 @@ import Tag from './Tag';
 
 import axios from 'axios';
 
-export default function Plate({ myValue, gameresult, setcontentId}) {
+export default function Plate({ myValue, gameresult}) {
+  
+  // const [idData, setData] = useState(null);
+  
+  // const getData = () => {
+  //   return idData;
+  // };
+
+  
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
@@ -20,7 +28,9 @@ export default function Plate({ myValue, gameresult, setcontentId}) {
   };
   const backgroundColor = changeColor(myValue.price);
   const [goEat, setGoEat] = useState([]);
-  console.log(myValue.appid);
+
+  
+
   useEffect(() => {
     axios
       .get(`https://j8c204.p.ssafy.io/api/games/detail/${myValue.appid}`)
@@ -31,11 +41,6 @@ export default function Plate({ myValue, gameresult, setcontentId}) {
         console.log(err);
       });
   }, [myValue.appid]);
-
-  useEffect(()=> {
-    console.log(myValue.appid);
-    setcontentId(myValue.appid);
-  },[myValue.appid])
 
   // console.log(goEat)
 
