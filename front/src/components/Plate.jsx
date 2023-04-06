@@ -81,14 +81,6 @@ export default function Plate({ myValue, gameresult, onAppIdChange }) {
                         <Tag props={genre} key={index} />
                       ))}
                   </div>
-                  
-                  {/* <a
-                    href={`https://store.steampowered.com/app/${myValue.appid}/EA_SPORTS_FIFA_23/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    go to eat
-                  </a> */}
                 </div>
               </div>
             </div>
@@ -106,6 +98,7 @@ export default function Plate({ myValue, gameresult, onAppIdChange }) {
           Go to Eat
         </button>
       </a> */}
+      
     </>
   );
 }
