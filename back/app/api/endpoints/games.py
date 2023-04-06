@@ -45,12 +45,14 @@ def get_result(user_type: bool, steamId: str, table_list: list):
         선호 장르 5개 리스트
 
     """
+    playedGenres = []
+    result = {}
+
     if(user_type):
+
         # 1. 플레이했던 게임 정보(appid) 불러오기
-        playedGames = {}
         appids = []
-        playedGenres = []
-        result = {}
+        playedGames = {}
         url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steam_key}&steamid={steamId}"
         response = requests.get(url)
         json_response = response.json()
@@ -60,25 +62,18 @@ def get_result(user_type: bool, steamId: str, table_list: list):
             appids.append(k['appid'])
 
         # 2. 불러온 appid를 이용해 db에서 game detail 가져오기
-        print(appids)
         for k in appids:
             playedGenres.append(games.find_one({"appid": str(k)}, {
                 "_id": 0, "genres": 1}))
 
-        # 3. game detail list에서 장르 뽑아서 5개 가져오기
-        result = recommend_game.get_preference(playedGenres)
-
     else:
         # 1. 불러온 appid를 이용해 db에서 game detail 가져오기
-        playedGenres = []
-        result = {}
-
         for k in table_list:
             playedGenres.append(games.find_one({"appid": k}, {
                 "_id": 0, "genres": 1}))
 
-        # 3. game detail list에서 장르 뽑아서 5개 가져오기
-        result = recommend_game.get_preference(playedGenres)
+    # 3. game detail list에서 장르 뽑아서 5개 가져오기
+    result = recommend_game.get_preference(playedGenres)
 
     return result
 
