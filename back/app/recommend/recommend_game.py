@@ -40,7 +40,7 @@ Output: 게임별 매치율 리스트
 '''
 
 
-def get_result(preference, games):
+def get_rate(preference, games):
 
     # appid가 0이면 '나'
     games.append({'appid': 0, 'genres': ','.join(preference)})
