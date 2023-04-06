@@ -28,8 +28,6 @@
 
 .steamTxt {
   margin-right: 25px;
-  font-family: 'Inter';
-  font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 39px;
@@ -179,4 +177,64 @@ border-radius: 20px;
   background-color: rgb(155, 141, 141);
   /* 스크롤바 둥글게 설정    */
   border-radius: 10px;    
+}
+
+.tutorialpic {
+  background-image: url(assets/tutorial.png);
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: fixed;
+}
+
+.pointingCircle {
+    width:250px;
+    height:160px;
+    border-radius:50% / 50%;
+}
+
+.balloon {
+  position: relative;
+  border-radius: 10px;
+}
+
+.balloon::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 0px;
+  border-top: 20px solid transparent;
+  border-left: 20px solid #ffffff;
+  border-bottom: 20px solid transparent;
+  transform: rotate(-15deg);
+}
+.balloon2 {
+  position: relative;
+  border-radius: 10px;
+}
+
+.balloon2::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  right: 0px;
+  border-top: 20px solid transparent;
+  border-right: 20px solid #ffffff;
+  border-bottom: 20px solid transparent;
+  transform: rotate(25deg);
+}
+.balloon3 {
+  position: relative;
+  border-radius: 10px;
+}
+
+.balloon3::before {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  right: 0px;
+  border-top: 20px solid transparent;
+  border-right: 20px solid #ffffff;
+  border-bottom: 20px solid transparent;
+  transform: rotate(-25deg);
 }
