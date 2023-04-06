@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CategoryTag from './CategoryTag';
 import axios from 'axios';
 import GenreTag from '../components/GenreTag';
 import Carousel from './Carousel';
 import { userGame } from '../../recoil/user/atoms/';
 import { useRecoilState } from 'recoil';
+import clickSound from '../assets/clickSound.mp3';
+
 export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
+  const clickAudioRef = useRef(null);
+
   const [gameDetail, setGameDetail] = useState([]);
   const [plates, setPlates] = useRecoilState(userGame);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +41,10 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
 
   console.log('랜더링 후', gameDetail);
   const closeInfo = () => {
-    setInfo(!Info);
+    clickAudioRef.current.play();
+    setTimeout(() => {
+      setInfo(!Info);
+    }, 100);
   };
 
   const getGame = () => {
@@ -48,6 +55,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
     getSushi.setAttribute('style', 'visibility:hidden');
     const newPlates = [...plates, gameDetail];
     setPlates(newPlates);
+    closeInfo();
     return newPlates;
   };
   return (
@@ -60,26 +68,27 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
             <header className="col-span-10 text-left pl-5 text-4xl mt-4">
               {gameDetail.name}
             </header>
-            <div className="col-start-12">
-              <button onClick={closeInfo}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="w-6 h-6 text-white-700"
-                  viewBox="0 0 1792 1792"
-                >
-                  <path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"></path>
-                </svg>
-              </button>
-            </div>
+            <button
+              className="col-start-12 flex justify-center items-center"
+              onClick={closeInfo}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="w-6 h-6 text-white-700"
+                viewBox="0 0 1792 1792"
+              >
+                <path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"></path>
+              </svg>
+            </button>
             <div className="col-span-7 z-10">
               <Carousel images={gameDetail.screenshots} />
             </div>
 
             <div className="col-span-5 text-left bg-neutral-700 rounded-lg pt-2 relative ">
-              <div className='sushiBackgrounds'>
+              <div className="sushiBackgrounds">
                 <div className="ml-4 p-2 flex flex-wrap space-x-2 ">
                   <div className="p-1">장르 :</div>
                   {gameDetail.genres.map((genre, index) => (
@@ -122,6 +131,7 @@ export default function Dish({ Info, setInfo, id, firstIdDict, secondIdDict }) {
           </div>
         </div>
       )}
+      <audio ref={clickAudioRef} src={clickSound} type="audio/mp3"></audio>
     </div>
   );
 }
