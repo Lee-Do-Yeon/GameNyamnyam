@@ -6,7 +6,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import doorSound from '../../assets/doorSound.wav';
 import AlertModal from '../../components/AlertModal';
+import clickSound from '../../assets/clickSound.mp3';
+
 export default function Mainpage() {
+  const clickAudioRef = useRef(null);
   const [Detail, setDetail] = useRecoilState(userDetail);
   const location = useLocation();
   const audioRef = useRef(null);
@@ -62,8 +65,12 @@ export default function Mainpage() {
   }
 
   function goToSteam() {
-    window.location.href =
+    clickAudioRef.current.play();
+    setTimeout(() => {
+      window.location.href =
       'https://steamcommunity.com/openid/login?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.mode=checkid_setup&openid.return_to=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.realm=https%3A%2F%2Fj8c204.p.ssafy.io%2Fapi%2Flogin%2Fprocesslogin&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select';
+    }, 200);
+    
   }
   return (
     <div className="mainPageImg">
@@ -89,6 +96,7 @@ export default function Mainpage() {
           </div>
         </button>
       )}
+      <audio ref={clickAudioRef} src={clickSound} type="audio/mp3"></audio>
     </div>
   );
 }
