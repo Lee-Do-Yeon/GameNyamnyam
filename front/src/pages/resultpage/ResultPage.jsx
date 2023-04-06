@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, } from 'react';
 import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import { useRecoilValue } from 'recoil';
 import { userGame, userDetail } from '../../../recoil/user/atoms';
@@ -16,11 +18,11 @@ export default function Resultpage() {
   const steamId = UserInfo[0];
   const myCount = UserInfo[1];
 
-  const [contentId, setcontentId] = useState(null);
-  
+
   const [similar, setSimilar] = useState([]);
   const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid
   const [gameresult, setGameresult] = useState([]); // [매치율]
+  const [idx, setIdx] = useState(0);
 
   const data = [];
   for (let i = 0; i < myValue.length; i++) {
@@ -40,7 +42,10 @@ export default function Resultpage() {
           `https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`,
           data,
         ), // 선호도 나오게함
-        // axios.post(`http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`, data), // 선호도 나오게함
+        // axios.post(
+        //   `http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`,
+        //   data,
+        // ), // 선호도 나오게함
       ])
 
       .then((res) => {
@@ -66,9 +71,7 @@ export default function Resultpage() {
   }, [data3.preference]);
 
   // console.log(document.querySelector('.card-front'));
-  // console.log(document.querySelector('.slick-prev'));
-  // console.log(document.querySelector('.slick-next'));
-  
+
   // 바꾸기
   const settings = {
     dots: true,
@@ -76,7 +79,12 @@ export default function Resultpage() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    beforeChange: (oldIdx, newIdx) => {
+      console.log(newIdx);
+      setIdx(newIdx);
+    },
   };
+
   return (
     <div className="h-screen bg-yellow-600 font-semibold">
       <div className="flex items-center justify-center h-1/6">
@@ -112,14 +120,13 @@ export default function Resultpage() {
                       key={index}
                       myValue={item}
                       gameresult={gameresult[item.appid]}
-                      setcontentId={setcontentId}
                     />
                   ))}
                 </Slider>
               </div>
 
               <a
-                href={`https://store.steampowered.com/app/${contentId}`}
+                href={`https://store.steampowered.com/app/${data[idx]}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -127,6 +134,11 @@ export default function Resultpage() {
                   Go to Eat
                 </button>
               </a>
+
+              {/* <button className="place-self-end bg-yellow-300 hover:bg-yellow-500 font-bold rounded-lg text-sm text-black px-5 py-2.5 absolute bottom-20 right-20">
+                now id
+              </button> */}
+
             </div>
           </div>
         </div>
@@ -148,7 +160,9 @@ export default function Resultpage() {
                       <div className="col-span-6 pl-2 truncate">
                         {item.name}
                       </div>
-                      <div className="col-start-9 col-end-12">₩ {item.price}</div>
+                      <div className="col-start-9 col-end-12">
+                        ₩ {item.price}
+                      </div>
                     </div>
                   ))}
               </div>
