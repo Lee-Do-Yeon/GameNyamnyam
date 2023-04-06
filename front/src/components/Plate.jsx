@@ -4,7 +4,7 @@ import Tag from './Tag';
 
 import axios from 'axios';
 
-export default function Plate({ myValue, gameresult}) {
+export default function Plate({ myValue, gameresult, onAppIdChange }) {
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
@@ -20,12 +20,13 @@ export default function Plate({ myValue, gameresult}) {
   };
   const backgroundColor = changeColor(myValue.price);
   const [goEat, setGoEat] = useState([]);
-  
+
   useEffect(() => {
     axios
       .get(`https://j8c204.p.ssafy.io/api/games/detail/${myValue.appid}`)
       .then((res) => {
         setGoEat(res.data);
+        onAppIdChange(myValue.appid); 
       })
       .catch((err) => {
         console.log(err);
@@ -69,13 +70,25 @@ export default function Plate({ myValue, gameresult}) {
               />
               <div className="card-back bg-black opacity-70">
                 <div className="w-4/5 text-white">
-                  <div className="text-4xl pb-5 text-center">{gameresult} % </div>
-                  <div>{ goEat.categories && goEat.categories[0] }</div>
-                  <div className="py-3 ">
-                    {goEat && goEat.genres && goEat.genres.map((genre, index) => (
-                      <Tag  props={genre} key={index}/>
-                    ))}
+                  <div className="text-4xl pb-5 text-center">
+                    {gameresult} %{' '}
                   </div>
+                  <div>{goEat.categories && goEat.categories[0]}</div>
+                  <div className="py-3 flex flex-wrap">
+                    {goEat &&
+                      goEat.genres &&
+                      goEat.genres.map((genre, index) => (
+                        <Tag props={genre} key={index} />
+                      ))}
+                  </div>
+                  
+                  {/* <a
+                    href={`https://store.steampowered.com/app/${myValue.appid}/EA_SPORTS_FIFA_23/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    go to eat
+                  </a> */}
                 </div>
               </div>
             </div>
