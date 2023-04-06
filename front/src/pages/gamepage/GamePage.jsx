@@ -9,7 +9,6 @@ import axios from 'axios';
 import DetailModal from '../../components/DetailModal';
 import PickedDish from '../../components/PickedDish';
 import bellSound from '../../assets/bellSound.wav';
-
 export default function Gamepage() {
   const audioRef = useRef(null);
   const [gameData, setGameData] = useState([]);
@@ -19,6 +18,7 @@ export default function Gamepage() {
   const [firstIdDict, setFirstIdDict] = useState({});
   const [secondIdDict, setSecondIdDict] = useState({});
   const userDetails = useRecoilValue(userDetail);
+  const [totalLoading, setTotalLoading] = useState(false);
   const showInfo = (id) => {
     setInfo(!Info);
     setGameDetail(id);
@@ -36,7 +36,7 @@ export default function Gamepage() {
         .then(function (response) {
           console.log(response.data);
           setGameData(response.data);
-          setDataLoaded(true);
+          // setDataLoaded(true);
           console.log(dataLoaded);
         })
         .catch(function (error) {
@@ -48,13 +48,17 @@ export default function Gamepage() {
         .then(function (response) {
           console.log(response.data);
           setGameData(response.data);
-          setDataLoaded(true);
+          // setDataLoaded(true);
           console.log(dataLoaded);
         })
         .catch(function (error) {
           console.log(error);
         });
     }
+    setTimeout(() => {
+      setTotalLoading(true);
+      setDataLoaded(true);
+    }, 3000);
   }, []);
   // 첫번 째 스시 바
   useEffect(() => {
@@ -272,125 +276,134 @@ export default function Gamepage() {
           <Receipt />
         </div>
       </div>
-      <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-        <div className="sushiBar">
-          <div className="firstTrail">
-            <Droppable
-              droppableId="first-sushi-bar"
-              direction="horizontal"
-              isDropDisabled={true}
-            >
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {FirstSushis.map((sushi, index) => (
-                    <Draggable
-                      key={String(sushi.appid)}
-                      draggableId={String(sushi.appid)}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="leftMovingPlate"
-                          onClick={() => showInfo(sushi.appid)}
-                        >
-                          <Dish price={sushi.price} image={sushi.image} />
-
-                          <p className="truncate w-5/6 titleP text-center font-jamsil">
-                            {sushi.name}
-                          </p>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
-          <div className="secondTrail">
-            <Droppable
-              droppableId="second-sushi-bar"
-              direction="horizontal"
-              isDropDisabled={true}
-            >
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {SecondSushis.map((sushi, index) => (
-                    <Draggable
-                      key={String(sushi.appid)}
-                      draggableId={String(sushi.appid)}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="rightMovingPlate"
-                          onClick={() => showInfo(sushi.appid)}
-                        >
-                          <Dish price={sushi.price} image={sushi.image} />
-
-                          <p className="truncate w-5/6 titleP text-center font-jamsil">
-                            {sushi.name}
-                          </p>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
+      {!totalLoading ? (
+        <div className="block text-center">
+          <img src="src/assets/sushiload2.gif" alt="" className="m-auto w-[30vw]" />
+          <p className="font-bold text-white text-2xl">l o a d i n g . . . </p>
+          {/* <FadeLoader color="#d6bd36" /> */}
         </div>
-        <div className="clientTable">
-          <Droppable droppableId="plate-list" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="setDish overflow-x-auto scroll box1 pt-1 "
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+          <div className="sushiBar">
+            <div className="firstTrail">
+              <Droppable
+                droppableId="first-sushi-bar"
+                direction="horizontal"
+                isDropDisabled={true}
               >
-                {plates.map((plate, index) => (
-                  <Draggable
-                    isDragDisabled={true}
-                    key={String(plate.appid)}
-                    draggableId={String(plate.appid)}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="myPlate"
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {FirstSushis.map((sushi, index) => (
+                      <Draggable
+                        key={String(sushi.appid)}
+                        draggableId={String(sushi.appid)}
+                        index={index}
                       >
-                        <PickedDish
-                          showInfo={showInfo}
-                          id={plate.appid}
-                          price={plate.price}
-                          image={plate.image}
-                          firstIdDict={firstIdDict}
-                          secondIdDict={secondIdDict}
-                        />
-                        <p className="truncate w-5/6 titleP text-center font-jamsil">
-                          {plate.name}
-                        </p>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          <div className="bell" onClick={navigateToResult}></div>
-        </div>
-      </DragDropContext>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="leftMovingPlate"
+                            onClick={() => showInfo(sushi.appid)}
+                          >
+                            <Dish price={sushi.price} image={sushi.image} />
+
+                            <p className="truncate w-5/6 titleP text-center font-jamsil">
+                              {sushi.name}
+                            </p>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+            <div className="secondTrail">
+              <Droppable
+                droppableId="second-sushi-bar"
+                direction="horizontal"
+                isDropDisabled={true}
+              >
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {SecondSushis.map((sushi, index) => (
+                      <Draggable
+                        key={String(sushi.appid)}
+                        draggableId={String(sushi.appid)}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="rightMovingPlate"
+                            onClick={() => showInfo(sushi.appid)}
+                          >
+                            <Dish price={sushi.price} image={sushi.image} />
+
+                            <p className="truncate w-5/6 titleP text-center font-jamsil">
+                              {sushi.name}
+                            </p>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          </div>
+          <div className="clientTable">
+            <Droppable droppableId="plate-list" direction="horizontal">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="setDish overflow-x-auto scroll box1 pt-1 "
+                >
+                  {plates.map((plate, index) => (
+                    <Draggable
+                      isDragDisabled={true}
+                      key={String(plate.appid)}
+                      draggableId={String(plate.appid)}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="myPlate"
+                        >
+                          <PickedDish
+                            showInfo={showInfo}
+                            id={plate.appid}
+                            price={plate.price}
+                            image={plate.image}
+                            firstIdDict={firstIdDict}
+                            secondIdDict={secondIdDict}
+                          />
+                          <p className="truncate w-5/6 titleP text-center font-jamsil">
+                            {plate.name}
+                          </p>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            <div className="bell" onClick={navigateToResult}></div>
+          </div>
+        </DragDropContext>
+      )}
+
       {Info && (
         <DetailModal
           Info={Info}
