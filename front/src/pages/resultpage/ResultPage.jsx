@@ -3,8 +3,9 @@ import { useNavigate} from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
+import resultSound from '../../assets/resultSound.mp3';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import { userGame, userDetail } from '../../../recoil/user/atoms';
 import AddGame from '../../components/AddGame';
 import Plate from '../../components/Plate';
@@ -12,6 +13,8 @@ import clickSound from '../../assets/clickSound.mp3';
 import axios from 'axios';
 
 export default function Resultpage() {
+  const navigate = useNavigate();
+  const resetList = useResetRecoilState(userGame);
   const resultAudioRef = useRef(null);
   const clickAudioRef = useRef(null);
   // const steamId = '76561198797386305';
@@ -26,7 +29,10 @@ export default function Resultpage() {
   const [gameresult, setGameresult] = useState([]); // [매치율]
   const [idx, setIdx] = useState(0);
 
-
+  const gotoGame = () => {
+    resetList();
+    navigate('/game');
+  };
 
   const data = [];
   for (let i = 0; i < myValue.length; i++) {
@@ -81,10 +87,9 @@ export default function Resultpage() {
         console.log(err, '두번째 오류');
       });
     setTimeout(() => {
-      console.log('해줘');
       setLoading(true);
       resultAudioRef.current.play();
-    }, 3000);
+    }, 6000);
   }, [data3.preference]);
 
   // console.log(document.querySelector('.card-front'));
@@ -247,12 +252,20 @@ export default function Resultpage() {
               </div>
             </div>
           </div>
-          <div className="p-4 h-1/6">
+          <div className="p-4 h-1/6 relative">
             <div className="p-4 text-center">
               <div className="text-white text-xl">
                 이런 게임도 좋아하실거 같아요
               </div>
               <AddGame className="p-3" similar={similar} />
+            </div>
+            <div className="h-10 w-[312px] absolute right-14 top-5">
+              <button
+                className="h-full w-full bg-gray-200 rounded-xl"
+                onClick={gotoGame}
+              >
+                다시 고르러 가기
+              </button>
             </div>
           </div>
         </div>
