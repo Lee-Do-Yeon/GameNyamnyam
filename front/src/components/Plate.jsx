@@ -5,6 +5,14 @@ import Tag from './Tag';
 import axios from 'axios';
 
 export default function Plate({ myValue, gameresult}) {
+  
+  // const [idData, setData] = useState(null);
+  
+  // const getData = () => {
+  //   return idData;
+  // };
+
+  
   const changeColor = (price) => {
     if (price === 0) {
       return '#FEF874';
@@ -20,7 +28,9 @@ export default function Plate({ myValue, gameresult}) {
   };
   const backgroundColor = changeColor(myValue.price);
   const [goEat, setGoEat] = useState([]);
+
   
+
   useEffect(() => {
     axios
       .get(`https://j8c204.p.ssafy.io/api/games/detail/${myValue.appid}`)
@@ -52,7 +62,7 @@ export default function Plate({ myValue, gameresult}) {
       <div className="h-[420px]">
         <div className="w-full h-full flex items-center justify-center pb-5">
           <div
-            className={`ellipse w-[600px] h-[400px] shadow-2xl absolute`}
+            className={`ellipse w-[600px] h-[400px] shadow-2xl absolute `}
             style={{ backgroundColor: backgroundColor }}
           ></div>
 
@@ -61,6 +71,7 @@ export default function Plate({ myValue, gameresult}) {
           ></div>
           <div className="ellipse bg-white w-[480px] h-[300px] absolute"></div>
           <div className="w-[430px] h-[250px] rounded-lg absolute"></div>
+
           <div id="result_wrap">
             <div className="card">
               <img
@@ -69,12 +80,16 @@ export default function Plate({ myValue, gameresult}) {
               />
               <div className="card-back bg-black opacity-70">
                 <div className="w-4/5 text-white">
-                  <div className="text-4xl pb-5 text-center">{gameresult} % </div>
-                  <div>{ goEat.categories && goEat.categories[0] }</div>
-                  <div className="py-3 ">
-                    {goEat && goEat.genres && goEat.genres.map((genre, index) => (
-                      <Tag  props={genre} key={index}/>
-                    ))}
+                  <div className="text-4xl pb-5 text-center">
+                    {gameresult} %
+                  </div>
+                  <div>{goEat.categories && goEat.categories[0]}</div>
+                  <div className="py-3 flex flex-wrap">
+                    {goEat &&
+                      goEat.genres &&
+                      goEat.genres.map((genre, index) => (
+                        <Tag props={genre} key={index} />
+                      ))}
                   </div>
                 </div>
               </div>

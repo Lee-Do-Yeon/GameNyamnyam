@@ -8,7 +8,7 @@ export default function Modal({ setCanLogin }) {
     navigate('/');
   };
   return (
-    <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-30 z-10">
+    <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-30 z-10 font-jamsil">
       <div>
         <div className="w-[40vw] h-[90vh] p-3 overflow-scroll box2 rounded-md bg-neutral-600 text-white">
           <h1 className="text-center text-2xl my-6">
