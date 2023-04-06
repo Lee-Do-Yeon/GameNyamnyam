@@ -10,17 +10,14 @@ import axios from 'axios';
 
 export default function Resultpage() {
   // const steamId = '76561198797386305';
+
   const myValue = useRecoilValue(userGame);
   const UserInfo = useRecoilValue(userDetail);
   const steamId = UserInfo[0];
   const myCount = UserInfo[1];
 
-  const [appId, setAppId] = useState(null);
-  const handleAppIdChange = (appId) => {
-    setAppId(appId);
-  };
-
-
+  const [contentId, setcontentId] = useState(null);
+  
   const [similar, setSimilar] = useState([]);
   const [preference, setPreference] = useState(null); // [선호도] 장바구니appid, 5개 t or f, steamid
   const [gameresult, setGameresult] = useState([]); // [매치율]
@@ -43,7 +40,7 @@ export default function Resultpage() {
           `https://j8c204.p.ssafy.io/api/games/preference?user_type=${myCount}&steamId=${steamId}`,
           data,
         ), // 선호도 나오게함
-        // axios.post(`https://j8c204.p.ssafy.io/api/games/preference?user_type=true&steamId=${steamId}`, data), // 선호도 나오게함
+        // axios.post(`http://127.0.0.1:8000/api/games/preference?user_type=true&steamId=${steamId}`, data), // 선호도 나오게함
       ])
 
       .then((res) => {
@@ -62,16 +59,17 @@ export default function Resultpage() {
       .post('https://j8c204.p.ssafy.io/api/games/result', data3)
       .then((res) => {
         setGameresult(res.data);
-        console.log('후후.. 두번째닷');
       })
       .catch((err) => {
         console.log(err, '두번째 오류');
       });
   }, [data3.preference]);
 
-  console.log(document.querySelector('.slick-next'));
-  console.log(document.querySelector('.slick-prev'));
-
+  // console.log(document.querySelector('.card-front'));
+  // console.log(document.querySelector('.slick-prev'));
+  // console.log(document.querySelector('.slick-next'));
+  
+  // 바꾸기
   const settings = {
     dots: true,
     infinite: true,
@@ -114,14 +112,14 @@ export default function Resultpage() {
                       key={index}
                       myValue={item}
                       gameresult={gameresult[item.appid]}
-                      onAppIdChange={handleAppIdChange}
+                      setcontentId={setcontentId}
                     />
                   ))}
                 </Slider>
               </div>
 
               <a
-                href={`https://store.steampowered.com/app/${appId}/EA_SPORTS_FIFA_23/`}
+                href={`https://store.steampowered.com/app/${contentId}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
