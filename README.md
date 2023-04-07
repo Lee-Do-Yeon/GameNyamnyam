@@ -53,20 +53,13 @@
 
 ## 5. 서비스
 
-### 📺 시연영상
-
-동영상 자리
-
-<br/><br/>
-
 ### 🔎 주요기능
 
 ### 메인페이지
 
 - OpenId를 이용한 스팀 로그인 연동
 
-![image](https://user-images.githubusercontent.com/44861724/230276576-75c074cd-b935-40c4-91aa-e6d509ea8fab.png)
-![image](https://user-images.githubusercontent.com/44861724/230278700-c94eaf60-03c9-4b86-8d8f-a89277b9e8f0.png)
+![로그인 성공](https://user-images.githubusercontent.com/44861724/230518154-6bdceedd-c5ce-45ad-a9e6-e2982968a437.gif)
 
 <br/><br/>
 
@@ -83,8 +76,7 @@
 
 - 맞춤게임 → Word2Vec 모델을 이용하여 유사한 소개글(description)을 가진 게임들을 추출.
 
-![image](https://user-images.githubusercontent.com/44861724/230276935-9b2dae40-3429-4941-a511-54c31087d988.png)
-![image](https://user-images.githubusercontent.com/44861724/230277237-fb712132-5826-4fba-b1e1-af840f76ff3a.png)
+![게임 선택](https://user-images.githubusercontent.com/44861724/230518206-82cbe6ef-8594-4956-a962-1aa3e3a6d418.gif)
 
 <br/><br/>
 
@@ -93,9 +85,7 @@
 - 선택한 게임 중 선호 장르와 유사도에 따른 백분율 추출
 - 선택한 게임들과 비슷한 게임 3개 추천
 
-![image](https://user-images.githubusercontent.com/44861724/230317282-1e73ef19-a21a-4e69-917e-53ba7eab2c51.png)
-
-![image](https://user-images.githubusercontent.com/44861724/230278527-1ec2dc4b-a456-4288-807d-19dae647e3fd.png)
+![게임 결과](https://user-images.githubusercontent.com/44861724/230518231-fac1a9e6-5231-415b-aac6-5ab6f36d6b48.gif)
 
 <br/><br/>
 
